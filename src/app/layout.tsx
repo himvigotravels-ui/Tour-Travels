@@ -32,6 +32,21 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  icons: {
+    icon: [
+      { url: "/favicon.png" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: [
+      { url: "/favicon.png" },
+    ],
+    other: [
+      {
+        rel: "apple-touch-icon-precomposed",
+        url: "/favicon.png",
+      },
+    ],
+  },
   openGraph: {
     type: "website",
     locale: "en_IN",
@@ -52,7 +67,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Himvigo Tours | Premium Travel & Spiti Valley Packages",
     description: "Experience the magic of Himachal Pradesh with Himvigo. Premium, offbeat Spiti Valley tours, trekking expeditions, and reliable Chandigarh to Manali cab services.",
-    images: ["/opengraph-image.png"],
+    images: ["https://himvigo.com/opengraph-image.png"],
     creator: "@himvigotours",
   },
   robots: {

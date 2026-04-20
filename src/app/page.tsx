@@ -39,11 +39,6 @@ const features = [
   }
 ];
 
-export const metadata = {
-  title: "Best Himachal Tour Packages & Spiti Valley Tours",
-  description: "Experience the magic of Himachal Pradesh with Himvigo. Premium, offbeat Spiti Valley tours and reliable Chandigarh to Manali cab services.",
-};
-
 export default async function HomePage() {
   // Fetch all dynamic data from database
   const [packages, destinations, blogs, testimonials, activities] = await Promise.all([
