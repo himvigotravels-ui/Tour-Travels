@@ -61,13 +61,12 @@ export const Navbar = () => {
       }`}>
         {/* Logo */}
         <div className="flex items-center">
-          <Link href="/" className="flex items-center gap-2.5 group whitespace-nowrap">
-            <div className={`p-2 rounded-xl transition-all duration-500 ${isScrolled ? 'bg-forest-600 text-white shadow-md bg-amber-500 group-hover:text-slate-900' : 'bg-white/10 backdrop-blur-sm text-white border border-white/20 group-hover:bg-white/20'}`}>
-              <MountainSnow className="w-5 h-5 md:w-6 md:h-6" />
-            </div>
-            <span className={`font-outfit font-bold text-lg md:text-xl tracking-wide transition-colors duration-500 whitespace-nowrap ${isScrolled ? 'text-slate-900 group-hover:text-forest-700' : 'text-white'}`}>
-              Himvigo
-            </span>
+          <Link href="/" className="flex items-center group whitespace-nowrap">
+            <img 
+              src={isScrolled ? "/logo.svg" : "/logo-white.svg"} 
+              alt="Himvigo Logo" 
+              className="h-8 md:h-10 w-auto object-contain transition-opacity duration-300"
+            />
           </Link>
         </div>
  

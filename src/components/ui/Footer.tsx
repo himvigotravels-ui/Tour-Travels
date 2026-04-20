@@ -16,13 +16,8 @@ export const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 border-b border-forest-800 pb-12 mb-8">
         {/* Brand & Intro */}
         <div className="space-y-6">
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="p-2 bg-white/10 rounded-xl backdrop-blur-sm transition-colors text-white">
-              <MountainSnow className="w-6 h-6" />
-            </div>
-            <span className="font-outfit font-bold text-xl tracking-wide text-white">
-              Himvigo
-            </span>
+          <Link href="/" className="flex items-center group">
+            <img src="/logo-white.svg" alt="Himvigo Logo" className="h-10 w-auto object-contain" />
           </Link>
           <p className="text-forest-200 text-sm leading-relaxed font-inter pr-4">
             Your premium travel partner for offbeat tours, secure cab services, and unforgettable memories in the heart of the Himalayas.

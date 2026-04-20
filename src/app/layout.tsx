@@ -19,8 +19,62 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Tour & Travels | Himachal Packages",
-  description: "Best reliable tour packages in Himachal Pradesh.",
+  title: {
+    template: "%s | Himvigo Tours",
+    default: "Himvigo Tours | Premium Travel & Spiti Valley Packages",
+  },
+  description: "Experience the magic of Himachal Pradesh with Himvigo. Premium, offbeat Spiti Valley tours, trekking expeditions, and reliable Chandigarh to Manali cab services.",
+  keywords: ["Himachal Pradesh Tours", "Spiti Valley Packages", "Manali Tour", "Kasol Trek", "Chandigarh to Manali Cabs", "Premium Travel Himachal"],
+  authors: [{ name: "Himvigo Tours" }],
+  creator: "Himvigo Tours",
+  publisher: "Himvigo Tours",
+  metadataBase: new URL("https://himvigo.com"),
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_IN",
+    url: "https://himvigo.com",
+    title: "Himvigo Tours | Premium Travel & Spiti Valley Packages",
+    description: "Experience the magic of Himachal Pradesh with Himvigo. Premium, offbeat Spiti Valley tours, trekking expeditions, and reliable Chandigarh to Manali cab services.",
+    siteName: "Himvigo Tours",
+    images: [
+      {
+        url: "/opengraph-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Himvigo Tours - Premium Himalayan Experiences",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Himvigo Tours | Premium Travel & Spiti Valley Packages",
+    description: "Experience the magic of Himachal Pradesh with Himvigo. Premium, offbeat Spiti Valley tours, trekking expeditions, and reliable Chandigarh to Manali cab services.",
+    images: ["/opengraph-image.png"],
+    creator: "@himvigotours",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  icons: {
+    icon: [
+      { url: "/favicon.png", type: "image/png" },
+      { url: "/icon.svg", type: "image/svg+xml" }
+    ],
+    apple: [
+      { url: "/icon.svg", type: "image/svg+xml" }
+    ]
+  },
   verification: {
     google: "8WFTUbPg8wJt_6TLKRHNAKGwRw2gHCgU0HSiqp--pAs",
   },

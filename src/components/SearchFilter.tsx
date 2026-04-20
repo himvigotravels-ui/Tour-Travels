@@ -70,19 +70,19 @@ export const SearchFilter = () => {
       <div className="flex items-center gap-1 md:gap-2 mb-2 ml-4 w-full overflow-x-auto pb-1 pr-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         <button 
           onClick={() => setActiveTab("packages")}
-          className={`${activeTab === "packages" ? "bg-white text-forest-900 font-extrabold" : "bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 border-b-0 text-white font-medium shadow-inner"} px-6 py-3 rounded-t-xl text-xs md:text-sm tracking-wide transition-all whitespace-nowrap shrink-0`}
+          className={`${activeTab === "packages" ? "bg-white text-forest-900 font-extrabold shadow-sm" : "bg-slate-100/80 hover:bg-slate-200/80 border border-slate-200 border-b-0 text-slate-600 font-bold"} px-6 py-3 rounded-t-xl text-xs md:text-sm tracking-wide transition-all whitespace-nowrap shrink-0`}
         >
           Tour Packages
         </button>
         <button 
           onClick={() => setActiveTab("cab")}
-          className={`${activeTab === "cab" ? "bg-white text-forest-900 font-extrabold" : "bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 border-b-0 text-white font-medium shadow-inner"} px-6 py-3 rounded-t-xl text-xs md:text-sm tracking-wide transition-all whitespace-nowrap shrink-0`}
+          className={`${activeTab === "cab" ? "bg-white text-forest-900 font-extrabold shadow-sm" : "bg-slate-100/80 hover:bg-slate-200/80 border border-slate-200 border-b-0 text-slate-600 font-bold"} px-6 py-3 rounded-t-xl text-xs md:text-sm tracking-wide transition-all whitespace-nowrap shrink-0`}
         >
           Cab Services
         </button>
         <button 
           onClick={() => setActiveTab("custom")}
-          className={`${activeTab === "custom" ? "bg-white text-forest-900 font-extrabold" : "bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 border-b-0 text-white font-medium shadow-inner"} px-6 py-3 rounded-t-xl text-xs md:text-sm tracking-wide transition-all whitespace-nowrap shrink-0`}
+          className={`${activeTab === "custom" ? "bg-white text-forest-900 font-extrabold shadow-sm" : "bg-slate-100/80 hover:bg-slate-200/80 border border-slate-200 border-b-0 text-slate-600 font-bold"} px-6 py-3 rounded-t-xl text-xs md:text-sm tracking-wide transition-all whitespace-nowrap shrink-0`}
         >
           Custom Trips
         </button>
@@ -92,8 +92,8 @@ export const SearchFilter = () => {
         
         {/* Destination Input */}
         <div className="flex-1 w-full hover:bg-slate-50 rounded-2xl px-5 py-3 lg:border-r lg:border-slate-100 transition-colors cursor-text group relative">
-          <label className="block text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-1.5 group-hover:text-amber-600 transition-colors flex items-center">
-            <MapPin className="w-4 h-4 mr-1.5 text-slate-400 group-hover:text-amber-500 transition-colors"/> Destination
+          <label className="block text-[11px] font-bold uppercase tracking-widest text-slate-600 mb-1.5 group-hover:text-amber-600 transition-colors flex items-center">
+            <MapPin className="w-4 h-4 mr-1.5 text-slate-500 group-hover:text-amber-500 transition-colors"/> Destination
           </label>
           <div className="flex items-center">
             <input 
@@ -101,7 +101,7 @@ export const SearchFilter = () => {
               value={destination}
               onChange={(e) => setDestination(e.target.value)}
               placeholder="Where do you want to go?" 
-              className="bg-transparent border-none outline-none w-full text-slate-900 font-bold text-base md:text-lg placeholder-slate-400 truncate"
+              className="bg-transparent border-none outline-none w-full text-slate-900 font-bold text-base md:text-lg placeholder-slate-500 truncate"
             />
           </div>
         </div>
@@ -114,14 +114,14 @@ export const SearchFilter = () => {
           onClick={() => setIsDurationOpen(!isDurationOpen)}
           className="flex-1 w-full hover:bg-slate-50 rounded-2xl px-5 py-3 lg:border-r lg:border-slate-100 transition-colors cursor-pointer group relative"
         >
-          <label className="block text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-1.5 group-hover:text-amber-600 transition-colors flex items-center">
-            <Clock className="w-4 h-4 mr-1.5 text-slate-400 group-hover:text-amber-500 transition-colors"/> Duration
+          <label className="block text-[11px] font-bold uppercase tracking-widest text-slate-600 mb-1.5 group-hover:text-amber-600 transition-colors flex items-center">
+            <Clock className="w-4 h-4 mr-1.5 text-slate-500 group-hover:text-amber-500 transition-colors"/> Duration
           </label>
           <div className="flex items-center justify-between">
-            <span className={`font-bold text-base md:text-lg truncate ${duration ? "text-slate-900" : "text-slate-400"}`}>
+            <span className={`font-bold text-base md:text-lg truncate ${duration ? "text-slate-900" : "text-slate-500"}`}>
               {duration ? durations.find(d => d.value === duration)?.label : "Any duration"}
             </span>
-            <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${isDurationOpen ? "rotate-180 text-amber-500" : ""}`} />
+            <ChevronDown className={`w-5 h-5 text-slate-500 transition-transform duration-300 ${isDurationOpen ? "rotate-180 text-amber-500" : ""}`} />
           </div>
           
           {/* Dropdown Menu */}
@@ -150,14 +150,14 @@ export const SearchFilter = () => {
           onClick={() => setIsCategoryOpen(!isCategoryOpen)}
           className="flex-1 w-full hover:bg-slate-50 rounded-2xl px-5 py-3 transition-colors cursor-pointer group relative"
         >
-          <label className="block text-[11px] font-bold uppercase tracking-widest text-slate-500 mb-1.5 group-hover:text-amber-600 transition-colors flex items-center">
-            <Compass className="w-4 h-4 mr-1.5 text-slate-400 group-hover:text-amber-500 transition-colors"/> Category
+          <label className="block text-[11px] font-bold uppercase tracking-widest text-slate-600 mb-1.5 group-hover:text-amber-600 transition-colors flex items-center">
+            <Compass className="w-4 h-4 mr-1.5 text-slate-500 group-hover:text-amber-500 transition-colors"/> Category
           </label>
           <div className="flex items-center justify-between">
-            <span className={`font-bold text-base md:text-lg truncate ${category ? "text-slate-900" : "text-slate-400"}`}>
+            <span className={`font-bold text-base md:text-lg truncate ${category ? "text-slate-900" : "text-slate-500"}`}>
               {category ? categories.find(c => c.value === category)?.label : "All Categories"}
             </span>
-            <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${isCategoryOpen ? "rotate-180 text-amber-500" : ""}`} />
+            <ChevronDown className={`w-5 h-5 text-slate-500 transition-transform duration-300 ${isCategoryOpen ? "rotate-180 text-amber-500" : ""}`} />
           </div>
 
           {/* Dropdown Menu */}
