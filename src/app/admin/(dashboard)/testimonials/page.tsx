@@ -9,7 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 import { RiAddLine, RiEditLine, RiDeleteBinLine, RiStarFill } from "react-icons/ri";
@@ -65,19 +65,19 @@ export default function TestimonialsPage() {
         </TableBody></Table>
       </CardContent></Card>
 
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-lg">
-          <DialogHeader><DialogTitle>{form.id ? "Edit" : "Add"} Testimonial</DialogTitle></DialogHeader>
-          <div className="space-y-4">
+      <Sheet open={dialogOpen} onOpenChange={setDialogOpen}>
+        <SheetContent className="w-full sm:max-w-xl overflow-y-auto p-0 flex flex-col">
+          <SheetHeader className="p-6 pb-0"><SheetTitle>{form.id ? "Edit" : "Add"} Testimonial</SheetTitle></SheetHeader>
+          <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
             <div className="space-y-2"><Label>Customer Name *</Label><Input value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} /></div>
             <div className="space-y-2"><Label>Package Name *</Label><Input value={form.packageName} onChange={(e) => setForm((f) => ({ ...f, packageName: e.target.value }))} /></div>
             <div className="space-y-2"><Label>Review Text *</Label><Textarea value={form.text} onChange={(e) => setForm((f) => ({ ...f, text: e.target.value }))} rows={4} /></div>
             <div className="space-y-2"><Label>Rating (1-5)</Label><Input type="number" min={1} max={5} value={form.rating} onChange={(e) => setForm((f) => ({ ...f, rating: Number(e.target.value) }))} /></div>
-            <div className="flex items-center gap-2"><Switch checked={form.isActive} onCheckedChange={(v) => setForm((f) => ({ ...f, isActive: v }))} /><Label>Visible on site</Label></div>
+            <div className="flex items-center gap-2 pt-2"><Switch checked={form.isActive} onCheckedChange={(v) => setForm((f) => ({ ...f, isActive: v }))} /><Label>Visible on site</Label></div>
           </div>
-          <DialogFooter><Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button><Button onClick={handleSave} disabled={saving}>{saving ? "Saving..." : "Save"}</Button></DialogFooter>
-        </DialogContent>
-      </Dialog>
+          <SheetFooter className="p-6 pt-4 border-t"><Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button><Button onClick={handleSave} disabled={saving}>{saving ? "Saving..." : "Save"}</Button></SheetFooter>
+        </SheetContent>
+      </Sheet>
 
       <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
         <AlertDialogContent><AlertDialogHeader><AlertDialogTitle>Delete Testimonial?</AlertDialogTitle><AlertDialogDescription>This cannot be undone.</AlertDialogDescription></AlertDialogHeader>

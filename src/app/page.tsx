@@ -5,6 +5,7 @@ import RegionSlider from "@/components/home/RegionSlider";
 import TestimonialSlider from "@/components/home/TestimonialSlider";
 import ActivitiesSlider from "@/components/home/ActivitiesSlider";
 import BlogSection from "@/components/home/BlogSection";
+import HeroSlider from "@/components/home/HeroSlider";
 import { getFeaturedPackages } from "@/lib/db/packages";
 import { getAllDestinations } from "@/lib/db/destinations";
 import { getLatestBlogs } from "@/lib/db/blogs";
@@ -56,17 +57,7 @@ export default async function HomePage() {
 
       {/* Hero Section */}
       <section className="relative min-h-[90vh] flex flex-col justify-center items-center overflow-hidden bg-forest-900 pt-32 pb-24">
-        <div className="absolute inset-0 z-0">
-          <img 
-            src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1920&q=80" 
-            alt="Majestic Spiti landscape" 
-            className="w-full h-full object-cover opacity-80 scale-100 animate-[pulse_10s_ease-in-out_infinite]" 
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/40 via-transparent to-transparent"></div>
-          <div className="absolute bottom-0 left-0 w-full h-80 z-20 pointer-events-none overflow-hidden">
-            <div className="absolute inset-x-0 bottom-0 h-full bg-gradient-to-t from-slate-50 via-slate-50/90 to-transparent"></div>
-          </div>
-        </div>
+        <HeroSlider />
         
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 md:px-8 mt-4 text-center">
           <div className="inline-flex items-center gap-2 py-2 px-5 rounded-full bg-white/20 text-white border border-white/40 text-sm font-bold tracking-wide mb-8 backdrop-blur-3xl shadow-2xl">

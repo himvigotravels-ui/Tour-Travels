@@ -8,7 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ImageUpload } from "@/components/admin/ImageUpload";
@@ -116,43 +116,45 @@ export default function CabPage() {
       </Tabs>
 
       {/* Vehicle Dialog */}
-      <Dialog open={vDialogOpen} onOpenChange={setVDialogOpen}>
-        <DialogContent className="max-w-lg"><DialogHeader><DialogTitle>{vForm.id ? "Edit" : "Add"} Vehicle</DialogTitle></DialogHeader>
-        <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2"><Label>Name *</Label><Input value={vForm.name} onChange={(e) => setVForm((f) => ({ ...f, name: e.target.value }))} placeholder="Premium SUV" /></div>
-            <div className="space-y-2"><Label>Model *</Label><Input value={vForm.model} onChange={(e) => setVForm((f) => ({ ...f, model: e.target.value }))} placeholder="Toyota Innova Crysta" /></div>
-            <div className="space-y-2"><Label>Capacity</Label><Input value={vForm.capacity} onChange={(e) => setVForm((f) => ({ ...f, capacity: e.target.value }))} placeholder="6-7 Passengers" /></div>
-            <div className="space-y-2"><Label>Ideal For</Label><Input value={vForm.ideal} onChange={(e) => setVForm((f) => ({ ...f, ideal: e.target.value }))} placeholder="Family trips" /></div>
+      <Sheet open={vDialogOpen} onOpenChange={setVDialogOpen}>
+        <SheetContent className="w-full sm:max-w-xl overflow-y-auto p-0 flex flex-col">
+          <SheetHeader className="p-6 pb-0"><SheetTitle>{vForm.id ? "Edit" : "Add"} Vehicle</SheetTitle></SheetHeader>
+          <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2"><Label>Name *</Label><Input value={vForm.name} onChange={(e) => setVForm((f) => ({ ...f, name: e.target.value }))} placeholder="Premium SUV" /></div>
+              <div className="space-y-2"><Label>Model *</Label><Input value={vForm.model} onChange={(e) => setVForm((f) => ({ ...f, model: e.target.value }))} placeholder="Toyota Innova Crysta" /></div>
+              <div className="space-y-2"><Label>Capacity</Label><Input value={vForm.capacity} onChange={(e) => setVForm((f) => ({ ...f, capacity: e.target.value }))} placeholder="6-7 Passengers" /></div>
+              <div className="space-y-2"><Label>Ideal For</Label><Input value={vForm.ideal} onChange={(e) => setVForm((f) => ({ ...f, ideal: e.target.value }))} placeholder="Family trips" /></div>
+            </div>
+            <div className="space-y-2"><Label>Image</Label><ImageUpload value={vForm.image} onChange={(url) => setVForm((f) => ({ ...f, image: url }))} folder="cab" /></div>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between"><Label>Features</Label><Button type="button" variant="outline" size="sm" onClick={() => setVForm((f) => ({ ...f, features: [...f.features, ""] }))} className="gap-1"><RiAddCircleLine className="w-4 h-4" /> Add</Button></div>
+              {vForm.features.map((feat, i) => (
+                <div key={i} className="flex gap-2"><Input value={feat} onChange={(e) => setVForm((f) => ({ ...f, features: f.features.map((v, idx) => idx === i ? e.target.value : v) }))} placeholder="Feature" /><Button type="button" variant="ghost" size="sm" className="text-destructive" onClick={() => setVForm((f) => ({ ...f, features: f.features.filter((_, idx) => idx !== i) }))}><RiCloseLine className="w-4 h-4" /></Button></div>
+              ))}
+            </div>
+            <div className="flex items-center gap-2 pt-2"><Switch checked={vForm.isActive} onCheckedChange={(v) => setVForm((f) => ({ ...f, isActive: v }))} /><Label>Active</Label></div>
           </div>
-          <div className="space-y-2"><Label>Image</Label><ImageUpload value={vForm.image} onChange={(url) => setVForm((f) => ({ ...f, image: url }))} folder="cab" /></div>
-          <div className="space-y-3">
-            <div className="flex items-center justify-between"><Label>Features</Label><Button type="button" variant="outline" size="sm" onClick={() => setVForm((f) => ({ ...f, features: [...f.features, ""] }))} className="gap-1"><RiAddCircleLine className="w-4 h-4" /> Add</Button></div>
-            {vForm.features.map((feat, i) => (
-              <div key={i} className="flex gap-2"><Input value={feat} onChange={(e) => setVForm((f) => ({ ...f, features: f.features.map((v, idx) => idx === i ? e.target.value : v) }))} placeholder="Feature" /><Button type="button" variant="ghost" size="sm" className="text-destructive" onClick={() => setVForm((f) => ({ ...f, features: f.features.filter((_, idx) => idx !== i) }))}><RiCloseLine className="w-4 h-4" /></Button></div>
-            ))}
-          </div>
-          <div className="flex items-center gap-2"><Switch checked={vForm.isActive} onCheckedChange={(v) => setVForm((f) => ({ ...f, isActive: v }))} /><Label>Active</Label></div>
-        </div>
-        <DialogFooter><Button variant="outline" onClick={() => setVDialogOpen(false)}>Cancel</Button><Button onClick={saveVehicle} disabled={saving}>{saving ? "Saving..." : "Save"}</Button></DialogFooter>
-        </DialogContent>
-      </Dialog>
+          <SheetFooter className="p-6 pt-4 border-t"><Button variant="outline" onClick={() => setVDialogOpen(false)}>Cancel</Button><Button onClick={saveVehicle} disabled={saving}>{saving ? "Saving..." : "Save"}</Button></SheetFooter>
+        </SheetContent>
+      </Sheet>
 
       {/* Route Dialog */}
-      <Dialog open={rDialogOpen} onOpenChange={setRDialogOpen}>
-        <DialogContent className="max-w-lg"><DialogHeader><DialogTitle>{rForm.id ? "Edit" : "Add"} Route</DialogTitle></DialogHeader>
-        <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2"><Label>From *</Label><Input value={rForm.fromCity} onChange={(e) => setRForm((f) => ({ ...f, fromCity: e.target.value }))} placeholder="Chandigarh" /></div>
-            <div className="space-y-2"><Label>To *</Label><Input value={rForm.toCity} onChange={(e) => setRForm((f) => ({ ...f, toCity: e.target.value }))} placeholder="Manali" /></div>
-            <div className="space-y-2"><Label>Price</Label><Input value={rForm.price} onChange={(e) => setRForm((f) => ({ ...f, price: e.target.value }))} placeholder="Starts from ₹4,500" /></div>
-            <div className="space-y-2"><Label>Duration</Label><Input value={rForm.duration} onChange={(e) => setRForm((f) => ({ ...f, duration: e.target.value }))} placeholder="8-9 Hours" /></div>
+      <Sheet open={rDialogOpen} onOpenChange={setRDialogOpen}>
+        <SheetContent className="w-full sm:max-w-xl overflow-y-auto p-0 flex flex-col">
+          <SheetHeader className="p-6 pb-0"><SheetTitle>{rForm.id ? "Edit" : "Add"} Route</SheetTitle></SheetHeader>
+          <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2"><Label>From *</Label><Input value={rForm.fromCity} onChange={(e) => setRForm((f) => ({ ...f, fromCity: e.target.value }))} placeholder="Chandigarh" /></div>
+              <div className="space-y-2"><Label>To *</Label><Input value={rForm.toCity} onChange={(e) => setRForm((f) => ({ ...f, toCity: e.target.value }))} placeholder="Manali" /></div>
+              <div className="space-y-2"><Label>Price</Label><Input value={rForm.price} onChange={(e) => setRForm((f) => ({ ...f, price: e.target.value }))} placeholder="Starts from ₹4,500" /></div>
+              <div className="space-y-2"><Label>Duration</Label><Input value={rForm.duration} onChange={(e) => setRForm((f) => ({ ...f, duration: e.target.value }))} placeholder="8-9 Hours" /></div>
+            </div>
+            <div className="flex items-center gap-2 pt-2"><Switch checked={rForm.isActive} onCheckedChange={(v) => setRForm((f) => ({ ...f, isActive: v }))} /><Label>Active</Label></div>
           </div>
-          <div className="flex items-center gap-2"><Switch checked={rForm.isActive} onCheckedChange={(v) => setRForm((f) => ({ ...f, isActive: v }))} /><Label>Active</Label></div>
-        </div>
-        <DialogFooter><Button variant="outline" onClick={() => setRDialogOpen(false)}>Cancel</Button><Button onClick={saveRoute} disabled={saving}>{saving ? "Saving..." : "Save"}</Button></DialogFooter>
-        </DialogContent>
-      </Dialog>
+          <SheetFooter className="p-6 pt-4 border-t"><Button variant="outline" onClick={() => setRDialogOpen(false)}>Cancel</Button><Button onClick={saveRoute} disabled={saving}>{saving ? "Saving..." : "Save"}</Button></SheetFooter>
+        </SheetContent>
+      </Sheet>
 
       <AlertDialog open={!!deleteTarget} onOpenChange={() => setDeleteTarget(null)}>
         <AlertDialogContent><AlertDialogHeader><AlertDialogTitle>Delete?</AlertDialogTitle><AlertDialogDescription>This cannot be undone.</AlertDialogDescription></AlertDialogHeader>

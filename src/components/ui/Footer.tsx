@@ -1,7 +1,16 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { MountainSnow, MessageCircle, Globe, Send, Mail, Phone, MapPin } from "lucide-react";
 
 export const Footer = () => {
+  const pathname = usePathname();
+
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
+
   return (
     <footer className="bg-forest-900 text-white pt-20 pb-10">
       <div className="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 border-b border-forest-800 pb-12 mb-8">

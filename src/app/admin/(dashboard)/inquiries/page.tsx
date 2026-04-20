@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
@@ -83,9 +83,10 @@ export default function InquiriesPage() {
         ))}
       </TableBody></Table></CardContent></Card>
 
-      <Dialog open={!!selected} onOpenChange={() => setSelected(null)}>
-        <DialogContent className="max-w-lg">
-          <DialogHeader><DialogTitle>Inquiry Details</DialogTitle></DialogHeader>
+      <Sheet open={!!selected} onOpenChange={() => setSelected(null)}>
+        <SheetContent className="w-full sm:max-w-xl overflow-y-auto p-0 flex flex-col">
+          <SheetHeader className="p-6 pb-0"><SheetTitle>Inquiry Details</SheetTitle></SheetHeader>
+          <div className="flex-1 overflow-y-auto px-6 py-4">
           {selected && (
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4 text-sm">
@@ -119,9 +120,10 @@ export default function InquiriesPage() {
               <p className="text-xs text-muted-foreground">Submitted on {new Date(selected.createdAt).toLocaleString()}</p>
             </div>
           )}
-          <DialogFooter><Button variant="outline" onClick={() => setSelected(null)}>Close</Button></DialogFooter>
-        </DialogContent>
-      </Dialog>
+          </div>
+          <SheetFooter className="p-6 pt-4 border-t"><Button variant="outline" onClick={() => setSelected(null)}>Close</Button></SheetFooter>
+        </SheetContent>
+      </Sheet>
 
       <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
         <AlertDialogContent><AlertDialogHeader><AlertDialogTitle>Delete Inquiry?</AlertDialogTitle><AlertDialogDescription>This cannot be undone.</AlertDialogDescription></AlertDialogHeader>

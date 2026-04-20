@@ -9,7 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
@@ -160,59 +160,57 @@ export default function BlogsPage() {
         </CardContent>
       </Card>
 
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-3xl max-h-[90vh] p-0">
-          <DialogHeader className="p-6 pb-0">
-            <DialogTitle>{form.id ? "Edit Blog" : "Create Blog"}</DialogTitle>
-            <DialogDescription>Write and publish travel content.</DialogDescription>
-          </DialogHeader>
-          <ScrollArea className="max-h-[70vh] px-6">
-            <div className="space-y-5 pb-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2"><Label>Title *</Label><Input value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} /></div>
-                <div className="space-y-2"><Label>Slug</Label><Input value={form.slug} onChange={(e) => setForm((f) => ({ ...f, slug: e.target.value }))} placeholder="auto-generated" /></div>
-                <div className="space-y-2"><Label>Author *</Label><Input value={form.author} onChange={(e) => setForm((f) => ({ ...f, author: e.target.value }))} /></div>
-                <div className="space-y-2"><Label>Category</Label><Input value={form.category} onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))} /></div>
-              </div>
-              <div className="space-y-2"><Label>Cover Image</Label><ImageUpload value={form.coverImage} onChange={(url) => setForm((f) => ({ ...f, coverImage: url }))} folder="blogs" /></div>
-              <div className="space-y-2"><Label>Excerpt *</Label><Textarea value={form.excerpt} onChange={(e) => setForm((f) => ({ ...f, excerpt: e.target.value }))} rows={2} /></div>
-              <div className="space-y-2"><Label>Content * (Markdown supported)</Label><Textarea value={form.content} onChange={(e) => setForm((f) => ({ ...f, content: e.target.value }))} rows={12} className="font-mono text-sm" /></div>
+      <Sheet open={dialogOpen} onOpenChange={setDialogOpen}>
+        <SheetContent className="w-full sm:max-w-3xl overflow-y-auto p-0 flex flex-col">
+          <SheetHeader className="p-6 pb-0">
+            <SheetTitle>{form.id ? "Edit Blog" : "Create Blog"}</SheetTitle>
+            <SheetDescription>Write and publish travel content.</SheetDescription>
+          </SheetHeader>
+          <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2"><Label>Title *</Label><Input value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} /></div>
+              <div className="space-y-2"><Label>Slug</Label><Input value={form.slug} onChange={(e) => setForm((f) => ({ ...f, slug: e.target.value }))} placeholder="auto-generated" /></div>
+              <div className="space-y-2"><Label>Author *</Label><Input value={form.author} onChange={(e) => setForm((f) => ({ ...f, author: e.target.value }))} /></div>
+              <div className="space-y-2"><Label>Category</Label><Input value={form.category} onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))} /></div>
+            </div>
+            <div className="space-y-2"><Label>Cover Image</Label><ImageUpload value={form.coverImage} onChange={(url) => setForm((f) => ({ ...f, coverImage: url }))} folder="blogs" /></div>
+            <div className="space-y-2"><Label>Excerpt *</Label><Textarea value={form.excerpt} onChange={(e) => setForm((f) => ({ ...f, excerpt: e.target.value }))} rows={2} /></div>
+            <div className="space-y-2"><Label>Content * (Markdown supported)</Label><Textarea value={form.content} onChange={(e) => setForm((f) => ({ ...f, content: e.target.value }))} rows={12} className="font-mono text-sm" /></div>
 
-              <div className="space-y-2">
-                <Label>Tags</Label>
-                <div className="flex gap-2">
-                  <Input value={tagInput} onChange={(e) => setTagInput(e.target.value)} placeholder="Add tag..." onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addTag())} />
-                  <Button type="button" variant="outline" onClick={addTag}>Add</Button>
-                </div>
-                <div className="flex flex-wrap gap-1 mt-2">
-                  {form.tags.map((tag) => (
-                    <Badge key={tag} variant="secondary" className="gap-1 cursor-pointer" onClick={() => setForm((f) => ({ ...f, tags: f.tags.filter((t) => t !== tag) }))}>
-                      {tag} ×
-                    </Badge>
-                  ))}
-                </div>
+            <div className="space-y-2">
+              <Label>Tags</Label>
+              <div className="flex gap-2">
+                <Input value={tagInput} onChange={(e) => setTagInput(e.target.value)} placeholder="Add tag..." onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addTag())} />
+                <Button type="button" variant="outline" onClick={addTag}>Add</Button>
               </div>
-
-              <div className="flex items-center gap-2">
-                <Switch checked={form.isPublished} onCheckedChange={(v) => setForm((f) => ({ ...f, isPublished: v }))} />
-                <Label>Published</Label>
-              </div>
-
-              <Separator />
-              <div className="space-y-4">
-                <Label className="text-base font-semibold">SEO</Label>
-                <div className="space-y-2"><Label className="text-xs text-muted-foreground">Meta Title</Label><Input value={form.metaTitle} onChange={(e) => setForm((f) => ({ ...f, metaTitle: e.target.value }))} /></div>
-                <div className="space-y-2"><Label className="text-xs text-muted-foreground">Meta Description</Label><Textarea value={form.metaDescription} onChange={(e) => setForm((f) => ({ ...f, metaDescription: e.target.value }))} rows={2} /></div>
-                <div className="space-y-2"><Label className="text-xs text-muted-foreground">Meta Keywords</Label><Input value={form.metaKeywords} onChange={(e) => setForm((f) => ({ ...f, metaKeywords: e.target.value }))} /></div>
+              <div className="flex flex-wrap gap-1 mt-2">
+                {form.tags.map((tag) => (
+                  <Badge key={tag} variant="secondary" className="gap-1 cursor-pointer" onClick={() => setForm((f) => ({ ...f, tags: f.tags.filter((t) => t !== tag) }))}>
+                    {tag} ×
+                  </Badge>
+                ))}
               </div>
             </div>
-          </ScrollArea>
-          <DialogFooter className="p-6 pt-0">
+
+            <div className="flex items-center gap-2">
+              <Switch checked={form.isPublished} onCheckedChange={(v) => setForm((f) => ({ ...f, isPublished: v }))} />
+              <Label>Published</Label>
+            </div>
+
+            <Separator />
+            <div className="space-y-4">
+              <Label className="text-base font-semibold">SEO</Label>
+              <div className="space-y-2"><Label className="text-xs text-muted-foreground">Meta Title</Label><Input value={form.metaTitle} onChange={(e) => setForm((f) => ({ ...f, metaTitle: e.target.value }))} /></div>
+              <div className="space-y-2"><Label className="text-xs text-muted-foreground">Meta Description</Label><Textarea value={form.metaDescription} onChange={(e) => setForm((f) => ({ ...f, metaDescription: e.target.value }))} rows={2} /></div>
+              <div className="space-y-2"><Label className="text-xs text-muted-foreground">Meta Keywords</Label><Input value={form.metaKeywords} onChange={(e) => setForm((f) => ({ ...f, metaKeywords: e.target.value }))} /></div>
+            </div>
+          </div>
+          <SheetFooter className="p-6 pt-4 border-t">
             <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
             <Button onClick={handleSave} disabled={saving}>{saving ? "Saving..." : "Save Blog"}</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
 
       <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
         <AlertDialogContent>

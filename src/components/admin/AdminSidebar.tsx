@@ -53,13 +53,13 @@ export function AdminSidebar() {
   }
 
   return (
-    <Sidebar className="border-r border-sidebar-border">
-      <SidebarHeader className="px-6 py-5 border-b border-sidebar-border">
-        <Link href="/admin/dashboard" className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center shadow-md">
+    <Sidebar collapsible="icon" className="border-r border-sidebar-border">
+      <SidebarHeader className="px-6 py-5 border-b border-sidebar-border group-data-[collapsible=icon]:px-2 group-data-[collapsible=icon]:py-4">
+        <Link href="/admin/dashboard" className="flex items-center gap-3 justify-center">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center shadow-md flex-shrink-0">
             <RiLandscapeLine className="w-5 h-5 text-white" />
           </div>
-          <div>
+          <div className="group-data-[collapsible=icon]:hidden">
             <h2 className="text-sm font-bold tracking-tight">Himvigo</h2>
             <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-widest">Admin Panel</p>
           </div>
@@ -77,6 +77,7 @@ export function AdminSidebar() {
                 <SidebarMenuItem key={item.href}>
                   <SidebarMenuButton
                     asChild
+                    tooltip={item.title}
                     isActive={pathname === item.href || pathname.startsWith(item.href + "/")}
                     className="gap-3 px-3 py-2.5 rounded-lg font-medium transition-all"
                   >
@@ -101,6 +102,7 @@ export function AdminSidebar() {
                 <SidebarMenuItem key={item.href}>
                   <SidebarMenuButton
                     asChild
+                    tooltip={item.title}
                     isActive={pathname === item.href}
                     className="gap-3 px-3 py-2.5 rounded-lg font-medium transition-all"
                   >
@@ -116,15 +118,19 @@ export function AdminSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="p-4 border-t border-sidebar-border">
-        <Button
-          variant="ghost"
-          onClick={handleLogout}
-          className="w-full justify-start gap-3 text-muted-foreground hover:text-destructive hover:bg-destructive/10 font-medium"
-        >
-          <RiLogoutBoxLine className="w-4 h-4" />
-          Sign Out
-        </Button>
+      <SidebarFooter className="p-4 border-t border-sidebar-border group-data-[collapsible=icon]:p-2">
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              tooltip="Sign Out"
+              onClick={handleLogout}
+              className="w-full justify-start gap-3 text-muted-foreground hover:text-destructive hover:bg-destructive/10 font-medium group-data-[collapsible=icon]:justify-center"
+            >
+              <RiLogoutBoxLine className="w-4 h-4" />
+              <span>Sign Out</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
   );

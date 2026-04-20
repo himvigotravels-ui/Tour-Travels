@@ -19,6 +19,11 @@ export default function TestimonialSlider({ testimonials = [] }: { testimonials:
 
   if (!mounted) return null;
 
+  // Duplicate items if too few to allow smooth infinite loop without warnings
+  const slideItems = testimonials.length > 0 && testimonials.length < 6 
+    ? [...testimonials, ...testimonials, ...testimonials].slice(0, 8) 
+    : testimonials;
+
   return (
     <div className="relative w-full">
       <div className="flex justify-between items-end mb-16">
@@ -54,7 +59,7 @@ export default function TestimonialSlider({ testimonials = [] }: { testimonials:
         loop={true}
         className="pb-16"
       >
-        {testimonials.map((t, i) => (
+        {slideItems.map((t, i) => (
           <SwiperSlide key={i} className="h-auto">
             <div className="bg-white p-8 md:p-10 rounded-3xl border border-slate-100 shadow-[0_8px_30px_-4px_rgba(0,0,0,0.05)] hover:-translate-y-2 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.1)] transition-all duration-500 relative flex flex-col h-full cursor-grab active:cursor-grabbing">
               <div>

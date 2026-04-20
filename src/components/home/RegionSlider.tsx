@@ -25,6 +25,11 @@ export default function RegionSlider({ destinations = [] }: { destinations: Dest
 
   if (!mounted) return null; // Prevent hydration mismatch on arrows
 
+  // Duplicate items if too few to allow smooth infinite loop without warnings
+  const slideItems = destinations.length > 0 && destinations.length < 6 
+    ? [...destinations, ...destinations, ...destinations].slice(0, 8) 
+    : destinations;
+
   return (
     <div className="relative w-full">
       <div className="flex justify-between items-end mb-10">
@@ -57,7 +62,7 @@ export default function RegionSlider({ destinations = [] }: { destinations: Dest
         loop={true}
         className="!overflow-visible px-4 md:px-0" 
       >
-        {destinations.map((dest, i) => (
+        {slideItems.map((dest, i) => (
           <SwiperSlide key={i} className="h-full !w-[300px] md:!w-[380px]">
             <Link href={`/destinations/${dest.slug}`} className="block w-full h-[350px] md:h-[450px] rounded-3xl overflow-hidden relative group cursor-pointer shadow-xl border border-white/10 select-none">
               <div className="absolute inset-0 bg-slate-900/40 group-hover:bg-slate-900/10 transition-colors duration-500 z-10" />

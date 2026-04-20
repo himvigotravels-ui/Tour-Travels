@@ -9,7 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
@@ -105,10 +105,10 @@ export default function DestinationsPage() {
         </Table>
       </CardContent></Card>
 
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-3xl max-h-[90vh] p-0">
-          <DialogHeader className="p-6 pb-0"><DialogTitle>{form.id ? "Edit" : "Create"} Destination</DialogTitle><DialogDescription>Add or edit destination details and SEO.</DialogDescription></DialogHeader>
-          <ScrollArea className="max-h-[70vh] px-6"><div className="space-y-5 pb-6">
+      <Sheet open={dialogOpen} onOpenChange={setDialogOpen}>
+        <SheetContent className="w-full sm:max-w-2xl overflow-y-auto p-0 flex flex-col">
+          <SheetHeader className="p-6 pb-0"><SheetTitle>{form.id ? "Edit" : "Create"} Destination</SheetTitle><SheetDescription>Add or edit destination details and SEO.</SheetDescription></SheetHeader>
+          <div className="flex-1 overflow-y-auto px-6 py-4 space-y-5">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2"><Label>Name *</Label><Input value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} /></div>
               <div className="space-y-2"><Label>Slug</Label><Input value={form.slug} onChange={(e) => setForm((f) => ({ ...f, slug: e.target.value }))} placeholder="auto-generated" /></div>
@@ -137,10 +137,10 @@ export default function DestinationsPage() {
               <div className="space-y-2"><Label className="text-xs text-muted-foreground">Meta Description</Label><Textarea value={form.metaDescription} onChange={(e) => setForm((f) => ({ ...f, metaDescription: e.target.value }))} rows={2} /></div>
               <div className="space-y-2"><Label className="text-xs text-muted-foreground">Meta Keywords</Label><Input value={form.metaKeywords} onChange={(e) => setForm((f) => ({ ...f, metaKeywords: e.target.value }))} /></div>
             </div>
-          </div></ScrollArea>
-          <DialogFooter className="p-6 pt-0"><Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button><Button onClick={handleSave} disabled={saving}>{saving ? "Saving..." : "Save"}</Button></DialogFooter>
-        </DialogContent>
-      </Dialog>
+          </div>
+          <SheetFooter className="p-6 pt-4 border-t"><Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button><Button onClick={handleSave} disabled={saving}>{saving ? "Saving..." : "Save"}</Button></SheetFooter>
+        </SheetContent>
+      </Sheet>
 
       <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
         <AlertDialogContent><AlertDialogHeader><AlertDialogTitle>Delete Destination?</AlertDialogTitle><AlertDialogDescription>This action cannot be undone.</AlertDialogDescription></AlertDialogHeader>

@@ -9,7 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
@@ -232,181 +232,178 @@ export default function PackagesPage() {
         </CardContent>
       </Card>
 
-      {/* Create/Edit Dialog */}
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-4xl max-h-[90vh] p-0">
-          <DialogHeader className="p-6 pb-0">
-            <DialogTitle>{form.id ? "Edit Package" : "Create Package"}</DialogTitle>
-            <DialogDescription>Fill in the details for your tour package.</DialogDescription>
-          </DialogHeader>
-          <ScrollArea className="max-h-[70vh] px-6">
-            <div className="space-y-6 pb-6">
-              {/* Basic Info */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>Title *</Label>
-                  <Input value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} placeholder="Spiti Valley Road Trip" />
-                </div>
-                <div className="space-y-2">
-                  <Label>Slug</Label>
-                  <Input value={form.slug} onChange={(e) => setForm((f) => ({ ...f, slug: e.target.value }))} placeholder="auto-generated" />
-                </div>
-                <div className="space-y-2">
-                  <Label>Location *</Label>
-                  <Input value={form.location} onChange={(e) => setForm((f) => ({ ...f, location: e.target.value }))} placeholder="Spiti Valley" />
-                </div>
-                <div className="space-y-2">
-                  <Label>Vehicle Type *</Label>
-                  <Input value={form.vehicleType} onChange={(e) => setForm((f) => ({ ...f, vehicleType: e.target.value }))} placeholder="Tempo Traveller" />
-                </div>
-                <div className="space-y-2">
-                  <Label>Price Per Person (₹) *</Label>
-                  <Input type="number" value={form.pricePerPerson} onChange={(e) => setForm((f) => ({ ...f, pricePerPerson: Number(e.target.value) }))} />
-                </div>
-                <div className="space-y-2">
-                  <Label>Max Occupancy *</Label>
-                  <Input type="number" value={form.maxOccupancy} onChange={(e) => setForm((f) => ({ ...f, maxOccupancy: Number(e.target.value) }))} />
-                </div>
-                <div className="space-y-2">
-                  <Label>Duration Days *</Label>
-                  <Input type="number" value={form.durationDays} onChange={(e) => setForm((f) => ({ ...f, durationDays: Number(e.target.value) }))} />
-                </div>
-                <div className="space-y-2">
-                  <Label>Duration Nights *</Label>
-                  <Input type="number" value={form.durationNights} onChange={(e) => setForm((f) => ({ ...f, durationNights: Number(e.target.value) }))} />
-                </div>
-              </div>
-
+      {/* Create/Edit Sheet */}
+      <Sheet open={dialogOpen} onOpenChange={setDialogOpen}>
+        <SheetContent className="w-full sm:max-w-3xl overflow-y-auto p-0 flex flex-col">
+          <SheetHeader className="p-6 pb-0">
+            <SheetTitle>{form.id ? "Edit Package" : "Create Package"}</SheetTitle>
+            <SheetDescription>Fill in the details for your tour package.</SheetDescription>
+          </SheetHeader>
+          <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Description *</Label>
-                <Textarea value={form.description} onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))} rows={4} placeholder="Detailed package description..." />
+                <Label>Title *</Label>
+                <Input value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} placeholder="Spiti Valley Road Trip" />
               </div>
-
-              {/* Images */}
               <div className="space-y-2">
-                <Label>Images</Label>
-                <MultiImageUpload value={form.imageUrls} onChange={(urls) => setForm((f) => ({ ...f, imageUrls: urls }))} folder="packages" />
+                <Label>Slug</Label>
+                <Input value={form.slug} onChange={(e) => setForm((f) => ({ ...f, slug: e.target.value }))} placeholder="auto-generated" />
               </div>
-
-              {/* Categories */}
               <div className="space-y-2">
-                <Label>Categories</Label>
-                <div className="flex flex-wrap gap-2">
-                  {categoryOptions.map((cat) => (
-                    <Badge
-                      key={cat}
-                      variant={form.categories.includes(cat) ? "default" : "outline"}
-                      className="cursor-pointer capitalize"
-                      onClick={() => toggleCategory(cat)}
-                    >
-                      {cat}
-                    </Badge>
-                  ))}
-                </div>
+                <Label>Location *</Label>
+                <Input value={form.location} onChange={(e) => setForm((f) => ({ ...f, location: e.target.value }))} placeholder="Spiti Valley" />
               </div>
-
-              {/* Toggles */}
-              <div className="flex items-center gap-8">
-                <div className="flex items-center gap-2">
-                  <Switch checked={form.isFeatured} onCheckedChange={(v) => setForm((f) => ({ ...f, isFeatured: v }))} />
-                  <Label>Featured</Label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Switch checked={form.isActive} onCheckedChange={(v) => setForm((f) => ({ ...f, isActive: v }))} />
-                  <Label>Active</Label>
-                </div>
+              <div className="space-y-2">
+                <Label>Vehicle Type *</Label>
+                <Input value={form.vehicleType} onChange={(e) => setForm((f) => ({ ...f, vehicleType: e.target.value }))} placeholder="Tempo Traveller" />
               </div>
+              <div className="space-y-2">
+                <Label>Price Per Person (₹) *</Label>
+                <Input type="number" value={form.pricePerPerson} onChange={(e) => setForm((f) => ({ ...f, pricePerPerson: Number(e.target.value) }))} />
+              </div>
+              <div className="space-y-2">
+                <Label>Max Occupancy *</Label>
+                <Input type="number" value={form.maxOccupancy} onChange={(e) => setForm((f) => ({ ...f, maxOccupancy: Number(e.target.value) }))} />
+              </div>
+              <div className="space-y-2">
+                <Label>Duration Days *</Label>
+                <Input type="number" value={form.durationDays} onChange={(e) => setForm((f) => ({ ...f, durationDays: Number(e.target.value) }))} />
+              </div>
+              <div className="space-y-2">
+                <Label>Duration Nights *</Label>
+                <Input type="number" value={form.durationNights} onChange={(e) => setForm((f) => ({ ...f, durationNights: Number(e.target.value) }))} />
+              </div>
+            </div>
 
-              <Separator />
+            <div className="space-y-2">
+              <Label>Description *</Label>
+              <Textarea value={form.description} onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))} rows={4} placeholder="Detailed package description..." />
+            </div>
 
-              {/* Itinerary */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <Label className="text-base font-semibold">Itinerary</Label>
-                  <Button type="button" variant="outline" size="sm" onClick={addItinerary} className="gap-1">
-                    <RiAddCircleLine className="w-4 h-4" /> Add Day
-                  </Button>
-                </div>
-                {form.itinerary.map((item, i) => (
-                  <div key={i} className="grid grid-cols-[auto_1fr_2fr_auto] gap-2 items-start">
-                    <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-sm font-bold text-muted-foreground mt-0.5">
-                      D{item.day}
-                    </div>
-                    <Input value={item.title} onChange={(e) => updateItinerary(i, "title", e.target.value)} placeholder="Day title" />
-                    <Input value={item.activities} onChange={(e) => updateItinerary(i, "activities", e.target.value)} placeholder="Activities description" />
-                    <Button type="button" variant="ghost" size="sm" onClick={() => removeItinerary(i)} className="text-destructive mt-0.5">
-                      <RiCloseLine className="w-4 h-4" />
-                    </Button>
-                  </div>
+            {/* Images */}
+            <div className="space-y-2">
+              <Label>Images</Label>
+              <MultiImageUpload value={form.imageUrls} onChange={(urls) => setForm((f) => ({ ...f, imageUrls: urls }))} folder="packages" />
+            </div>
+
+            {/* Categories */}
+            <div className="space-y-2">
+              <Label>Categories</Label>
+              <div className="flex flex-wrap gap-2">
+                {categoryOptions.map((cat) => (
+                  <Badge
+                    key={cat}
+                    variant={form.categories.includes(cat) ? "default" : "outline"}
+                    className="cursor-pointer capitalize"
+                    onClick={() => toggleCategory(cat)}
+                  >
+                    {cat}
+                  </Badge>
                 ))}
               </div>
+            </div>
 
-              <Separator />
+            {/* Toggles */}
+            <div className="flex items-center gap-8">
+              <div className="flex items-center gap-2">
+                <Switch checked={form.isFeatured} onCheckedChange={(v) => setForm((f) => ({ ...f, isFeatured: v }))} />
+                <Label>Featured</Label>
+              </div>
+              <div className="flex items-center gap-2">
+                <Switch checked={form.isActive} onCheckedChange={(v) => setForm((f) => ({ ...f, isActive: v }))} />
+                <Label>Active</Label>
+              </div>
+            </div>
 
-              {/* Inclusions */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <Label className="text-base font-semibold">Inclusions</Label>
-                  <Button type="button" variant="outline" size="sm" onClick={() => addListItem("inclusions")} className="gap-1">
-                    <RiAddCircleLine className="w-4 h-4" /> Add
+            <Separator />
+
+            {/* Itinerary */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <Label className="text-base font-semibold">Itinerary</Label>
+                <Button type="button" variant="outline" size="sm" onClick={addItinerary} className="gap-1">
+                  <RiAddCircleLine className="w-4 h-4" /> Add Day
+                </Button>
+              </div>
+              {form.itinerary.map((item, i) => (
+                <div key={i} className="grid grid-cols-[auto_1fr_2fr_auto] gap-2 items-start">
+                  <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-sm font-bold text-muted-foreground mt-0.5">
+                    D{item.day}
+                  </div>
+                  <Input value={item.title} onChange={(e) => updateItinerary(i, "title", e.target.value)} placeholder="Day title" />
+                  <Input value={item.activities} onChange={(e) => updateItinerary(i, "activities", e.target.value)} placeholder="Activities description" />
+                  <Button type="button" variant="ghost" size="sm" onClick={() => removeItinerary(i)} className="text-destructive mt-0.5">
+                    <RiCloseLine className="w-4 h-4" />
                   </Button>
                 </div>
-                {form.inclusions.map((item, i) => (
-                  <div key={i} className="flex gap-2">
-                    <Input value={item} onChange={(e) => updateListItem("inclusions", i, e.target.value)} placeholder="e.g. Accommodation in hotels" />
-                    <Button type="button" variant="ghost" size="sm" onClick={() => removeListItem("inclusions", i)} className="text-destructive shrink-0">
-                      <RiCloseLine className="w-4 h-4" />
-                    </Button>
-                  </div>
-                ))}
-              </div>
+              ))}
+            </div>
 
-              {/* Exclusions */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <Label className="text-base font-semibold">Exclusions</Label>
-                  <Button type="button" variant="outline" size="sm" onClick={() => addListItem("exclusions")} className="gap-1">
-                    <RiAddCircleLine className="w-4 h-4" /> Add
+            <Separator />
+
+            {/* Inclusions */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <Label className="text-base font-semibold">Inclusions</Label>
+                <Button type="button" variant="outline" size="sm" onClick={() => addListItem("inclusions")} className="gap-1">
+                  <RiAddCircleLine className="w-4 h-4" /> Add
+                </Button>
+              </div>
+              {form.inclusions.map((item, i) => (
+                <div key={i} className="flex gap-2">
+                  <Input value={item} onChange={(e) => updateListItem("inclusions", i, e.target.value)} placeholder="e.g. Accommodation in hotels" />
+                  <Button type="button" variant="ghost" size="sm" onClick={() => removeListItem("inclusions", i)} className="text-destructive shrink-0">
+                    <RiCloseLine className="w-4 h-4" />
                   </Button>
                 </div>
-                {form.exclusions.map((item, i) => (
-                  <div key={i} className="flex gap-2">
-                    <Input value={item} onChange={(e) => updateListItem("exclusions", i, e.target.value)} placeholder="e.g. Lunch and snacks" />
-                    <Button type="button" variant="ghost" size="sm" onClick={() => removeListItem("exclusions", i)} className="text-destructive shrink-0">
-                      <RiCloseLine className="w-4 h-4" />
-                    </Button>
-                  </div>
-                ))}
+              ))}
+            </div>
+
+            {/* Exclusions */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <Label className="text-base font-semibold">Exclusions</Label>
+                <Button type="button" variant="outline" size="sm" onClick={() => addListItem("exclusions")} className="gap-1">
+                  <RiAddCircleLine className="w-4 h-4" /> Add
+                </Button>
               </div>
+              {form.exclusions.map((item, i) => (
+                <div key={i} className="flex gap-2">
+                  <Input value={item} onChange={(e) => updateListItem("exclusions", i, e.target.value)} placeholder="e.g. Lunch and snacks" />
+                  <Button type="button" variant="ghost" size="sm" onClick={() => removeListItem("exclusions", i)} className="text-destructive shrink-0">
+                    <RiCloseLine className="w-4 h-4" />
+                  </Button>
+                </div>
+              ))}
+            </div>
 
-              <Separator />
+            <Separator />
 
-              {/* SEO */}
-              <div className="space-y-4">
-                <Label className="text-base font-semibold">SEO Settings</Label>
-                <div className="grid grid-cols-1 gap-4">
-                  <div className="space-y-2">
-                    <Label className="text-xs text-muted-foreground">Meta Title</Label>
-                    <Input value={form.metaTitle} onChange={(e) => setForm((f) => ({ ...f, metaTitle: e.target.value }))} placeholder="SEO title (defaults to package title)" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label className="text-xs text-muted-foreground">Meta Description</Label>
-                    <Textarea value={form.metaDescription} onChange={(e) => setForm((f) => ({ ...f, metaDescription: e.target.value }))} placeholder="SEO description" rows={2} />
-                  </div>
-                  <div className="space-y-2">
-                    <Label className="text-xs text-muted-foreground">Meta Keywords</Label>
-                    <Input value={form.metaKeywords} onChange={(e) => setForm((f) => ({ ...f, metaKeywords: e.target.value }))} placeholder="spiti, tour, adventure" />
-                  </div>
+            {/* SEO */}
+            <div className="space-y-4">
+              <Label className="text-base font-semibold">SEO Settings</Label>
+              <div className="grid grid-cols-1 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">Meta Title</Label>
+                  <Input value={form.metaTitle} onChange={(e) => setForm((f) => ({ ...f, metaTitle: e.target.value }))} placeholder="SEO title (defaults to package title)" />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">Meta Description</Label>
+                  <Textarea value={form.metaDescription} onChange={(e) => setForm((f) => ({ ...f, metaDescription: e.target.value }))} placeholder="SEO description" rows={2} />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-xs text-muted-foreground">Meta Keywords</Label>
+                  <Input value={form.metaKeywords} onChange={(e) => setForm((f) => ({ ...f, metaKeywords: e.target.value }))} placeholder="spiti, tour, adventure" />
                 </div>
               </div>
             </div>
-          </ScrollArea>
-          <DialogFooter className="p-6 pt-0">
+          </div>
+          <SheetFooter className="p-6 pt-4 border-t">
             <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
             <Button onClick={handleSave} disabled={saving}>{saving ? "Saving..." : "Save Package"}</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
 
       {/* Delete Confirmation */}
       <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>

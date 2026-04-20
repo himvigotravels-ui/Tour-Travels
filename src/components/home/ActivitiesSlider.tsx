@@ -16,6 +16,11 @@ const IconMap: Record<string, React.ReactNode> = {
 };
 
 export default function ActivitiesSlider({ activities = [] }: { activities: ActivityData[] }) {
+  // Duplicate items if too few to allow smooth infinite loop without warnings
+  const slideItems = activities.length > 0 && activities.length < 6 
+    ? [...activities, ...activities, ...activities].slice(0, 8) 
+    : activities;
+
   return (
     <div className="w-full">
       <Swiper
@@ -35,7 +40,7 @@ export default function ActivitiesSlider({ activities = [] }: { activities: Acti
         loop={true}
         className="pb-16"
       >
-        {activities.map((act, i) => (
+        {slideItems.map((act, i) => (
           <SwiperSlide key={i}>
             <div className="group relative h-[500px] rounded-[2.5rem] overflow-hidden shadow-2xl border border-slate-200/50">
               <img 
