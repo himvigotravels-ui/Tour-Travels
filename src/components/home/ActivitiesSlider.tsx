@@ -7,45 +7,15 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Compass, Zap, MapPin } from "lucide-react";
 
-const activities = [
-  {
-    title: "Mountain Trekking",
-    desc: "Explore the untouched trails of the Great Himalayan National Park and Spiti Valley.",
-    img: "/images/activities/trekking.png",
-    location: "Spiti & Manali",
-    icon: <Compass className="w-5 h-5" />
-  },
-  {
-    title: "River Rafting",
-    desc: "Battle the white water rapids of Beas River for an adrenaline-pumping experience.",
-    img: "/images/activities/rafting.png",
-    location: "Kullu Valley",
-    icon: <Zap className="w-5 h-5" />
-  },
-  {
-    title: "Paragliding",
-    desc: "Soar like a bird over the lush green valleys of Bir Billing, the paragliding capital.",
-    img: "/images/activities/paragliding.png",
-    location: "Bir Billing",
-    icon: <MapPin className="w-5 h-5" />
-  },
-  {
-    title: "Alpine Camping",
-    desc: "Sleep under a million stars in the high-altitude cold deserts and lush meadows.",
-    img: "/images/activities/camping.png",
-    location: "Spiti & Chandratal",
-    icon: <Compass className="w-5 h-5" />
-  },
-  {
-    title: "Snow Skiing",
-    desc: "Glide through the thick powder snow of Solang Valley and Rohtang Pass.",
-    img: "/images/activities/skiing.png",
-    location: "Manali",
-    icon: <Zap className="w-5 h-5" />
-  }
-];
+import { ActivityData } from "@/lib/db/activities";
 
-export default function ActivitiesSlider() {
+const IconMap: Record<string, React.ReactNode> = {
+  Compass: <Compass className="w-5 h-5" />,
+  Zap: <Zap className="w-5 h-5" />,
+  MapPin: <MapPin className="w-5 h-5" />,
+};
+
+export default function ActivitiesSlider({ activities = [] }: { activities: ActivityData[] }) {
   return (
     <div className="w-full">
       <Swiper
@@ -69,14 +39,14 @@ export default function ActivitiesSlider() {
           <SwiperSlide key={i}>
             <div className="group relative h-[500px] rounded-[2.5rem] overflow-hidden shadow-2xl border border-slate-200/50">
               <img 
-                src={act.img} 
+                src={act.image} 
                 alt={act.title} 
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent flex flex-col justify-end p-8 md:p-10">
                 <div className="flex items-center gap-2 mb-4">
                   <div className="p-2 rounded-lg bg-amber-500 text-slate-900 shadow-lg">
-                    {act.icon}
+                    {IconMap[act.icon] || <Compass className="w-5 h-5" />}
                   </div>
                   <span className="text-sm font-bold text-white uppercase tracking-widest bg-white/10 backdrop-blur-md px-3 py-1 rounded-full border border-white/20">
                     {act.location}
@@ -86,7 +56,7 @@ export default function ActivitiesSlider() {
                   {act.title}
                 </h3>
                 <p className="text-slate-200 text-sm font-medium leading-relaxed opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500">
-                  {act.desc}
+                  {act.description}
                 </p>
               </div>
             </div>

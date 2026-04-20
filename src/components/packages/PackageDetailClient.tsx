@@ -38,7 +38,7 @@ export default function PackageDetailClient({ pkg }: PackageDetailClientProps) {
           className="absolute inset-0 z-0"
         >
           <img 
-            src={pkg.image_urls[0]} 
+            src={pkg.imageUrls[0]} 
             alt={pkg.title} 
             className="w-full h-full object-cover"
           />
@@ -88,7 +88,7 @@ export default function PackageDetailClient({ pkg }: PackageDetailClientProps) {
                 </div>
                 <div className="flex items-center text-slate-100 font-medium bg-white/10 backdrop-blur-md px-5 py-2.5 rounded-full border border-white/20 shadow-lg font-inter">
                   <Clock className="w-5 h-5 mr-2 text-amber-400" />
-                  {pkg.duration_days} Days / {pkg.duration_nights} Nights
+                  {pkg.durationDays} Days / {pkg.durationNights} Nights
                 </div>
               </motion.div>
             </div>
@@ -124,9 +124,9 @@ export default function PackageDetailClient({ pkg }: PackageDetailClientProps) {
             className="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 bg-white rounded-3xl shadow-sm border border-slate-200"
           >
             {[
-              { icon: Users, label: "Group Size", value: `Up to ${pkg.max_occupancy} px` },
-              { icon: Car, label: "Vehicle", value: pkg.vehicle_type },
-              { icon: Clock, label: "Duration", value: `${pkg.duration_days}D / ${pkg.duration_nights}N` },
+              { icon: Users, label: "Group Size", value: `Up to ${pkg.maxOccupancy} px` },
+              { icon: Car, label: "Vehicle", value: pkg.vehicleType },
+              { icon: Clock, label: "Duration", value: `${pkg.durationDays}D / ${pkg.durationNights}N` },
               { icon: Star, label: "Rating", value: "4.9/5 Excellent" }
             ].map((stat, i) => (
               <motion.div key={i} variants={fadeInUp} className="flex flex-col">
@@ -248,7 +248,7 @@ export default function PackageDetailClient({ pkg }: PackageDetailClientProps) {
 
         {/* Sticky Booking Sidebar */}
         <div className="w-full lg:w-1/3">
-          <BookingForm price={pkg.price_per_person} />
+          <BookingForm price={pkg.pricePerPerson} />
         </div>
 
       </section>

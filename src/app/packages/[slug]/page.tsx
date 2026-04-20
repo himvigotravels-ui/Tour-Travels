@@ -9,6 +9,19 @@ type Props = {
 
 const CATEGORIES = ["honeymoon", "family", "adventure", "offbeat", "spiritual", "cultural"];
 
+export async function generateStaticParams() {
+  const packages = await getAllPackages();
+  const packageParams = packages.map((pkg) => ({
+    slug: pkg.slug,
+  }));
+
+  const categoryParams = CATEGORIES.map((cat) => ({
+    slug: cat,
+  }));
+
+  return [...packageParams, ...categoryParams];
+}
+
 export default async function PackageDetails({ params }: Props) {
   const { slug } = await params;
   const lowerSlug = slug.toLowerCase();

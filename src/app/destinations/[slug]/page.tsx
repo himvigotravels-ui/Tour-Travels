@@ -2,87 +2,20 @@ import { notFound } from "next/navigation";
 import { PackageCard } from "@/components/ui/PackageCard";
 import { BottomCTA } from "@/components/ui/BottomCTA";
 import { getAllPackages } from "@/lib/db/packages";
-import { MapPin, Sun, Snowflake, Compass, Clock, ShieldCheck, ArrowLeft } from "lucide-react";
+import { getDestinationBySlug, getAllDestinations } from "@/lib/db/destinations";
+import { MapPin, Sun, Snowflake, Compass, Clock, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 
-const destinationsData = [
-  {
-    slug: "spiti-valley",
-    name: "Spiti Valley",
-    tagline: "The Middle Land",
-    description: "A cold desert mountain valley located high in the Himalaya mountains in the north-eastern part of the northern Indian state of Himachal Pradesh. Known for its stark beauty, ancient monasteries, and pure unadulterated Tibetan culture.",
-    bestTime: "June to October",
-    altitude: "12,500 ft (avg)",
-    vibe: "Adventure & Spiritual",
-    image: "https://images.unsplash.com/photo-1597843796321-230ff2ebcb71?auto=format&fit=crop&w=1200&q=80",
-    highlights: ["Key Monastery", "Chandratal Lake", "Komic Village", "Kunzum Pass"],
-  },
-  {
-    slug: "manali",
-    name: "Manali",
-    tagline: "Valley of the Gods",
-    description: "A high-altitude Himalayan resort town in India's northern Himachal Pradesh state. It has a reputation as a backpacking center and honeymoon destination. Surrounded by towering peaks and lush pine forests.",
-    bestTime: "October to June",
-    altitude: "6,726 ft",
-    vibe: "Romantic & Leisure",
-    image: "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&q=80",
-    highlights: ["Rohtang Pass", "Solang Valley", "Old Manali", "Hadimba Temple"],
-  },
-  {
-    slug: "kasol",
-    name: "Kasol",
-    tagline: "Mini Israel of India",
-    description: "A hamlet in the Kullu district of the Indian state of Himachal Pradesh. It is situated in Parvati Valley, on the banks of the Parvati River. Famous among backpackers for its vibrant cafe culture and pristine trekking trails.",
-    bestTime: "March to May",
-    altitude: "5,180 ft",
-    vibe: "Backpacking & Nature",
-    image: "https://images.unsplash.com/photo-1599661046289-e31887846eac?auto=format&fit=crop&w=1200&q=80",
-    highlights: ["Kheerganga Trek", "Tosh Village", "Parvati River", "Malana"],
-  },
-  {
-    slug: "shimla",
-    name: "Shimla",
-    tagline: "Queen of Hills",
-    description: "The capital and the largest city of the northern Indian state of Himachal Pradesh. Known for its colonial Victorian architecture, the legendary Mall Road, and surrounding snow-capped peaks in winter.",
-    bestTime: "March to June",
-    altitude: "7,467 ft",
-    vibe: "Heritage & Family",
-    image: "https://images.unsplash.com/photo-1595815771614-ade9d652a65d?auto=format&fit=crop&w=1200&q=80",
-    highlights: ["The Ridge", "Mall Road", "Jakhoo Temple", "Kufri"],
-  },
-  {
-    slug: "dharamshala",
-    name: "Dharamshala",
-    tagline: "Little Lhasa",
-    description: "The winter capital of Himachal Pradesh. It serves as the residence of the Dalai Lama and the headquarters of the Central Tibetan Administration. It blends rich Tibetan culture with beautiful Dhauladhar mountain backdrops.",
-    bestTime: "February to June",
-    altitude: "4,780 ft",
-    vibe: "Culture & Peace",
-    image: "https://images.unsplash.com/photo-1605649440417-062867824707?auto=format&fit=crop&w=1200&q=80",
-    highlights: ["McLeod Ganj", "Triund Trek", "Dal Lake", "Bhagsu Waterfall"],
-  },
-  {
-    slug: "kinnaur",
-    name: "Kinnaur",
-    tagline: "Land of Fairytales",
-    description: "A mountainous district in the northern Indian state of Himachal Pradesh. It is known for its apples and the Kinner Kailash, a mountain sacred to Hindus. Beautiful river valleys, rugged terrains, and warm people.",
-    bestTime: "April to October",
-    altitude: "7,612 ft (Rekong Peo)",
-    vibe: "Offbeat & Pristine",
-    image: "https://images.unsplash.com/photo-1577234286642-fc512a5f8f11?auto=format&fit=crop&w=1200&q=80",
-    highlights: ["Sangla Valley", "Chitkul", "Kalpa", "Sarahan"],
-  }
-];
-
 export async function generateStaticParams() {
-  return destinationsData.map((dest) => ({
+  const destinations = await getAllDestinations();
+  return destinations.map((dest) => ({
     slug: dest.slug,
   }));
 }
 
 export default async function DestinationDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const destination = destinationsData.find((d) => d.slug === slug);
+  const destination = await getDestinationBySlug(slug);
 
   if (!destination) {
     notFound();
@@ -182,13 +115,13 @@ export default async function DestinationDetailPage({ params }: { params: Promis
               <h3 className="text-2xl font-outfit font-bold mb-6 relative z-10">Traveler Tips</h3>
               <div className="space-y-6 relative z-10">
                 <p className="flex items-start gap-4 text-slate-300 leading-relaxed italic text-sm">
-                  "Always carry extra layers of clothing, even in summer. The mountain weather can change in minutes."
+                  &quot;Always carry extra layers of clothing, even in summer. The mountain weather can change in minutes.&quot;
                 </p>
                 <p className="flex items-start gap-4 text-slate-300 leading-relaxed italic text-sm">
-                  "Respect local customs and monasteries. Always walk clockwise around shrines."
+                  &quot;Respect local customs and monasteries. Always walk clockwise around shrines.&quot;
                 </p>
                 <p className="flex items-start gap-4 text-slate-300 leading-relaxed italic text-sm">
-                  "Carry enough cash as ATMs can be unreliable in high-altitude regions."
+                  &quot;Carry enough cash as ATMs can be unreliable in high-altitude regions.&quot;
                 </p>
               </div>
             </div>

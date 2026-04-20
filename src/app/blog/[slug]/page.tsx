@@ -1,68 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Calendar, User, Clock, Share2, MessageCircle, Compass, ChevronRight } from "lucide-react";
-
-const blogs = [
-  {
-    title: "10 Must-Visit Hidden Gems in Spiti valley",
-    content: `
-      <p>Spiti Valley, also known as the "Middle Land", is a cold desert mountain valley located high in the Himalayas. While Kaza and Key Monastery are popular, there are several hidden gems that remain untouched by mass tourism.</p>
-      
-      <h2>1. Dhankar Lake</h2>
-      <p>Located above the Dhankar Monastery, this high-altitude lake requires a moderate trek but offers surreal views and tranquility that is unmatched.</p>
-      
-      <h2>2. Mud Village</h2>
-      <p>The last village in the Pin Valley, Mud is a haven for trekkers and those looking for a truly offbeat experience amidst purple-hued mountains.</p>
-      
-      <h2>3. Langza (The Fossil Village)</h2>
-      <p>One of the highest villages in the world connected by a motorable road, Langza is famous for its giant Buddha statue and millions of years old fossils.</p>
-    `,
-    date: "April 10, 2026",
-    author: "Aditi Negi",
-    img: "https://images.unsplash.com/photo-1581791534721-e599df4417f7?auto=format&fit=crop&w=1200&q=80",
-    slug: "hidden-gems-spiti",
-    readTime: "8 min read"
-  },
-  {
-    title: "A Complete Guide to Planning Your Manali Trip",
-    content: `
-      <p>Planning a trip to Manali can be overwhelming given the variety of experiences it offers. From adventure sports to temple visits, here is our definitive guide.</p>
-      
-      <h2>Best Time to Visit</h2>
-      <p>For snow, visit between December and February. For pleasant weather and greenery, April to June is ideal.</p>
-      
-      <h2>Top Attractions</h2>
-      <ul>
-        <li>Hadimba Devi Temple</li>
-        <li>Old Manali Cafes</li>
-        <li>Solang Valley for Paragliding</li>
-        <li>Atal Tunnel & Sissu</li>
-      </ul>
-    `,
-    date: "April 05, 2026",
-    author: "Rohit Sharma",
-    img: "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&q=80",
-    slug: "manali-trip-guide",
-    readTime: "12 min read"
-  },
-  {
-     title: "Top 5 Activities to do in Shimla this Winter",
-     content: `
-       <p>Shimla in winter is a magical experience. When the 'Queen of Hills' is covered in a blanket of white snow, the city transforms into a fairytale land.</p>
-       
-       <h2>1. Ice Skating at the Open-Air Rink</h2>
-       <p>Shimla houses South Asia's only natural ice-skating rink. Skating under the open sky is a thrill you shouldn't miss.</p>
-       
-       <h2>2. Walking the Snow-Covered Ridge</h2>
-       <p>The Ridge and Mall Road look stunning covered in snow. Enjoy a cup of hot coffee while watching the snowfall.</p>
-     `,
-     date: "March 28, 2026",
-     author: "Sonia Verma",
-     img: "https://images.unsplash.com/photo-1596701062351-8c2c14d1fdd0?auto=format&fit=crop&w=1200&q=80",
-     slug: "shimla-winter-activities",
-     readTime: "6 min read"
-  }
-];
+import { getBlogBySlug, getAllBlogs } from "@/lib/db/blogs";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -70,18 +9,23 @@ type Props = {
 
 export default async function BlogDetailPage({ params }: Props) {
   const { slug } = await params;
-  const blog = blogs.find(b => b.slug === slug);
+  const blog = await getBlogBySlug(slug);
 
   if (!blog) {
     notFound();
   }
+
+  // Calculate read time (rough estimate: 200 words per minute)
+  const wordCount = blog.content.replace(/<[^>]*>/g, '').split(/\s+/).length;
+  const readTimeMinutes = Math.max(1, Math.ceil(wordCount / 200));
+  const readTime = `${readTimeMinutes} min read`;
 
   return (
     <main className="flex flex-col min-h-screen bg-white">
       {/* Hero */}
       <section className="relative h-[65vh] min-h-[500px] flex items-end pb-16 bg-slate-900 overflow-hidden">
         <div className="absolute inset-0">
-          <img src={blog.img} alt={blog.title} className="w-full h-full object-cover opacity-70" />
+          <img src={blog.coverImage} alt={blog.title} className="w-full h-full object-cover opacity-70" />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-transparent"></div>
         </div>
         <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-8 w-full">
@@ -90,9 +34,9 @@ export default async function BlogDetailPage({ params }: Props) {
           </Link>
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-outfit font-extrabold text-white mb-8 drop-shadow-xl leading-[1.1] max-w-4xl">{blog.title}</h1>
           <div className="flex flex-wrap items-center gap-6 text-slate-300 font-bold text-xs uppercase tracking-[0.2em]">
-            <span className="flex items-center gap-2"><Calendar className="w-4 h-4 text-amber-500" /> {blog.date}</span>
+            <span className="flex items-center gap-2"><Calendar className="w-4 h-4 text-amber-500" /> {new Date(blog.publishedAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</span>
             <span className="flex items-center gap-2"><User className="w-4 h-4 text-amber-500" /> {blog.author}</span>
-            <span className="flex items-center gap-2"><Clock className="w-4 h-4 text-amber-500" /> {blog.readTime}</span>
+            <span className="flex items-center gap-2"><Clock className="w-4 h-4 text-amber-500" /> {readTime}</span>
           </div>
         </div>
       </section>
@@ -173,6 +117,7 @@ export default async function BlogDetailPage({ params }: Props) {
 }
 
 export async function generateStaticParams() {
+  const blogs = await getAllBlogs();
   return blogs.map((blog) => ({
     slug: blog.slug,
   }));

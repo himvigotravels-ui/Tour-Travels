@@ -1,45 +1,21 @@
 import Link from "next/link";
-import { ArrowRight, Calendar, User, Clock, Compass } from "lucide-react";
+import { ArrowRight, Calendar, User } from "lucide-react";
 import { BottomCTA } from "@/components/ui/BottomCTA";
+import { getAllBlogs } from "@/lib/db/blogs";
 
 export const metadata = {
   title: "Travel Blog | Himvigo Tours",
   description: "Read the latest stories, guides, and tips from the heart of the Himalayas.",
 };
 
-const blogs = [
-  {
-    title: "10 Must-Visit Hidden Gems in Spiti valley",
-    excerpt: "Spiti is more than just Kaza. Discover the secret villages and high-altitude lakes that most tourists miss...",
-    date: "April 10, 2026",
-    author: "Aditi Negi",
-    img: "https://images.unsplash.com/photo-1581791534721-e599df4417f7?auto=format&fit=crop&w=800&q=80",
-    slug: "hidden-gems-spiti"
-  },
-  {
-    title: "A Complete Guide to Planning Your Manali Trip",
-    excerpt: "From budget homestays to luxury resorts, here is everything you need to know about planning a perfect holiday in Manali...",
-    date: "April 05, 2026",
-    author: "Rohit Sharma",
-    img: "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=800&q=80",
-    slug: "manali-trip-guide"
-  },
-  {
-    title: "Top 5 Activities to do in Shimla this Winter",
-    excerpt: "Shimla turns into a white wonderland in winter. Here are the top 5 things you shouldn't miss during your visit...",
-    date: "March 28, 2026",
-    author: "Sonia Verma",
-    img: "https://images.unsplash.com/photo-1596701062351-8c2c14d1fdd0?auto=format&fit=crop&w=800&q=80",
-    slug: "shimla-winter-activities"
-  }
-];
+export default async function BlogListPage() {
+  const blogs = await getAllBlogs();
 
-export default function BlogListPage() {
   return (
     <main className="flex flex-col min-h-screen bg-slate-50">
       <section className="relative h-[40vh] flex items-center justify-center bg-forest-900 border-b border-white/10">
         <div className="absolute inset-0">
-          <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80" className="w-full h-full object-cover opacity-50" />
+          <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80" className="w-full h-full object-cover opacity-50" alt="Blog Hero" />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-transparent"></div>
         </div>
         <div className="relative z-10 text-center">
@@ -53,20 +29,20 @@ export default function BlogListPage() {
           {blogs.map((blog, i) => (
             <Link key={i} href={`/blog/${blog.slug}`} className="group bg-white rounded-[2.5rem] overflow-hidden border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-500">
                <div className="h-64 overflow-hidden relative">
-                  <img src={blog.img} alt={blog.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                  <img src={blog.coverImage} alt={blog.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                   <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full text-[10px] font-bold text-slate-900 uppercase tracking-widest border border-white/20">
-                    Travel Guide
+                    {blog.category || "Travel Guide"}
                   </div>
                </div>
                <div className="p-8">
                   <div className="flex items-center gap-4 text-[11px] font-bold text-slate-400 mb-4 uppercase tracking-[0.2em]">
-                    <span className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5" /> {blog.date}</span>
+                    <span className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5" /> {new Date(blog.publishedAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</span>
                     <span className="flex items-center gap-1.5"><User className="w-3.5 h-3.5" /> {blog.author}</span>
                   </div>
                   <h3 className="text-2xl font-bold text-slate-900 mb-4 group-hover:text-amber-600 transition-colors font-outfit">
                     {blog.title}
                   </h3>
-                  <p className="text-slate-500 font-medium leading-relaxed font-inter mb-6">
+                  <p className="text-slate-500 font-medium leading-relaxed font-inter mb-6 line-clamp-3">
                     {blog.excerpt}
                   </p>
                   <div className="flex items-center font-bold text-amber-600 group-hover:text-amber-700 transition-colors">

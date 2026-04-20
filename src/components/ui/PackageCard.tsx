@@ -6,16 +6,16 @@ import { Clock, MapPin, Users, CarFront, ArrowRight, Sparkles, ShieldCheck, Moun
 import { motion } from "framer-motion";
 
 export type TourPackage = {
-  id: string;
+  id?: string;
   slug: string;
   title: string;
   location: string;
-  price_per_person: number;
-  duration_days: number;
-  duration_nights: number;
-  image_urls: string[];
-  vehicle_type: string;
-  max_occupancy: number;
+  pricePerPerson: number;
+  durationDays: number;
+  durationNights: number;
+  imageUrls: string[];
+  vehicleType: string;
+  maxOccupancy: number;
   description?: string;
   itinerary?: { day: number; title: string; activities: string }[];
   inclusions?: string[];
@@ -48,7 +48,7 @@ export const PackageCard = ({ tour }: { tour: TourPackage }) => {
     >
       <div className="relative h-72 w-full overflow-hidden">
         <Image
-          src={tour.image_urls[0] || "/placeholder-mountain.png"}
+          src={tour.imageUrls[0] || "/placeholder-mountain.png"}
           alt={tour.title}
           fill
           className="object-cover transition-transform duration-[2000ms] group-hover:scale-110"
@@ -109,15 +109,15 @@ export const PackageCard = ({ tour }: { tour: TourPackage }) => {
         <div className="mb-6 grid grid-cols-3 gap-2 text-xs font-bold tracking-wide text-slate-600 md:text-[13px]">
           <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-3">
             <Clock className="h-4 w-4 text-forest-700" />
-            <span className="truncate">{tour.duration_days}D / {tour.duration_nights}N</span>
+            <span className="truncate">{tour.durationDays}D / {tour.durationNights}N</span>
           </div>
           <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-3">
             <CarFront className="h-4 w-4 text-forest-700" />
-            <span className="truncate">{tour.vehicle_type}</span>
+            <span className="truncate">{tour.vehicleType}</span>
           </div>
           <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-3">
             <Users className="h-4 w-4 text-forest-700" />
-            <span>{tour.max_occupancy} pax</span>
+            <span>{tour.maxOccupancy} pax</span>
           </div>
         </div>
 
@@ -125,7 +125,7 @@ export const PackageCard = ({ tour }: { tour: TourPackage }) => {
           <div>
             <p className="mb-1 text-[10px] font-extrabold uppercase tracking-[0.26em] text-slate-400">Starting from</p>
             <p className="font-outfit text-3xl font-black text-slate-900">
-              ₹{tour.price_per_person.toLocaleString("en-IN")}
+              ₹{tour.pricePerPerson.toLocaleString("en-IN")}
             </p>
             <p className="mt-1 text-xs font-semibold leading-snug text-slate-500">Per person, customizable on request</p>
           </div>

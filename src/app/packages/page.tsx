@@ -31,9 +31,9 @@ export default async function PackagesPage(props: { searchParams: Promise<{ dest
 
   if (durQuery) {
     packages = packages.filter(pkg => {
-      if (durQuery === "3-5") return pkg.duration_days >= 3 && pkg.duration_days <= 5;
-      if (durQuery === "6-8") return pkg.duration_days >= 6 && pkg.duration_days <= 8;
-      if (durQuery === "9+") return pkg.duration_days >= 9;
+      if (durQuery === "3-5") return pkg.durationDays >= 3 && pkg.durationDays <= 5;
+      if (durQuery === "6-8") return pkg.durationDays >= 6 && pkg.durationDays <= 8;
+      if (durQuery === "9+") return pkg.durationDays >= 9;
       return true;
     });
   }
@@ -57,9 +57,9 @@ export default async function PackagesPage(props: { searchParams: Promise<{ dest
 
   if (sortQuery) {
     packages.sort((a, b) => {
-      if (sortQuery === "price-asc") return a.price_per_person - b.price_per_person;
-      if (sortQuery === "price-desc") return b.price_per_person - a.price_per_person;
-      if (sortQuery === "duration-asc") return a.duration_days - b.duration_days;
+      if (sortQuery === "price-asc") return a.pricePerPerson - b.pricePerPerson;
+      if (sortQuery === "price-desc") return b.pricePerPerson - a.pricePerPerson;
+      if (sortQuery === "duration-asc") return a.durationDays - b.durationDays;
       return 0; // "recommended"
     });
   }

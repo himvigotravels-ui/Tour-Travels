@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ChevronRight, MapPin, Phone, Mail, Send, Clock, Map } from "lucide-react";
+import { ChevronRight, MapPin, Phone, Mail, Clock, Map } from "lucide-react";
+import { ContactForm } from "@/components/contact/ContactForm";
 
 export const metadata = {
   title: "Contact Us | Himvigo Tours",
@@ -92,96 +93,9 @@ export default function ContactPage() {
           <div className="lg:col-span-3 bg-white rounded-[2.5rem] p-8 md:p-12 shadow-[0_8px_30px_-4px_rgba(0,0,0,0.05)] border border-slate-100 flex flex-col justify-center relative overflow-hidden">
             {/* Subtle Form Decoration */}
             <div className="absolute right-0 top-0 w-32 h-32 bg-forest-50 rounded-bl-[100px] -z-0"></div>
-
-            <div className="relative z-10">
-              <h2 className="text-3xl font-outfit font-bold text-slate-900 mb-2">Send an Inquiry</h2>
-              <p className="text-slate-500 font-inter mb-10 text-base md:text-lg">Drop us a line to customize a package or book a 4x4 cab.</p>
-
-              <form className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="flex flex-col gap-2">
-                    <label className="text-[13px] font-bold text-slate-700 uppercase tracking-wide">Full Name</label>
-                    <input 
-                      type="text" 
-                      placeholder="Jane Doe" 
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-3.5 focus:ring-2 focus:ring-forest-500 focus:border-forest-500 outline-none transition-all font-medium text-slate-900 placeholder-slate-400"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <label className="text-[13px] font-bold text-slate-700 uppercase tracking-wide">Phone Number</label>
-                    <input 
-                      type="tel" 
-                      placeholder="+91" 
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-3.5 focus:ring-2 focus:ring-forest-500 focus:border-forest-500 outline-none transition-all font-medium text-slate-900 placeholder-slate-400"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="flex flex-col gap-2">
-                    <label className="text-[13px] font-bold text-slate-700 uppercase tracking-wide">Departure From</label>
-                    <input 
-                      type="text" 
-                      placeholder="Starting City (e.g. Chandigarh)" 
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-3.5 focus:ring-2 focus:ring-forest-500 focus:border-forest-500 outline-none transition-all font-medium text-slate-900 placeholder-slate-400"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <label className="text-[13px] font-bold text-slate-700 uppercase tracking-wide">Destination To</label>
-                    <input 
-                      type="text" 
-                      placeholder="Where to go (e.g. Spiti Valley)" 
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-3.5 focus:ring-2 focus:ring-forest-500 focus:border-forest-500 outline-none transition-all font-medium text-slate-900 placeholder-slate-400"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="flex flex-col gap-2">
-                    <label className="text-[13px] font-bold text-slate-700 uppercase tracking-wide">Travel Date</label>
-                    <input 
-                      type="date" 
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-3.5 focus:ring-2 focus:ring-forest-500 focus:border-forest-500 outline-none transition-all font-medium text-slate-900 appearance-none cursor-pointer"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <label className="text-[13px] font-bold text-slate-700 uppercase tracking-wide">Passengers</label>
-                    <select className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-3.5 focus:ring-2 focus:ring-forest-500 focus:border-forest-500 outline-none transition-all font-medium text-slate-900 appearance-none cursor-pointer">
-                      <option>1 Person</option>
-                      <option>2 People</option>
-                      <option>3 - 5 People</option>
-                      <option>5 - 10 People</option>
-                      <option>Large Group (10+)</option>
-                    </select>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <label className="text-[13px] font-bold text-slate-700 uppercase tracking-wide">Duration</label>
-                    <input 
-                      type="text" 
-                      placeholder="e.g. 5 Days" 
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-3.5 focus:ring-2 focus:ring-forest-500 focus:border-forest-500 outline-none transition-all font-medium text-slate-900 placeholder-slate-400"
-                    />
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <label className="text-[13px] font-bold text-slate-700 uppercase tracking-wide">Your Message</label>
-                  <textarea 
-                    rows={4} 
-                    placeholder="Tell us more about your requirements..." 
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-5 py-3.5 focus:ring-2 focus:ring-forest-500 focus:border-forest-500 outline-none transition-all font-medium text-slate-900 placeholder:font-normal placeholder-slate-400 resize-none"
-                  ></textarea>
-                </div>
-
-                <button 
-                  type="button" 
-                  className="mt-4 w-full md:w-auto inline-flex items-center justify-center bg-forest-900 hover:bg-amber-500 text-white hover:text-slate-900 font-bold px-10 py-4 rounded-xl transition-all shadow-xl hover:shadow-amber-500/40 hover:-translate-y-1 group"
-                >
-                  Send Inquiry <Send className="w-4 h-4 ml-3 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                </button>
-              </form>
-            </div>
+            <ContactForm />
           </div>
+
         </div>
       </section>
 
