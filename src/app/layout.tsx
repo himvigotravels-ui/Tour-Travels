@@ -81,15 +81,6 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  icons: {
-    icon: [
-      { url: "/favicon.png", type: "image/png" },
-      { url: "/icon.svg", type: "image/svg+xml" }
-    ],
-    apple: [
-      { url: "/icon.svg", type: "image/svg+xml" }
-    ]
-  },
   verification: {
     google: "8WFTUbPg8wJt_6TLKRHNAKGwRw2gHCgU0HSiqp--pAs",
   },
