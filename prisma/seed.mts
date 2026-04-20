@@ -1,7 +1,7 @@
 import "dotenv/config";
 
 async function main() {
-  const { PrismaClient } = await import("../src/generated/prisma/client.js");
+  const { PrismaClient } = await import("@prisma/client");
   const { PrismaPg } = await import("@prisma/adapter-pg");
   const bcrypt = await import("bcryptjs");
   
