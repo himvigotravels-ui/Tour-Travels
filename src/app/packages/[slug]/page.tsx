@@ -3,6 +3,10 @@ import { notFound } from "next/navigation";
 import PackageDetailClient from "@/components/packages/PackageDetailClient";
 import CategoryLandingPage from "@/components/packages/CategoryLandingPage";
 
+import { BottomCTA } from "@/components/ui/BottomCTA";
+
+export const dynamic = 'force-dynamic';
+
 type Props = {
   params: Promise<{ slug: string }>;
 };
@@ -26,6 +30,8 @@ export default async function PackageDetails({ params }: Props) {
   const { slug } = await params;
   const lowerSlug = slug.toLowerCase();
   
+  let content;
+
   // Detect if this is a category page request
   if (CATEGORIES.includes(lowerSlug)) {
     const allPackages = await getAllPackages();
@@ -33,15 +39,22 @@ export default async function PackageDetails({ params }: Props) {
       (p.categories || []).map(c => c.toLowerCase()).includes(lowerSlug)
     );
     
-    return <CategoryLandingPage category={slug} packages={categoryPackages} />;
+    content = <CategoryLandingPage category={slug} packages={categoryPackages} />;
+  } else {
+    // Otherwise, it's a specific package request
+    const pkg = await getPackageBySlug(slug);
+
+    if (!pkg) {
+      notFound();
+    }
+
+    content = <PackageDetailClient pkg={pkg} />;
   }
 
-  // Otherwise, it's a specific package request
-  const pkg = await getPackageBySlug(slug);
-
-  if (!pkg) {
-    notFound();
-  }
-
-  return <PackageDetailClient pkg={pkg} />;
+  return (
+    <>
+      {content}
+      <BottomCTA />
+    </>
+  );
 }

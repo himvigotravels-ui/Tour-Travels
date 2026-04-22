@@ -56,7 +56,7 @@ export const Navbar = () => {
     >
       <div className={`max-w-7xl mx-auto w-full flex items-center justify-between transition-all duration-500 rounded-full px-5 md:px-8 ${
         isScrolled
-          ? "bg-white/95 backdrop-blur-lg shadow-[0_8px_30px_-4px_rgba(0,0,0,0.1)] border border-slate-200/50 py-3 md:py-4"
+          ? "bg-white shadow-[0_8px_30px_-4px_rgba(0,0,0,0.1)] border border-slate-200/50 py-3 md:py-4"
           : "bg-transparent border border-transparent py-2 md:py-3"
       }`}>
         {/* Logo */}
@@ -77,7 +77,7 @@ export const Navbar = () => {
               <Link
                 href={link.href}
                 className={`flex items-center gap-1 font-semibold text-[13px] uppercase tracking-wider transition-colors font-outfit py-4 whitespace-nowrap ${
-                  isScrolled ? "text-slate-600 hover:text-amber-500" : "text-white/80 hover:text-white drop-shadow-sm"
+                  isScrolled ? "text-slate-600 hover:text-brand-orange" : "text-white/80 hover:text-white drop-shadow-sm"
                 }`}
               >
                 {link.name}
@@ -94,7 +94,7 @@ export const Navbar = () => {
                     <Link
                       key={sub.name}
                       href={sub.href}
-                      className="block px-6 py-2.5 text-[13px] font-medium text-slate-600 hover:text-amber-600 hover:bg-slate-50 transition-colors"
+                      className="block px-6 py-2.5 text-[13px] font-medium text-slate-600 hover:text-brand-orange hover:bg-slate-50 transition-colors"
                     >
                       {sub.name}
                     </Link>
@@ -111,8 +111,8 @@ export const Navbar = () => {
             href="/contact"
             className={`px-6 py-3 rounded-full font-bold text-sm transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 inline-block whitespace-nowrap ${
               isScrolled
-                ? "bg-slate-900 text-white hover:bg-forest-700 hover:shadow-forest-700/20"
-                : "bg-amber-500 text-slate-900 hover:bg-amber-400 hover:shadow-amber-500/30"
+                ? "bg-brand-blue text-white hover:bg-brand-blue/90 hover:shadow-brand-blue/20"
+                : "bg-brand-orange text-white hover:bg-brand-orange/90 hover:shadow-brand-orange/30"
             }`}
           >
             Get a Quote
@@ -159,7 +159,7 @@ export const Navbar = () => {
                       <Link
                         key={sub.name}
                         href={sub.href}
-                        className="text-slate-500 font-medium font-inter text-sm py-2 hover:text-amber-600 transition-colors"
+                        className="text-slate-500 font-medium font-inter text-sm py-2 hover:text-brand-orange transition-colors"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         {sub.name}

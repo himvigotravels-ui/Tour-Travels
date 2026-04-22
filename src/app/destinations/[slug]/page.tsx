@@ -6,6 +6,8 @@ import { getDestinationBySlug, getAllDestinations } from "@/lib/db/destinations"
 import { MapPin, Sun, Snowflake, Compass, Clock, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 
+export const dynamic = 'force-dynamic';
+
 export async function generateStaticParams() {
   const destinations = await getAllDestinations();
   return destinations.map((dest) => ({
@@ -30,21 +32,21 @@ export default async function DestinationDetailPage({ params }: { params: Promis
   return (
     <main className="flex flex-col min-h-screen bg-slate-50">
       {/* Hero Section */}
-      <section className="relative h-[60vh] md:h-[70vh] flex items-center justify-center overflow-hidden bg-forest-900">
+      <section className="relative h-screen flex items-center justify-center overflow-hidden bg-brand-blue">
         <div className="absolute inset-0 z-0">
           <img 
             src={destination.image} 
             alt={destination.name} 
-            className="w-full h-full object-cover opacity-60" 
+            className="w-full h-full object-cover" 
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
+          <div className="absolute inset-0 bg-black/30"></div>
         </div>
         
-        <div className="relative z-10 max-w-7xl mx-auto px-4 text-center">
-          <h4 className="text-amber-400 font-bold uppercase tracking-[0.3em] text-sm md:text-base mb-4 drop-shadow-md">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 text-center pt-24">
+          <h4 className="text-brand-orange font-bold uppercase tracking-[0.4em] text-sm md:text-base mb-6 drop-shadow-md">
             {destination.tagline}
           </h4>
-          <h1 className="text-5xl md:text-8xl font-outfit font-extrabold text-white mb-6 drop-shadow-2xl">
+          <h1 className="text-6xl md:text-9xl font-outfit font-extrabold text-white mb-6 drop-shadow-2xl tracking-tighter">
             {destination.name}
           </h1>
         </div>
@@ -63,20 +65,20 @@ export default async function DestinationDetailPage({ params }: { params: Promis
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
               <div className="p-8 rounded-3xl bg-white border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="flex items-center gap-3 text-xl font-bold text-slate-900 mb-6">
-                  <Compass className="w-6 h-6 text-amber-500" /> Key Highlights
+                  <Compass className="w-6 h-6 text-brand-orange" /> Key Highlights
                 </h3>
                 <ul className="space-y-4">
                   {destination.highlights.map((h, i) => (
                     <li key={i} className="flex items-center gap-3 text-slate-600 font-medium">
-                      <ShieldCheck className="w-4 h-4 text-forest-600" /> {h}
+                      <ShieldCheck className="w-4 h-4 text-brand-blue" /> {h}
                     </li>
                   ))}
                 </ul>
               </div>
               
               <div className="space-y-4">
-                <div className="p-6 rounded-2xl bg-forest-50 border border-forest-100 flex items-center gap-5">
-                  <div className="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center text-forest-600">
+                <div className="p-6 rounded-2xl bg-brand-blue/5 border border-brand-blue/10 flex items-center gap-5">
+                  <div className="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center text-brand-blue">
                     <Sun className="w-6 h-6" />
                   </div>
                   <div>
@@ -84,8 +86,8 @@ export default async function DestinationDetailPage({ params }: { params: Promis
                     <p className="text-slate-900 font-bold">{destination.bestTime}</p>
                   </div>
                 </div>
-                <div className="p-6 rounded-2xl bg-amber-50 border border-amber-100 flex items-center gap-5">
-                  <div className="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center text-amber-600">
+                <div className="p-6 rounded-2xl bg-brand-orange/5 border border-brand-orange/10 flex items-center gap-5">
+                  <div className="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center text-brand-orange">
                     <MapPin className="w-6 h-6" />
                   </div>
                   <div>
@@ -126,10 +128,10 @@ export default async function DestinationDetailPage({ params }: { params: Promis
               </div>
             </div>
             
-            <div className="p-8 rounded-3xl bg-amber-500 text-slate-900 shadow-xl shadow-amber-500/20">
+            <div className="p-8 rounded-3xl bg-brand-orange text-slate-900 shadow-xl shadow-brand-orange/20">
               <h3 className="text-xl font-bold mb-4">Want a Custom Trip?</h3>
               <p className="text-sm font-medium mb-8 leading-relaxed">Our experts can create a personalized 100% customized itinerary for your trip to {destination.name}.</p>
-              <Link href="/contact" className="block text-center py-4 bg-slate-900 text-white font-bold rounded-2xl hover:bg-forest-700 transition-colors">
+              <Link href="/contact" className="block text-center py-4 bg-slate-900 text-white font-bold rounded-2xl hover:bg-brand-blue transition-colors">
                 Request Custom Quote
               </Link>
             </div>
@@ -140,10 +142,10 @@ export default async function DestinationDetailPage({ params }: { params: Promis
         <div className="border-t border-slate-200 pt-16">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
             <div>
-              <h2 className="text-3xl md:text-5xl font-outfit font-bold text-slate-900">
+              <h2 className="text-3xl md:text-5xl font-outfit font-bold text-brand-blue">
                 Packages for {destination.name}
               </h2>
-              <div className="h-1.5 w-24 bg-forest-700 mt-6 rounded-full" />
+              <div className="h-1.5 w-24 bg-brand-orange mt-6 rounded-full" />
               <p className="text-slate-600 mt-6 font-inter text-lg">
                 Explore our handpicked itineraries for {destination.name} and surrounding valleys.
               </p>
@@ -165,7 +167,7 @@ export default async function DestinationDetailPage({ params }: { params: Promis
             <div className="py-20 text-center bg-white rounded-[3rem] border border-dashed border-slate-300">
               <Compass className="w-16 h-16 text-slate-300 mx-auto mb-6" />
               <p className="text-slate-500 font-bold text-xl italic">No packages available for this destination yet.</p>
-              <Link href="/contact" className="mt-8 inline-block text-forest-700 font-bold hover:underline">
+              <Link href="/contact" className="mt-8 inline-block text-brand-orange font-bold hover:underline">
                 Inquire about custom {destination.name} trips &rarr;
               </Link>
             </div>

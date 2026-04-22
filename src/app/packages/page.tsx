@@ -3,13 +3,21 @@ import { PackageCard } from "@/components/ui/PackageCard";
 import { PackageFilters, ClientFilterDispatcher } from "@/components/packages/PackageFilters";
 import { SortDropdown } from "@/components/packages/SortDropdown";
 import { BookingForm } from "@/components/packages/BookingForm";
-import { ChevronRight } from "lucide-react";
+import { RiArrowRightSLine } from "react-icons/ri";
 import Link from "next/link";
 
-export const metadata = {
-  title: "All Tour Packages | Himvigo Tours",
-  description: "Browse our premium selection of Himachal Pradesh itineraries, from Spiti Valley road trips to luxury Manali snow retreats.",
-};
+import { getSettings } from "@/lib/db/settings";
+
+export const dynamic = 'force-dynamic';
+
+export async function generateMetadata() {
+  const settings = await getSettings();
+  return {
+    title: settings.seo_packages_title || "Tour Packages | Himvigo Tours",
+    description: settings.seo_packages_description || "Browse our premium selection of Himachal Pradesh itineraries.",
+    keywords: settings.seo_packages_keywords || "tour packages, himachal",
+  };
+}
 
 export default async function PackagesPage(props: { searchParams: Promise<{ dest?: string; dur?: string; cat?: string; q?: string; sort?: string }> }) {
   const searchParams = await props.searchParams;
@@ -19,7 +27,12 @@ export default async function PackagesPage(props: { searchParams: Promise<{ dest
   const textQuery = searchParams.q?.toLowerCase();
   const sortQuery = searchParams.sort;
   
-  let packages = await getAllPackages();
+  const [allPackages, settings] = await Promise.all([
+    getAllPackages(),
+    getSettings()
+  ]);
+
+  let packages = [...allPackages];
   
   if (destQuery) {
     packages = packages.filter(pkg => {
@@ -66,24 +79,27 @@ export default async function PackagesPage(props: { searchParams: Promise<{ dest
 
   return (
     <main className="flex flex-col min-h-screen bg-slate-50">
-      {/* Short Hero Banner */}
-      <section className="relative w-full h-[40vh] min-h-[350px] flex items-end pb-12 bg-forest-900 overflow-hidden">
+      {/* Full Height Hero Banner */}
+      <section className="relative w-full h-screen flex items-center justify-center bg-slate-900 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img 
             src="/hero-spiti.png" 
             alt="Himalayan mountains" 
-            className="w-full h-full object-cover opacity-50"
+            className="w-full h-full object-cover opacity-60"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-slate-900/10"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-transparent"></div>
         </div>
         
-        <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8 w-full pt-28 md:pt-32 pb-4 text-center md:text-left">
-          <Link href="/" className="inline-flex items-center justify-center md:justify-start text-amber-400 hover:text-amber-300 font-inter text-sm md:text-base font-medium mb-3 md:mb-4 transition-colors">
-            Home <ChevronRight className="w-4 h-4 mx-1" /> <span className="text-slate-300 font-normal">Packages</span>
+        <div className="relative z-10 max-w-7xl mx-auto px-6 w-full pt-24 text-center">
+          <Link href="/" className="inline-flex items-center justify-center text-amber-400 hover:text-amber-300 font-inter text-sm md:text-base font-medium mb-8 transition-colors bg-white/5 px-4 py-1.5 rounded-full backdrop-blur-sm border border-white/10">
+            Home <RiArrowRightSLine className="w-4 h-4 mx-1" /> <span className="text-slate-300 font-normal">Packages</span>
           </Link>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-outfit font-extrabold text-white drop-shadow-xl leading-tight">
-            Find Your Next <br className="md:hidden" /><span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-500">Journey</span>
+          <h1 className="text-5xl md:text-8xl font-outfit font-extrabold text-white drop-shadow-2xl leading-[1.1] mb-8">
+            Find Your Next <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-500">Journey</span>
           </h1>
+          <p className="text-slate-200 mt-6 max-w-2xl mx-auto text-lg md:text-xl font-medium drop-shadow-lg opacity-90">
+            {settings.service_packages_desc || "Thoughtfully planned itineraries covering Himachal's most loved destinations."}
+          </p>
         </div>
       </section>
 

@@ -8,7 +8,7 @@ export const metadata = {
 export default function PrivacyPolicy() {
   return (
     <main className="flex flex-col min-h-screen bg-slate-50">
-      <section className="bg-forest-900 pt-32 pb-16 px-4">
+      <section className="bg-brand-blue pt-32 pb-16 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-outfit font-extrabold text-white mb-4">Privacy Policy</h1>
           <p className="text-slate-300 font-inter">Last updated: April 2026</p>
@@ -16,7 +16,7 @@ export default function PrivacyPolicy() {
       </section>
       
       <section className="py-16 px-4">
-        <div className="max-w-4xl mx-auto bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-slate-200 prose prose-slate prose-lg max-w-none prose-headings:font-outfit prose-headings:font-bold prose-headings:text-slate-900 prose-a:text-amber-600 hover:prose-a:text-amber-700">
+        <div className="max-w-4xl mx-auto bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-slate-200 prose prose-slate prose-lg max-w-none prose-headings:font-outfit prose-headings:font-bold prose-headings:text-slate-900 prose-a:text-brand-blue hover:prose-a:text-slate-800">
           <h2>1. Introduction</h2>
           <p>At Himvigo Tours, your privacy is a top priority. This Privacy Policy explains how we collect, use, and protect your personal information when you use our website or book our Himalayan tour packages.</p>
 
@@ -43,8 +43,8 @@ export default function PrivacyPolicy() {
           <h2>5. Contacting Us</h2>
           <p>If you have any questions about this Privacy Policy, please contact us at:</p>
           <p>
-            <strong>Phone:</strong> <a href="tel:+917018318824">+91 70183 18824</a><br />
-            <strong>Email:</strong> info@himvigo.com
+            <strong>Phone:</strong> <a href="tel:+919805514018">+91 98055 14018</a><br />
+            <strong>Email:</strong> himvigotours@gmail.com
           </p>
         </div>
       </section>

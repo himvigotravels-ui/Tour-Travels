@@ -1,32 +1,63 @@
-import { ShieldCheck, Users, Heart, Map, Award, Globe, MessageCircle } from "lucide-react";
+import { RiShieldCheckLine, RiGroupLine, RiHeartLine, RiMapLine, RiAwardLine, RiGlobalLine, RiMessage3Line } from "react-icons/ri";
 import { BottomCTA } from "@/components/ui/BottomCTA";
+import { getSettings } from "@/lib/db/settings";
+
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: "About Us | Himvigo - Authentic Himalayan Experiences",
   description: "Learn about Himvigo's journey, our mission to provide authentic travel experiences, and the team behind your favorite Himalayan adventures.",
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const settings = await getSettings();
+
+  const trustUs = settings.about_trust_us_json 
+    ? JSON.parse(settings.about_trust_us_json)
+    : [
+        { title: "Local to the Core", desc: "We don't hire third-party vendors. Every driver and guide is a native of the region you're visiting." },
+        { title: "Unmatched Safety", desc: "Mountain roads require mountain skills. Our vehicles and drivers are vetted for extreme high-altitude conditions." },
+        { title: "Sustainable Travel", desc: "A portion of our proceeds goes directly to supporting education in Spiti and Lahaul village schools." }
+      ];
+
+  const iconMap: Record<number, any> = {
+    0: <RiGroupLine className="w-10 h-10" />,
+    1: <RiShieldCheckLine className="w-10 h-10" />,
+    2: <RiHeartLine className="w-10 h-10" />,
+  };
+
+  const bgMap: Record<number, string> = {
+    0: "bg-brand-blue/5",
+    1: "bg-brand-orange/5",
+    2: "bg-slate-50",
+  };
+
+  const colorMap: Record<number, string> = {
+    0: "text-brand-blue",
+    1: "text-brand-orange",
+    2: "text-slate-600",
+  };
+
   return (
     <main className="flex flex-col min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="relative h-[60vh] flex items-center justify-center overflow-hidden bg-slate-900">
+      <section className="relative h-screen flex items-center justify-center overflow-hidden bg-brand-blue">
         <div className="absolute inset-0 z-0">
           <img 
             src="/hero-spiti.png" 
             alt="Himvigo Travelers" 
-            className="w-full h-full object-cover opacity-60 mix-blend-overlay"
+            className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent"></div>
+          <div className="absolute inset-0 bg-black/40"></div>
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 text-center">
-          <h4 className="text-amber-400 font-extrabold text-sm uppercase tracking-[0.3em] mb-4 drop-shadow-md">Our Story</h4>
-          <h1 className="text-5xl md:text-8xl font-outfit font-extrabold text-white mb-6 drop-shadow-2xl">
-            Born in the <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-500">Himalayas</span>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 text-center pt-24">
+          <h4 className="text-brand-orange font-extrabold text-sm uppercase tracking-[0.3em] mb-6 drop-shadow-md">Our Story</h4>
+          <h1 className="text-5xl md:text-8xl font-outfit font-extrabold text-white mb-8 drop-shadow-2xl">
+            Born in the <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-orange/80 to-brand-orange">Himalayas</span>
           </h1>
-          <p className="text-xl text-slate-100 max-w-2xl mx-auto font-medium drop-shadow-lg italic">
-            "We don't just show you the mountains; we let you live them."
+          <p className="text-lg md:text-xl text-slate-100 max-w-2xl mx-auto font-medium drop-shadow-lg italic opacity-90">
+            &quot;We don&apos;t just show you the mountains; we let you live them.&quot;
           </p>
         </div>
       </section>
@@ -36,8 +67,8 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
             <div className="relative">
-              <div className="absolute -top-10 -left-10 w-40 h-40 bg-forest-50 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob" />
-              <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-amber-50 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000" />
+              <div className="absolute -top-10 -left-10 w-40 h-40 bg-brand-blue/10 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob" />
+              <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-brand-orange/10 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000" />
               <div className="relative rounded-[3rem] overflow-hidden shadow-2xl border-8 border-white group">
                 <img 
                   src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80" 
@@ -46,7 +77,7 @@ export default function AboutPage() {
                 />
                 <div className="absolute inset-x-0 bottom-0 p-8 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent text-white">
                   <div className="flex items-center gap-4 mb-2">
-                    <Award className="w-8 h-8 text-amber-400" />
+                    <RiAwardLine className="w-8 h-8 text-brand-orange" />
                     <span className="text-2xl font-bold font-outfit">10+ Years</span>
                   </div>
                   <p className="text-slate-300 font-medium italic">Crafting local stories across Himachal.</p>
@@ -55,20 +86,28 @@ export default function AboutPage() {
             </div>
 
             <div>
-              <h2 className="text-4xl md:text-5xl font-outfit font-bold text-slate-900 leading-tight">Authenticity is our only North Star.</h2>
-              <div className="h-1.5 w-24 bg-forest-600 mt-6 rounded-full" />
+              <h2 className="text-4xl md:text-5xl font-outfit font-bold text-slate-900 leading-tight">
+                Authenticity is our only North Star.
+              </h2>
+              <div className="h-1.5 w-24 bg-brand-orange mt-6 rounded-full" />
               
               <div className="mt-10 space-y-8 text-lg text-slate-600 font-inter leading-relaxed">
-                <p>
-                  Himvigo started in a small wooden cabin in Manali with a simple belief: the real beauty of the Himalayas isn't in the overcrowded shopping streets, but in the silent valleys and home-cooked meals of remote villages.
-                </p>
-                <p>
-                  Today, we are a network of local guides, drivers, and host families who shared this vision. We specialize in offbeat Spiti expeditions and luxury Kinnaur circuits, ensuring every traveler leaves with a piece of the mountains in their heart.
-                </p>
+                {settings.about_who_we_are ? settings.about_who_we_are.split('\n\n').map((para: string, i: number) => (
+                  <p key={i}>{para}</p>
+                )) : (
+                  <>
+                    <p>
+                      Himvigo started in a small wooden cabin in Manali with a simple belief: the real beauty of the Himalayas isn't in the overcrowded shopping streets, but in the silent valleys and home-cooked meals of remote villages.
+                    </p>
+                    <p>
+                      Today, we are a network of local guides, drivers, and host families who shared this vision. We specialize in offbeat Spiti expeditions and luxury Kinnaur circuits, ensuring every traveler leaves with a piece of the mountains in their heart.
+                    </p>
+                  </>
+                )}
                 
                 <div className="grid grid-cols-2 gap-8 pt-8">
                   <div>
-                    <h4 className="text-3xl font-extrabold text-slate-900 font-outfit">2k+</h4>
+                    <h4 className="text-3xl font-extrabold text-slate-900 font-outfit">10k+</h4>
                     <p className="text-sm text-slate-500 font-bold uppercase tracking-widest mt-1">Happy Souls</p>
                   </div>
                   <div>
@@ -86,52 +125,30 @@ export default function AboutPage() {
       <section className="py-24 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-20">
-            <h2 className="text-3xl md:text-5xl font-outfit font-bold text-slate-900">Why Travel With Us?</h2>
-            <div className="h-1.5 w-24 bg-amber-500 mt-6 rounded-full mx-auto" />
+            <h2 className="text-3xl md:text-5xl font-outfit font-bold text-slate-900">Why Travelers Trust Us</h2>
+            <div className="h-1.5 w-24 bg-brand-orange mt-6 rounded-full mx-auto" />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            {[
-              { 
-                icon: <Users className="w-10 h-10" />, 
-                title: "Local to the Core", 
-                desc: "We don't hire third-party vendors. Every driver and guide is a native of the region you're visiting.",
-                bg: "bg-forest-50",
-                color: "text-forest-600"
-              },
-              { 
-                icon: <ShieldCheck className="w-10 h-10" />, 
-                title: "Unmatched Safety", 
-                desc: "Mountain roads require mountain skills. Our vehicles and drivers are vetted for extreme high-altitude conditions.",
-                bg: "bg-amber-50",
-                color: "text-amber-600"
-              },
-              { 
-                icon: <Heart className="w-10 h-10" />, 
-                title: "Sustainable Travel", 
-                desc: "A portion of our proceeds goes directly to supporting education in Spiti and Lahaul village schools.",
-                bg: "bg-red-50",
-                color: "text-red-600"
-              }
-            ].map((value, i) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+            {trustUs.map((value: any, i: number) => (
               <div key={i} className="bg-white p-12 rounded-[3rem] shadow-sm hover:shadow-xl transition-all duration-500 group relative overflow-hidden">
-                <div className={`absolute top-0 right-0 w-32 h-32 ${value.bg} opacity-20 rounded-bl-full transform translate-x-8 -translate-y-8 group-hover:scale-150 transition-transform duration-700`} />
-                <div className={`w-20 h-20 rounded-3xl ${value.bg} ${value.color} flex items-center justify-center mb-8 transform group-hover:-rotate-6 transition-transform`}>
-                  {value.icon}
+                <div className={`absolute top-0 right-0 w-32 h-32 ${bgMap[i % 3]} opacity-20 rounded-bl-full transform translate-x-8 -translate-y-8 group-hover:scale-150 transition-transform duration-700`} />
+                <div className={`w-20 h-20 rounded-3xl ${bgMap[i % 3]} ${colorMap[i % 3]} flex items-center justify-center mb-8 transform group-hover:-rotate-6 transition-transform`}>
+                  {iconMap[i] || <RiGroupLine className="w-10 h-10" />}
                 </div>
                 <h3 className="text-2xl font-bold text-slate-900 mb-4">{value.title}</h3>
-                <p className="text-slate-500 font-medium leading-relaxed">{value.desc}</p>
+                <p className="text-slate-600 font-medium leading-relaxed">{value.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Meet the Founder / Team (Optional but adds trust) */}
+      {/* Meet the Founder */}
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4">
-           <div className="bg-forest-900 rounded-[4rem] p-12 md:p-20 relative overflow-hidden flex flex-col md:flex-row items-center gap-16">
-              <div className="absolute top-0 right-0 w-[40rem] h-[40rem] bg-amber-400 opacity-5 blur-[120px] rounded-full translate-x-1/2 -translate-y-1/2" />
+           <div className="bg-brand-blue rounded-[4rem] p-12 md:p-20 relative overflow-hidden flex flex-col md:flex-row items-center gap-16">
+              <div className="absolute top-0 right-0 w-[40rem] h-[40rem] bg-brand-orange opacity-10 blur-[120px] rounded-full translate-x-1/2 -translate-y-1/2" />
               
               <div className="w-64 h-64 md:w-80 md:h-80 rounded-[3rem] overflow-hidden border-4 border-white/10 shrink-0 shadow-2xl transform hover:rotate-2 transition-transform">
                 <img 
@@ -142,15 +159,15 @@ export default function AboutPage() {
               </div>
 
               <div className="relative z-10 text-center md:text-left">
-                <MessageCircle className="w-12 h-12 text-amber-500 mb-6 mx-auto md:ml-0 opacity-50" />
+                <RiMessage3Line className="w-12 h-12 text-brand-orange mb-6 mx-auto md:ml-0 opacity-50" />
                 <h3 className="text-3xl md:text-4xl font-outfit font-bold text-white mb-6 leading-tight">
                   "I started this because I wanted travelers to see the Himachal I grew up in — wild, honest, and welcoming."
                 </h3>
                 <div className="flex flex-col md:flex-row items-center gap-4">
-                  <div className="h-px w-12 bg-amber-500 hidden md:block" />
+                  <div className="h-px w-12 bg-brand-orange hidden md:block" />
                   <div>
                     <h4 className="text-xl font-bold text-white">Siddharth Sharma</h4>
-                    <p className="text-amber-500 text-sm font-bold uppercase tracking-widest">Founder & Local Explorer</p>
+                    <p className="text-brand-orange text-sm font-bold uppercase tracking-widest">Founder & Local Explorer</p>
                   </div>
                 </div>
               </div>

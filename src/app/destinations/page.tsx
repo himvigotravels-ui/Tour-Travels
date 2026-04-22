@@ -1,113 +1,65 @@
 import Link from "next/link";
-import { ArrowRight, MapPin, Map, Sun, Snowflake, Compass } from "lucide-react";
+
+export const dynamic = 'force-dynamic';
+import { 
+  RiArrowRightLine, 
+  RiMapPinLine, 
+  RiMapLine, 
+  RiSunLine, 
+  RiSnowflakeLine, 
+  RiCompass3Line 
+} from "react-icons/ri";
 import Image from "next/image";
 import { BottomCTA } from "@/components/ui/BottomCTA";
 
-export const metadata = {
-  title: "Destinations | Himvigo Tours",
-  description: "Explore the magical regions of Himachal Pradesh. From the cold desert of Spiti to the green valleys of Kullu Manali.",
-};
+import { getSettings } from "@/lib/db/settings";
 
-const destinationsData = [
-  {
-    slug: "spiti-valley",
-    name: "Spiti Valley",
-    tagline: "The Middle Land",
-    description: "A cold desert mountain valley located high in the Himalaya mountains in the north-eastern part of the northern Indian state of Himachal Pradesh. Known for its stark beauty, ancient monasteries, and pure unadulterated Tibetan culture.",
-    bestTime: "June to October",
-    altitude: "12,500 ft (avg)",
-    vibe: "Adventure & Spiritual",
-    image: "https://images.unsplash.com/photo-1586724230411-48b2d1dd2571?auto=format&fit=crop&w=1200&q=80",
-    highlights: ["Key Monastery", "Chandratal Lake", "Komic Village", "Kunzum Pass"],
-  },
-  {
-    slug: "manali",
-    name: "Manali",
-    tagline: "Valley of the Gods",
-    description: "A high-altitude Himalayan resort town in India's northern Himachal Pradesh state. It has a reputation as a backpacking center and honeymoon destination. Surrounded by towering peaks and lush pine forests.",
-    bestTime: "October to June",
-    altitude: "6,726 ft",
-    vibe: "Romantic & Leisure",
-    image: "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&q=80",
-    highlights: ["Rohtang Pass", "Solang Valley", "Old Manali", "Hadimba Temple"],
-  },
-  {
-    slug: "kasol",
-    name: "Kasol",
-    tagline: "Mini Israel of India",
-    description: "A hamlet in the Kullu district of the Indian state of Himachal Pradesh. It is situated in Parvati Valley, on the banks of the Parvati River. Famous among backpackers for its vibrant cafe culture and pristine trekking trails.",
-    bestTime: "March to May",
-    altitude: "5,180 ft",
-    vibe: "Backpacking & Nature",
-    image: "https://images.unsplash.com/photo-1599661046289-e31887846eac?auto=format&fit=crop&w=1200&q=80",
-    highlights: ["Kheerganga Trek", "Tosh Village", "Parvati River", "Malana"],
-  },
-  {
-    slug: "shimla",
-    name: "Shimla",
-    tagline: "Queen of Hills",
-    description: "The capital and the largest city of the northern Indian state of Himachal Pradesh. Known for its colonial Victorian architecture, the legendary Mall Road, and surrounding snow-capped peaks in winter.",
-    bestTime: "March to June",
-    altitude: "7,467 ft",
-    vibe: "Heritage & Family",
-    image: "https://images.unsplash.com/photo-1595815771614-ade9d652a65d?auto=format&fit=crop&w=1200&q=80",
-    highlights: ["The Ridge", "Mall Road", "Jakhoo Temple", "Kufri"],
-  },
-  {
-    slug: "dharamshala",
-    name: "Dharamshala",
-    tagline: "Little Lhasa",
-    description: "The winter capital of Himachal Pradesh. It serves as the residence of the Dalai Lama and the headquarters of the Central Tibetan Administration. It blends rich Tibetan culture with beautiful Dhauladhar mountain backdrops.",
-    bestTime: "February to June",
-    altitude: "4,780 ft",
-    vibe: "Culture & Peace",
-    image: "https://images.unsplash.com/photo-1524443169398-9aa1ceab67d5?auto=format&fit=crop&w=1200&q=80",
-    highlights: ["McLeod Ganj", "Triund Trek", "Dal Lake", "Bhagsu Waterfall"],
-  },
-  {
-    slug: "kinnaur",
-    name: "Kinnaur",
-    tagline: "Land of Fairytales",
-    description: "A mountainous district in the northern Indian state of Himachal Pradesh. It is known for its apples and the Kinner Kailash. Beautiful river valleys, rugged terrains, and warm people.",
-    bestTime: "April to October",
-    altitude: "7,612 ft (Rekong Peo)",
-    vibe: "Offbeat & Pristine",
-    image: "https://images.unsplash.com/photo-1524443169398-9aa1ceab67d5?auto=format&fit=crop&w=1200&q=80",
-    highlights: ["Sangla Valley", "Chitkul", "Kalpa", "Sarahan"],
-  },
-];
+export const dynamic = 'force-dynamic';
 
-export default function DestinationsPage() {
+export async function generateMetadata() {
+  const settings = await getSettings();
+  return {
+    title: settings.seo_destinations_title || "Explore Destinations | Himvigo Tours",
+    description: settings.seo_destinations_description || "Explore the magical regions of Himachal Pradesh.",
+    keywords: settings.seo_destinations_keywords || "destinations, spiti, manali",
+  };
+}
+
+import { getAllDestinations } from "@/lib/db/destinations";
+
+export default async function DestinationsPage() {
+  const destinationsData = await getAllDestinations();
+  const settings = await getSettings();
   return (
     <main className="flex flex-col min-h-screen bg-slate-50">
       
       {/* Cinematic Hero Section */}
-      <section className="relative min-h-[70vh] flex flex-col justify-center items-center overflow-hidden bg-forest-950 pt-32 pb-24">
+      <section className="relative h-screen flex flex-col justify-center items-center overflow-hidden bg-brand-blue">
         {/* Background Layer with Parallax & Blend */}
         <div className="absolute inset-0 z-0 bg-slate-950">
           <img 
             src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1920&q=80" 
             alt="Majestic Spiti landscape" 
-            className="w-full h-full object-cover opacity-60 mix-blend-luminosity scale-105 animate-pulse" 
+            className="w-full h-full object-cover scale-105 animate-pulse" 
             style={{ animationDuration: '25s' }} 
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-50 via-slate-900/40 to-slate-900/60 z-10"></div>
+          <div className="absolute inset-0 bg-black/40 z-10"></div>
           {/* Topographic pattern layered over the image */}
-          <div className="absolute inset-0 z-20 opacity-20 mix-blend-overlay pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.8) 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
+          <div className="absolute inset-0 z-20 opacity-15 mix-blend-overlay pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.8) 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
         </div>
         
         {/* Text Area */}
-        <div className="relative z-30 w-full max-w-5xl mx-auto px-4 text-center mt-10">
-          <div className="inline-flex items-center gap-2 py-2 px-5 rounded-full bg-slate-900/50 backdrop-blur-md border border-white/10 text-amber-400 font-bold text-xs uppercase tracking-widest mb-8 shadow-2xl">
-            <Compass className="w-4 h-4" /> Discover the Himalayas
+        <div className="relative z-30 w-full max-w-5xl mx-auto px-4 text-center pt-24">
+          <div className="inline-flex items-center gap-2 py-2 px-5 rounded-full bg-slate-900/50 border border-white/10 text-brand-orange font-bold text-xs uppercase tracking-widest mb-8 shadow-2xl">
+            <RiCompass3Line className="w-4 h-4" /> Discover the Himalayas
           </div>
           
           <h1 className="text-5xl md:text-7xl lg:text-[6.5rem] font-outfit font-extrabold text-white mb-8 drop-shadow-2xl tracking-tight leading-[1.05]">
             Magical Destinations <br className="hidden md:block" />
-            <span className="relative text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-500 inline-block">
+            <span className="relative text-transparent bg-clip-text bg-gradient-to-r from-brand-orange/70 to-brand-orange inline-block">
               Wait For You
               {/* Dynamic Underline */}
-              <svg className="absolute -bottom-2 left-0 w-full h-4 text-amber-500 z-[-1] opacity-80" viewBox="0 0 100 20" preserveAspectRatio="none">
+              <svg className="absolute -bottom-2 left-0 w-full h-4 text-brand-orange z-[-1] opacity-80" viewBox="0 0 100 20" preserveAspectRatio="none">
                 <path d="M0,15 Q50,0 100,10" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
               </svg>
             </span>
@@ -139,30 +91,29 @@ export default function DestinationsPage() {
                   </div>
                   {/* Floating Badge */}
                   <div className={`absolute top-8 ${isEven ? '-right-6' : '-left-6'} hidden lg:flex flex-col items-center justify-center w-28 h-28 bg-white rounded-full shadow-xl border border-slate-100 z-10 hover:scale-110 transition-transform duration-300 cursor-default`}>
-                    <Compass className="w-8 h-8 text-amber-500 mb-1" />
+                    <RiCompass3Line className="w-8 h-8 text-brand-orange mb-1" />
                     <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Explore</span>
                   </div>
                 </div>
 
                 {/* Text Side */}
                 <div className="w-full md:w-1/2 flex flex-col justify-center">
-                  <h4 className="text-amber-500 font-bold uppercase tracking-widest text-sm mb-3 font-inter">{dest.tagline}</h4>
+                  <h4 className="text-brand-orange font-bold uppercase tracking-widest text-sm mb-3 font-inter">{dest.tagline}</h4>
                   <h2 className="text-4xl md:text-6xl font-outfit font-extrabold text-slate-900 mb-6 drop-shadow-sm">{dest.name}</h2>
                   
                   <p className="text-slate-600 font-inter text-lg leading-relaxed mb-8">
                     {dest.description}
                   </p>
-
                   <div className="grid grid-cols-2 gap-6 mb-10">
                     <div>
                       <h5 className="flex items-center gap-2 text-sm font-bold text-slate-400 uppercase tracking-wider mb-2">
-                        <Sun className="w-4 h-4 text-forest-600" /> Best Time
+                        <RiSunLine className="w-4 h-4 text-brand-blue" /> Best Time
                       </h5>
                       <p className="text-slate-900 font-semibold">{dest.bestTime}</p>
                     </div>
                     <div>
                       <h5 className="flex items-center gap-2 text-sm font-bold text-slate-400 uppercase tracking-wider mb-2">
-                        <MapPin className="w-4 h-4 text-forest-600" /> Altitude
+                        <RiMapPinLine className="w-4 h-4 text-brand-blue" /> Altitude
                       </h5>
                       <p className="text-slate-900 font-semibold">{dest.altitude}</p>
                     </div>
@@ -172,7 +123,7 @@ export default function DestinationsPage() {
                     <h5 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Highlights</h5>
                     <div className="flex flex-wrap gap-2">
                       {dest.highlights.map((highlight, idx) => (
-                        <span key={idx} className="bg-forest-50 text-forest-800 font-medium px-4 py-2 rounded-xl text-sm border border-forest-100/50">
+                        <span key={idx} className="bg-brand-blue/5 text-brand-blue font-medium px-4 py-2 rounded-xl text-sm border border-brand-blue/10">
                           {highlight}
                         </span>
                       ))}
@@ -182,9 +133,9 @@ export default function DestinationsPage() {
                   <div>
                     <Link 
                       href={`/destinations/${dest.slug}`}
-                      className="inline-flex items-center gap-3 bg-slate-900 hover:bg-forest-700 text-white px-8 py-4 rounded-2xl font-bold transition-all duration-300 font-outfit text-lg shadow-lg hover:shadow-forest-700/30 hover:-translate-y-1 group"
+                      className="inline-flex items-center gap-3 bg-brand-blue hover:bg-brand-blue/90 text-white px-8 py-4 rounded-2xl font-bold transition-all duration-300 font-outfit text-lg shadow-lg hover:shadow-brand-blue/30 hover:-translate-y-1 group"
                     >
-                      View {dest.name} Detail <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                      View {dest.name} Detail <RiArrowRightLine className="w-5 h-5 transition-transform group-hover:translate-x-1" />
                     </Link>
                   </div>
                 </div>

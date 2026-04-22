@@ -3,6 +3,8 @@ import Link from "next/link";
 import { ArrowLeft, Calendar, User, Clock, Share2, MessageCircle, Compass, ChevronRight } from "lucide-react";
 import { getBlogBySlug, getAllBlogs } from "@/lib/db/blogs";
 
+export const dynamic = 'force-dynamic';
+
 type Props = {
   params: Promise<{ slug: string }>;
 };

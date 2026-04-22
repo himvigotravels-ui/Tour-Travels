@@ -1,7 +1,6 @@
 "use client";
 
 import { PackageCard, TourPackage } from "@/components/ui/PackageCard";
-import { BottomCTA } from "@/components/ui/BottomCTA";
 import { Compass, Star, MapPin, Clock, ShieldCheck, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -52,7 +51,7 @@ export default function CategoryLandingPage({ category, packages }: CategoryLand
       <section className="relative w-full h-screen min-h-[600px] flex items-end pb-16 md:pb-24 pt-32 bg-forest-900 overflow-hidden">
         <motion.div 
           initial={{ scale: 1.1, opacity: 0 }}
-          animate={{ scale: 1, opacity: 0.8 }}
+          animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 1.5 }}
           className="absolute inset-0 z-0"
         >
@@ -62,8 +61,8 @@ export default function CategoryLandingPage({ category, packages }: CategoryLand
             className="w-full h-full object-cover" 
           />
         </motion.div>
-        {/* Deep Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-slate-900/20 z-[1]"></div>
+        {/* Subtle Overlay */}
+        <div className="absolute inset-0 bg-black/30 z-[1]"></div>
         
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8 w-full mt-auto">
@@ -72,7 +71,7 @@ export default function CategoryLandingPage({ category, packages }: CategoryLand
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
           >
-           <Link href="/packages" className="inline-flex items-center text-amber-500 hover:text-amber-400 font-inter text-sm md:text-base font-semibold mb-6 transition-colors group drop-shadow-md">
+           <Link href="/packages" className="inline-flex items-center text-brand-orange hover:text-brand-orange/80 font-inter text-sm md:text-base font-semibold mb-6 transition-colors group drop-shadow-md">
               Packages <ChevronRight className="w-4 h-4 mx-1 group-hover:translate-x-1 transition-transform" /> <span className="text-slate-100 font-normal">{category.charAt(0).toUpperCase() + category.slice(1)}</span>
             </Link>
           </motion.div>
@@ -84,8 +83,8 @@ export default function CategoryLandingPage({ category, packages }: CategoryLand
               transition={{ delay: 0.4, duration: 0.8 }}
               className="max-w-4xl"
             >
-              <div className="inline-flex items-center gap-2 py-1.5 px-4 rounded-md bg-white/10 border border-white/20 text-white text-xs font-bold uppercase tracking-[0.2em] mb-5 backdrop-blur-md shadow-xl">
-                <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" /> {info.subtitle}
+              <div className="inline-flex items-center gap-2 py-1.5 px-4 rounded-md bg-white/10 border border-white/20 text-white text-xs font-bold uppercase tracking-[0.2em] mb-5">
+                <Star className="w-3.5 h-3.5 fill-brand-orange text-brand-orange" /> {info.subtitle}
               </div>
               <h1 className="text-4xl md:text-6xl lg:text-7xl font-outfit font-extrabold text-white mb-6 drop-shadow-xl leading-[1.1]">
                 {info.title}
@@ -102,10 +101,10 @@ export default function CategoryLandingPage({ category, packages }: CategoryLand
       <section className="py-24 max-w-7xl mx-auto px-4 md:px-8 w-full">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div className="max-w-2xl">
-            <h2 className="text-3xl md:text-5xl font-outfit font-bold text-slate-900">
+            <h2 className="text-3xl md:text-5xl font-outfit font-bold text-brand-blue">
               Internal Curated Packages
             </h2>
-            <div className="h-1.5 w-24 bg-forest-700 mt-6 rounded-full" />
+            <div className="h-1.5 w-24 bg-brand-orange mt-6 rounded-full" />
             <p className="text-slate-600 mt-6 font-inter text-lg">
               Explore our top-rated {category} itineraries, verified by local experts.
             </p>
@@ -128,14 +127,13 @@ export default function CategoryLandingPage({ category, packages }: CategoryLand
             <Compass className="w-20 h-20 text-slate-300 mx-auto mb-8 group-hover:rotate-45 transition-transform duration-700" />
             <p className="text-slate-500 font-bold text-2xl italic font-outfit">No specific {category} packages available yet.</p>
             <p className="text-slate-400 mt-2 font-medium">However, we can design one just for you!</p>
-            <Link href="/contact" className="mt-10 inline-flex items-center justify-center bg-slate-900 text-white font-bold px-10 py-4 rounded-2xl hover:bg-forest-700 transition-all shadow-xl">
+            <Link href="/contact" className="mt-10 inline-flex items-center justify-center bg-brand-blue text-white font-bold px-10 py-4 rounded-2xl hover:bg-brand-blue/90 transition-all shadow-xl">
               Inquire Now
             </Link>
           </div>
         )}
       </section>
 
-      <BottomCTA />
     </main>
   );
 }

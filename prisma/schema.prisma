@@ -6,195 +6,169 @@ datasource db {
   provider = "postgresql"
 }
 
-// ─── Tour Packages ───────────────────────────────────
 model Package {
-  id             String   @id @default(cuid())
-  slug           String   @unique
-  title          String
-  location       String
-  pricePerPerson Int
-  durationDays   Int
-  durationNights Int
-  imageUrls      String[]
-  vehicleType    String
-  maxOccupancy   Int
-  description    String   @db.Text
-  itinerary      Json     // [{day, title, activities}]
-  inclusions     String[]
-  exclusions     String[]
-  categories     String[]
-  isFeatured     Boolean  @default(false)
-  isActive       Boolean  @default(true)
-
-  // SEO
+  id              String   @id @default(cuid())
+  slug            String   @unique
+  title           String
+  location        String
+  pricePerPerson  Int
+  durationDays    Int
+  durationNights  Int
+  imageUrls       String[]
+  vehicleType     String
+  maxOccupancy    Int
+  description     String
+  itinerary       Json
+  inclusions      String[]
+  exclusions      String[]
+  categories      String[]
+  isFeatured      Boolean  @default(false)
+  isActive        Boolean  @default(true)
   metaTitle       String?
   metaDescription String?
   metaKeywords    String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   @@map("packages")
 }
 
-// ─── Blog Posts ──────────────────────────────────────
 model Blog {
-  id          String   @id @default(cuid())
-  slug        String   @unique
-  title       String
-  excerpt     String   @db.Text
-  content     String   @db.Text
-  author      String
-  coverImage  String
-  category    String   @default("Travel Guide")
-  tags        String[]
-  isPublished Boolean  @default(false)
-  publishedAt DateTime?
-
-  // SEO
+  id              String    @id @default(cuid())
+  slug            String    @unique
+  title           String
+  excerpt         String
+  content         String
+  author          String
+  coverImage      String
+  category        String    @default("Travel Guide")
+  tags            String[]
+  isPublished     Boolean   @default(false)
+  publishedAt     DateTime?
   metaTitle       String?
   metaDescription String?
   metaKeywords    String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   @@map("blogs")
 }
 
-// ─── Destinations ────────────────────────────────────
 model Destination {
-  id          String   @id @default(cuid())
-  slug        String   @unique
-  name        String
-  tagline     String
-  description String   @db.Text
-  bestTime    String
-  altitude    String
-  vibe        String
-  image       String
-  highlights  String[]
-  isActive    Boolean  @default(true)
-  sortOrder   Int      @default(0)
-
-  // SEO
+  id              String   @id @default(cuid())
+  slug            String   @unique
+  name            String
+  tagline         String
+  description     String
+  bestTime        String
+  altitude        String
+  vibe            String
+  image           String
+  highlights      String[]
+  isActive        Boolean  @default(true)
+  sortOrder       Int      @default(0)
   metaTitle       String?
   metaDescription String?
   metaKeywords    String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   @@map("destinations")
 }
 
-// ─── Testimonials ────────────────────────────────────
 model Testimonial {
-  id          String  @id @default(cuid())
+  id          String   @id @default(cuid())
   name        String
-  text        String  @db.Text
+  text        String
   packageName String
-  rating      Int     @default(5)
-  isActive    Boolean @default(true)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  rating      Int      @default(5)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@map("testimonials")
 }
 
-// ─── Activities ──────────────────────────────────────
 model Activity {
-  id          String  @id @default(cuid())
+  id          String   @id @default(cuid())
   title       String
-  description String  @db.Text
+  description String
   image       String
   location    String
-  icon        String  @default("Compass") // react-icons name
-  isActive    Boolean @default(true)
-  sortOrder   Int     @default(0)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  icon        String   @default("Compass")
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@map("activities")
 }
 
-// ─── Cab Vehicles ────────────────────────────────────
 model CabVehicle {
-  id       String   @id @default(cuid())
-  name     String
-  model    String
-  capacity String
-  ideal    String
-  features String[]
-  image    String
-  isActive Boolean  @default(true)
-
+  id        String   @id @default(cuid())
+  name      String
+  model     String
+  capacity  String
+  ideal     String
+  features  String[]
+  image     String
+  isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("cab_vehicles")
 }
 
-// ─── Cab Routes ──────────────────────────────────────
 model CabRoute {
-  id       String  @id @default(cuid())
-  fromCity String
-  toCity   String
-  price    String
-  duration String
-  isActive Boolean @default(true)
-
+  id        String   @id @default(cuid())
+  fromCity  String
+  toCity    String
+  price     String
+  duration  String
+  isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("cab_routes")
 }
 
-// ─── Contact Inquiries ───────────────────────────────
 model Inquiry {
-  id             String   @id @default(cuid())
+  id             String    @id @default(cuid())
   name           String
-  email          String?
   phone          String
   fromCity       String?
   toCity         String?
-  pickupLocation String?
-  dropLocation   String?
   travelDate     String?
-  pickupDate     DateTime?
-  dropDate       DateTime?
-  adults         Int      @default(1)
-  children       Int      @default(0)
   passengers     String?
   duration       String?
-  message        String?  @db.Text
-  status         String   @default("new") // new, contacted, closed
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  message        String?
+  status         String    @default("new")
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  adults         Int       @default(1)
+  children       Int       @default(0)
+  dropDate       DateTime?
+  dropLocation   String?
+  email          String?
+  pickupDate     DateTime?
+  pickupLocation String?
 
   @@map("inquiries")
 }
 
-// ─── Site Settings (Key-Value) ───────────────────────
 model SiteSetting {
-  id    String @id @default(cuid())
-  key   String @unique
-  value String @db.Text
-
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
   updatedAt DateTime @updatedAt
 
   @@map("site_settings")
 }
 
-// ─── Admin User ──────────────────────────────────────
 model AdminUser {
-  id       String @id @default(cuid())
-  email    String @unique
-  password String // bcrypt hashed
-
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
   createdAt DateTime @default(now())
 
   @@map("admin_users")

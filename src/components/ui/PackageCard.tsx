@@ -2,7 +2,16 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Clock, MapPin, Users, CarFront, ArrowRight, Sparkles, ShieldCheck, Mountain } from "lucide-react";
+import { 
+  RiTimeLine, 
+  RiMapPinLine, 
+  RiGroupLine, 
+  RiCarLine, 
+  RiArrowRightLine, 
+  RiSparklingLine, 
+  RiShieldCheckLine, 
+  RiLandscapeLine 
+} from "react-icons/ri";
 import { motion } from "framer-motion";
 
 export type TourPackage = {
@@ -58,19 +67,19 @@ export const PackageCard = ({ tour }: { tour: TourPackage }) => {
 
         <div className="absolute left-4 right-4 top-4 flex items-start justify-between gap-2">
           <div className="flex items-center gap-1.5 rounded-full border border-white/30 bg-white/75 px-3 py-1.5 shadow-lg backdrop-blur-md">
-            <MapPin className="h-3 w-3 text-forest-800" />
+            <RiMapPinLine className="h-3 w-3 text-forest-800" />
             <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-900 sm:text-[11px]">{tour.location}</span>
           </div>
 
           <div className="flex items-center gap-1.5 rounded-full bg-slate-950/65 px-3 py-1.5 text-white shadow-lg ring-1 ring-white/15 backdrop-blur-md">
-            <Sparkles className="h-3 w-3 text-amber-300" />
+            <RiSparklingLine className="h-3 w-3 text-amber-300" />
             <span className="text-[10px] font-bold uppercase tracking-[0.14em] sm:text-[11px]">{categoryLabel}</span>
           </div>
         </div>
 
         <div className="absolute inset-x-4 bottom-4">
           <div className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/12 px-3 py-1.5 text-white backdrop-blur-md">
-            <Mountain className="h-3 w-3 text-amber-300" />
+            <RiLandscapeLine className="h-3 w-3 text-amber-300" />
             <span className="text-[10px] font-bold uppercase tracking-[0.14em] sm:text-[11px]">Curated Himalayan Circuit</span>
           </div>
         </div>
@@ -81,7 +90,7 @@ export const PackageCard = ({ tour }: { tour: TourPackage }) => {
           <div className="mb-3 flex items-center justify-between gap-3">
             <span className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-forest-700">Best for</span>
             <div className="flex items-center gap-1.5 rounded-full bg-white/90 px-2.5 py-1.5 text-[10px] font-bold text-slate-700 shadow-sm sm:text-[11px]">
-              <ShieldCheck className="h-3 w-3 text-forest-700" />
+              <RiShieldCheckLine className="h-3 w-3 text-forest-700" />
               Verified stays & rides
             </div>
           </div>
@@ -108,15 +117,15 @@ export const PackageCard = ({ tour }: { tour: TourPackage }) => {
 
         <div className="mb-6 grid grid-cols-3 gap-2 text-xs font-bold tracking-wide text-slate-600 md:text-[13px]">
           <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-3">
-            <Clock className="h-4 w-4 text-forest-700" />
+            <RiTimeLine className="h-4 w-4 text-forest-700" />
             <span className="truncate">{tour.durationDays}D / {tour.durationNights}N</span>
           </div>
           <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-3">
-            <CarFront className="h-4 w-4 text-forest-700" />
+            <RiCarLine className="h-4 w-4 text-forest-700" />
             <span className="truncate">{tour.vehicleType}</span>
           </div>
           <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-3">
-            <Users className="h-4 w-4 text-forest-700" />
+            <RiGroupLine className="h-4 w-4 text-forest-700" />
             <span>{tour.maxOccupancy} pax</span>
           </div>
         </div>
@@ -134,7 +143,7 @@ export const PackageCard = ({ tour }: { tour: TourPackage }) => {
             href={`/packages/${tour.slug}`}
             className="group/btn inline-flex items-center justify-center gap-2 rounded-2xl bg-slate-900 px-6 py-3.5 font-outfit text-sm font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:bg-amber-500 hover:text-slate-900 hover:shadow-amber-500/30"
           >
-            Explore <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+            Explore <RiArrowRightLine className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
           </Link>
         </div>
       </div>
