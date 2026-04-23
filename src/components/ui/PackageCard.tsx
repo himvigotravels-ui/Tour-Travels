@@ -30,6 +30,9 @@ export type TourPackage = {
   inclusions?: string[];
   exclusions?: string[];
   categories?: string[];
+  metaTitle?: string;
+  metaDescription?: string;
+  metaKeywords?: string;
 };
 
 const categoryLabelMap: Record<string, string> = {

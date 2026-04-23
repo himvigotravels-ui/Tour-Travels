@@ -12,6 +12,9 @@ export interface DestinationData {
   image: string;
   highlights: string[];
   sortOrder: number;
+  metaTitle?: string;
+  metaDescription?: string;
+  metaKeywords?: string;
 }
 
 export async function getAllDestinations(): Promise<DestinationData[]> {

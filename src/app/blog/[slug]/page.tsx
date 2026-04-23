@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Calendar, User, Clock, Share2, MessageCircle, Compass, ChevronRight } from "lucide-react";
 import { getBlogBySlug, getAllBlogs } from "@/lib/db/blogs";
+import { Metadata } from "next";
 
 export const dynamic = 'force-dynamic';
 
@@ -123,4 +124,30 @@ export async function generateStaticParams() {
   return blogs.map((blog) => ({
     slug: blog.slug,
   }));
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const blog = await getBlogBySlug(slug);
+
+  if (!blog) return {};
+
+  const title = blog.metaTitle || `${blog.title} | Himvigo Blog`;
+  const description = blog.metaDescription || blog.excerpt || blog.content.substring(0, 160).replace(/<[^>]*>/g, '');
+
+  return {
+    title,
+    description,
+    keywords: blog.metaKeywords || blog.tags?.join(', '),
+    openGraph: {
+      title,
+      description,
+      images: blog.coverImage ? [{ url: blog.coverImage }] : []
+    },
+    twitter: {
+      title,
+      description,
+      images: blog.coverImage ? [blog.coverImage] : []
+    }
+  };
 }

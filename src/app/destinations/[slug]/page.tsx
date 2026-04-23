@@ -5,6 +5,7 @@ import { getAllPackages } from "@/lib/db/packages";
 import { getDestinationBySlug, getAllDestinations } from "@/lib/db/destinations";
 import { MapPin, Sun, Snowflake, Compass, Clock, ShieldCheck } from "lucide-react";
 import Link from "next/link";
+import { Metadata } from "next";
 
 export const dynamic = 'force-dynamic';
 
@@ -13,6 +14,32 @@ export async function generateStaticParams() {
   return destinations.map((dest) => ({
     slug: dest.slug,
   }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const destination = await getDestinationBySlug(slug);
+
+  if (!destination) return {};
+
+  const title = destination.metaTitle || `${destination.name} Travel Guide | Himvigo`;
+  const description = destination.metaDescription || destination.description.substring(0, 160);
+
+  return {
+    title,
+    description,
+    keywords: destination.metaKeywords,
+    openGraph: {
+      title,
+      description,
+      images: destination.image ? [{ url: destination.image }] : []
+    },
+    twitter: {
+      title,
+      description,
+      images: destination.image ? [destination.image] : []
+    }
+  };
 }
 
 export default async function DestinationDetailPage({ params }: { params: Promise<{ slug: string }> }) {

@@ -11,6 +11,10 @@ export interface BlogData {
   category: string;
   isPublished: boolean;
   publishedAt: Date;
+  metaTitle?: string;
+  metaDescription?: string;
+  metaKeywords?: string;
+  tags?: string[];
 }
 
 export async function getAllBlogs(): Promise<BlogData[]> {
