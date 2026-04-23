@@ -90,7 +90,7 @@ export default async function HomePage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* Hero Section */}
-      <section className="relative h-screen flex flex-col items-center overflow-hidden bg-brand-blue pt-20">
+      <section className="relative min-h-screen h-auto md:h-screen flex flex-col items-center overflow-hidden bg-brand-blue pt-20">
         <HeroSlider />
         
         {/* Main Content Container - Vertically Centered with Gap Management */}

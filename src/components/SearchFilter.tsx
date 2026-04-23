@@ -88,10 +88,10 @@ export const SearchFilter = () => {
         </button>
       </div>
 
-      <div className="bg-white rounded-3xl p-3 md:p-4 shadow-2xl flex flex-col lg:flex-row items-center gap-2 w-full relative z-20 divide-y lg:divide-y-0 divide-slate-100">
+      <div className="bg-white rounded-[2rem] md:rounded-3xl p-2 md:p-4 shadow-2xl flex flex-col lg:flex-row items-center gap-1 md:gap-2 w-full relative z-20 divide-y lg:divide-y-0 divide-slate-100">
         
         {/* Destination Input */}
-        <div className="flex-1 w-full hover:bg-slate-50 rounded-2xl px-5 py-3 lg:border-r lg:border-slate-100 transition-colors cursor-text group relative">
+        <div className="flex-1 w-full hover:bg-slate-50 rounded-2xl px-4 py-2.5 md:px-5 md:py-3 lg:border-r lg:border-slate-100 transition-colors cursor-text group relative">
           <label className="block text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-1.5 group-hover:text-brand-blue transition-colors flex items-center">
             <MapPin className="w-4 h-4 mr-1.5 text-slate-400 group-hover:text-brand-blue transition-colors"/> Destination
           </label>
@@ -112,7 +112,7 @@ export const SearchFilter = () => {
         <div 
           ref={durationRef}
           onClick={() => setIsDurationOpen(!isDurationOpen)}
-          className="flex-1 w-full hover:bg-slate-50 rounded-2xl px-5 py-3 lg:border-r lg:border-slate-100 transition-colors cursor-pointer group relative"
+          className="flex-1 w-full hover:bg-slate-50 rounded-2xl px-4 py-2.5 md:px-5 md:py-3 lg:border-r lg:border-slate-100 transition-colors cursor-pointer group relative"
         >
           <label className="block text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-1.5 group-hover:text-brand-blue transition-colors flex items-center">
             <Clock className="w-4 h-4 mr-1.5 text-slate-400 group-hover:text-brand-blue transition-colors"/> Duration
@@ -148,7 +148,7 @@ export const SearchFilter = () => {
         <div 
           ref={categoryRef}
           onClick={() => setIsCategoryOpen(!isCategoryOpen)}
-          className="flex-1 w-full hover:bg-slate-50 rounded-2xl px-5 py-3 transition-colors cursor-pointer group relative"
+          className="flex-1 w-full hover:bg-slate-50 rounded-2xl px-4 py-2.5 md:px-5 md:py-3 transition-colors cursor-pointer group relative"
         >
           <label className="block text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-1.5 group-hover:text-brand-blue transition-colors flex items-center">
             <Compass className="w-4 h-4 mr-1.5 text-slate-400 group-hover:text-brand-blue transition-colors"/> Category
@@ -181,10 +181,10 @@ export const SearchFilter = () => {
         {/* Search Button */}
         <button 
           onClick={handleSearch}
-          className="w-full lg:w-auto mt-2 lg:mt-0 bg-brand-orange hover:bg-brand-orange/90 text-white font-extrabold px-8 py-5 md:py-6 rounded-2xl flex items-center justify-center transition-all shadow-lg hover:shadow-brand-orange/40 hover:-translate-y-1"
+          className="w-full lg:w-auto mt-1 lg:mt-0 bg-brand-orange hover:bg-brand-orange/90 text-white font-extrabold px-8 py-4 md:py-6 rounded-2xl flex items-center justify-center transition-all shadow-lg hover:shadow-brand-orange/40 hover:-translate-y-1"
         >
-          <Search className="w-6 h-6 lg:mr-2" />
-          <span className="lg:hidden text-lg ml-2">Search Packages</span>
+          <Search className="w-5 h-5 md:w-6 md:h-6 lg:mr-2" />
+          <span className="lg:hidden text-base md:text-lg ml-2">Search Packages</span>
         </button>
       </div>
     </div>
