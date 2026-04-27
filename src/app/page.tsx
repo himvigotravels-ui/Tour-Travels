@@ -125,7 +125,7 @@ export default async function HomePage() {
         <div className="relative h-[80vh] min-h-[620px] max-h-[820px] overflow-hidden pt-24">
           <HeroSlider />
 
-          <div className="relative z-10 h-full w-full max-w-6xl mx-auto px-4 md:px-8 flex flex-col justify-center">
+          <div className="relative z-10 h-full w-full max-w-7xl mx-auto px-4 md:px-8 flex flex-col justify-center">
             <div className="w-full">
               <div className="inline-flex items-center gap-2 rounded-full bg-white/10 ring-1 ring-white/25 px-3 py-1.5 backdrop-blur-md mb-5">
                 <span className="relative flex h-2 w-2">
@@ -209,14 +209,14 @@ export default async function HomePage() {
 
         {/* Search band — clean and dedicated, no nested cards */}
         <div className="relative z-20 -mt-12 md:-mt-16 px-4">
-          <div className="mx-auto w-full max-w-6xl">
+          <div className="mx-auto w-full max-w-7xl">
             <SearchFilter />
           </div>
         </div>
 
         {/* Trust band — single tidy strip with separators */}
         <div className="px-4 mt-10 md:mt-14">
-          <div className="mx-auto w-full max-w-6xl">
+          <div className="mx-auto w-full max-w-7xl">
             <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-slate-200 rounded-2xl bg-slate-50 ring-1 ring-slate-200/70 overflow-hidden">
               {[
                 { value: "12+", label: "Years in the mountains" },
