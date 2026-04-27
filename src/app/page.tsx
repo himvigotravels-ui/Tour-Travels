@@ -119,16 +119,15 @@ export default async function HomePage() {
     <main className="flex flex-col min-h-screen bg-slate-50">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      {/* Hero Section — clean cinematic */}
+      {/* Hero Section */}
       <section className="relative bg-white">
-        {/* Image stage */}
-        <div className="relative h-[78vh] min-h-[600px] max-h-[760px] overflow-hidden pt-24">
+        {/* Cinematic image stage — content sits comfortably inside */}
+        <div className="relative h-[80vh] min-h-[620px] max-h-[820px] overflow-hidden pt-24">
           <HeroSlider />
 
-          {/* Centered content */}
           <div className="relative z-10 h-full w-full max-w-6xl mx-auto px-4 md:px-8 flex flex-col justify-center">
-            <div className="max-w-3xl">
-              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 ring-1 ring-white/25 px-3 py-1.5 backdrop-blur-md mb-6">
+            <div className="max-w-2xl">
+              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 ring-1 ring-white/25 px-3 py-1.5 backdrop-blur-md mb-5">
                 <span className="relative flex h-2 w-2">
                   <span className="absolute inset-0 animate-ping rounded-full bg-brand-orange opacity-75" />
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-brand-orange" />
@@ -138,7 +137,7 @@ export default async function HomePage() {
                 </span>
               </div>
 
-              <h1 className="font-outfit text-5xl md:text-6xl lg:text-[5.5rem] font-extrabold text-white drop-shadow-2xl tracking-tight leading-[1.02] mb-6">
+              <h1 className="font-outfit text-4xl md:text-5xl lg:text-6xl font-extrabold text-white drop-shadow-2xl tracking-tight leading-[1.05] mb-5">
                 {settings.hero_headline
                   ? settings.hero_headline
                       .split(" ")
@@ -174,7 +173,7 @@ export default async function HomePage() {
                   : "Your Himachal Adventure Starts Here"}
               </h1>
 
-              <p className="text-base md:text-xl text-white/85 mb-8 font-inter max-w-2xl drop-shadow-lg leading-relaxed">
+              <p className="text-base md:text-lg text-white/85 mb-7 font-inter max-w-xl drop-shadow-lg leading-relaxed">
                 {settings.hero_subheadline ||
                   "Safe rides. Local expertise. Unforgettable journeys through the heart of the Himalayas."}
               </p>
@@ -182,14 +181,14 @@ export default async function HomePage() {
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                 <Link
                   href="/packages"
-                  className="group inline-flex items-center justify-center gap-2 rounded-full bg-brand-orange px-7 py-3.5 font-bold text-white shadow-xl shadow-brand-orange/30 transition-all duration-300 hover:bg-brand-orange/90 hover:-translate-y-0.5 font-outfit"
+                  className="group inline-flex items-center justify-center gap-2 rounded-full bg-brand-orange px-6 py-3 font-bold text-white shadow-xl shadow-brand-orange/30 transition-all duration-300 hover:bg-brand-orange/90 hover:-translate-y-0.5 font-outfit"
                 >
                   {settings.hero_cta_text || "Plan Your Trip"}
                   <RiArrowRightLine className="w-5 h-5 transition-transform group-hover:translate-x-1" />
                 </Link>
                 <a
                   href={`tel:${settings.site_phone || "+917018318824"}`}
-                  className="group inline-flex items-center justify-center gap-2 rounded-full bg-white/10 px-7 py-3.5 font-bold text-white ring-1 ring-white/30 backdrop-blur-md transition-all duration-300 hover:bg-white/20 hover:-translate-y-0.5 font-outfit"
+                  className="group inline-flex items-center justify-center gap-2 rounded-full bg-white/10 px-6 py-3 font-bold text-white ring-1 ring-white/30 backdrop-blur-md transition-all duration-300 hover:bg-white/20 hover:-translate-y-0.5 font-outfit"
                 >
                   <RiPhoneLine className="w-5 h-5" />
                   {settings.hero_cta_call || "Call Us Now"}
@@ -198,55 +197,35 @@ export default async function HomePage() {
             </div>
           </div>
 
-          {/* Bottom fade for seamless transition into search band */}
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent via-slate-950/30 to-slate-950/80" />
+          {/* Soft bottom fade so the photo blends into the next band */}
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-white" />
         </div>
 
-        {/* Trust strip + Search band — sits cleanly under the hero, no overlap */}
-        <div className="relative z-20 -mt-24 md:-mt-32 px-4">
+        {/* Search band — clean and dedicated, no nested cards */}
+        <div className="relative z-20 -mt-12 md:-mt-16 px-4">
           <div className="mx-auto w-full max-w-6xl">
-            {/* Search card */}
-            <div className="rounded-3xl bg-white/95 ring-1 ring-slate-200/80 shadow-[0_30px_80px_-30px_rgba(15,23,42,0.45)] backdrop-blur-xl p-3 md:p-5">
-              {/* Tiny title bar */}
-              <div className="hidden md:flex items-center justify-between px-2 pb-3">
-                <div>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-brand-orange">
-                    Where to next?
-                  </p>
-                  <h2 className="font-outfit text-base font-bold text-slate-900">
-                    Find your perfect Himachal escape
-                  </h2>
-                </div>
-                <div className="hidden lg:flex items-center gap-4 text-[11px] text-slate-500">
-                  <span className="inline-flex items-center gap-1.5">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                    Live availability
-                  </span>
-                  <span className="inline-flex items-center gap-1.5">
-                    <span className="h-1.5 w-1.5 rounded-full bg-brand-orange" />
-                    Free cancellation
-                  </span>
-                </div>
-              </div>
-              <SearchFilter />
-            </div>
+            <SearchFilter />
+          </div>
+        </div>
 
-            {/* Trust band — slim, clean, below the search */}
-            <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-3 px-2">
+        {/* Trust band — single tidy strip with separators */}
+        <div className="px-4 mt-10 md:mt-14">
+          <div className="mx-auto w-full max-w-6xl">
+            <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-slate-200 rounded-2xl bg-slate-50 ring-1 ring-slate-200/70 overflow-hidden">
               {[
                 { value: "12+", label: "Years in the mountains" },
                 { value: "1.5k+", label: "Curated expeditions" },
                 { value: "100%", label: "Local guides & drivers" },
-                { value: "4.9★", label: "10,000+ traveller reviews" },
+                { value: "4.9★", label: "10,000+ reviews" },
               ].map((s, i) => (
                 <div
                   key={i}
-                  className="flex items-baseline gap-2 border-l-2 border-brand-orange/60 pl-3"
+                  className="flex flex-col items-center justify-center gap-1 py-5 px-3 text-center"
                 >
-                  <span className="font-outfit text-2xl font-extrabold text-brand-blue leading-none">
+                  <span className="font-outfit text-2xl md:text-3xl font-extrabold text-brand-blue leading-none">
                     {s.value}
                   </span>
-                  <span className="text-[11px] font-medium text-slate-500 leading-tight">
+                  <span className="text-[11px] md:text-xs font-medium text-slate-500 leading-tight">
                     {s.label}
                   </span>
                 </div>
