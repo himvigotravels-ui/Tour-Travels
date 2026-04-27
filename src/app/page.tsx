@@ -137,7 +137,7 @@ export default async function HomePage() {
                 </span>
               </div>
 
-              <h1 className="font-outfit text-4xl md:text-5xl lg:text-6xl font-extrabold text-white drop-shadow-2xl tracking-tight leading-[1.05] mb-5">
+              <h1 className="font-outfit text-5xl md:text-6xl lg:text-7xl xl:text-[5.5rem] font-extrabold text-white drop-shadow-2xl tracking-tight leading-[1.02] mb-5">
                 {settings.hero_headline
                   ? settings.hero_headline
                       .split(" ")
