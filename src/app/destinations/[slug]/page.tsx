@@ -25,15 +25,26 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const internalPage = await getInternalPageBySlug(slug);
   if (internalPage && internalPage.type === "destination") {
     const title = internalPage.metaTitle || internalPage.title;
-    const description = internalPage.metaDescription || internalPage.description || `Explore our best ${internalPage.title} and plan your dream trip with Himvigo.`;
+    const description =
+      internalPage.metaDescription ||
+      internalPage.description ||
+      `Explore our best ${internalPage.title} and plan your dream trip with Himvigo.`;
+    const ogImage = internalPage.ogImage || internalPage.coverImage || undefined;
     return {
       title,
       description,
-      alternates: {
-        canonical: `/destinations/${slug}`,
+      keywords: internalPage.metaKeywords || undefined,
+      alternates: { canonical: `/destinations/${slug}` },
+      openGraph: {
+        title,
+        description,
+        images: ogImage ? [{ url: ogImage }] : undefined,
       },
-      openGraph: { title, description },
-      twitter: { title, description }
+      twitter: {
+        title,
+        description,
+        images: ogImage ? [ogImage] : undefined,
+      },
     };
   }
 
@@ -70,18 +81,41 @@ export default async function DestinationDetailPage({ params }: { params: Promis
   // Check for dynamic internal pages first
   const internalPage = await getInternalPageBySlug(slug);
   if (internalPage && internalPage.type === "destination") {
-    const allDestinations = await getAllDestinations();
-    // Filter destinations that have this category slug or title in their categories array
-    const groupDestinations = allDestinations.filter(d => 
-      (d.categories || []).map(c => c.toLowerCase()).includes(slug.toLowerCase()) ||
-      (d.categories || []).some(c => c.toLowerCase() === internalPage.title.toLowerCase())
+    // Prefer manually-selected destinations; fall back to category-array matching
+    const manualIds = (internalPage.destinations ?? []).map((d) => d.id);
+    let groupDestinations;
+    if (manualIds.length > 0) {
+      const idOrder = new Map<string, number>(
+        manualIds.map((id, idx) => [id, idx])
+      );
+      const allDestinations = await getAllDestinations();
+      groupDestinations = allDestinations
+        .filter((d) => d.id && manualIds.includes(d.id))
+        .sort(
+          (a, b) =>
+            (idOrder.get(a.id ?? "") ?? 0) -
+            (idOrder.get(b.id ?? "") ?? 0)
+        );
+    } else {
+      const allDestinations = await getAllDestinations();
+      groupDestinations = allDestinations.filter(
+        (d) =>
+          (d.categories || [])
+            .map((c) => c.toLowerCase())
+            .includes(slug.toLowerCase()) ||
+          (d.categories || []).some(
+            (c) => c.toLowerCase() === internalPage.title.toLowerCase()
+          )
+      );
+    }
+
+    return (
+      <DestinationGroupLandingPage
+        groupName={internalPage.title}
+        destinations={groupDestinations}
+        description={internalPage.description || undefined}
+      />
     );
-    
-    return <DestinationGroupLandingPage 
-      groupName={internalPage.title} 
-      destinations={groupDestinations} 
-      description={internalPage.description || undefined} 
-    />;
   }
 
   const destination = await getDestinationBySlug(slug);

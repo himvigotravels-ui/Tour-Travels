@@ -17,43 +17,91 @@ async function verifyAuth() {
   }
 }
 
-export async function PUT(req: Request, props: { params: Promise<{ id: string }> }) {
+export async function GET(
+  _req: Request,
+  props: { params: Promise<{ id: string }> }
+) {
+  const params = await props.params;
+  if (!(await verifyAuth())) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const page = await prisma.internalPage.findUnique({
+    where: { id: params.id },
+    include: {
+      packages: { select: { id: true } },
+      destinations: { select: { id: true } },
+    },
+  });
+  if (!page) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+  return NextResponse.json(page);
+}
+
+export async function PUT(
+  req: Request,
+  props: { params: Promise<{ id: string }> }
+) {
   const params = await props.params;
   if (!(await verifyAuth())) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   try {
     const data = await req.json();
+    const packageIds: string[] = Array.isArray(data.packageIds) ? data.packageIds : [];
+    const destinationIds: string[] = Array.isArray(data.destinationIds) ? data.destinationIds : [];
+
     const page = await prisma.internalPage.update({
       where: { id: params.id },
       data: {
         title: data.title,
         slug: data.slug,
-        description: data.description,
+        description: data.description || null,
+        tagline: data.tagline || null,
+        content: data.content || null,
+        coverImage: data.coverImage || null,
         type: data.type,
         isActive: data.isActive,
+        isFeatured: data.isFeatured ?? false,
         sortOrder: Number(data.sortOrder) || 0,
-        metaTitle: data.metaTitle,
-        metaDescription: data.metaDescription,
+        metaTitle: data.metaTitle || null,
+        metaDescription: data.metaDescription || null,
+        metaKeywords: data.metaKeywords || null,
+        ogImage: data.ogImage || null,
+        packages:
+          data.type === "package"
+            ? { set: packageIds.map((id) => ({ id })) }
+            : { set: [] },
+        destinations:
+          data.type === "destination"
+            ? { set: destinationIds.map((id) => ({ id })) }
+            : { set: [] },
+      },
+      include: {
+        packages: { select: { id: true } },
+        destinations: { select: { id: true } },
       },
     });
     return NextResponse.json(page);
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
-export async function DELETE(req: Request, props: { params: Promise<{ id: string }> }) {
+export async function DELETE(
+  _req: Request,
+  props: { params: Promise<{ id: string }> }
+) {
   const params = await props.params;
   if (!(await verifyAuth())) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   try {
-    await prisma.internalPage.delete({
-      where: { id: params.id },
-    });
+    await prisma.internalPage.delete({ where: { id: params.id } });
     return NextResponse.json({ success: true });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

@@ -23,6 +23,10 @@ export async function GET() {
   }
   const pages = await prisma.internalPage.findMany({
     orderBy: { sortOrder: "asc" },
+    include: {
+      packages: { select: { id: true } },
+      destinations: { select: { id: true } },
+    },
   });
   return NextResponse.json(pages);
 }
@@ -33,20 +37,42 @@ export async function POST(req: Request) {
   }
   try {
     const data = await req.json();
+    const packageIds: string[] = Array.isArray(data.packageIds) ? data.packageIds : [];
+    const destinationIds: string[] = Array.isArray(data.destinationIds) ? data.destinationIds : [];
+
     const page = await prisma.internalPage.create({
       data: {
         title: data.title,
         slug: data.slug,
-        description: data.description,
+        description: data.description || null,
+        tagline: data.tagline || null,
+        content: data.content || null,
+        coverImage: data.coverImage || null,
         type: data.type,
         isActive: data.isActive ?? true,
+        isFeatured: data.isFeatured ?? false,
         sortOrder: Number(data.sortOrder) || 0,
-        metaTitle: data.metaTitle,
-        metaDescription: data.metaDescription,
+        metaTitle: data.metaTitle || null,
+        metaDescription: data.metaDescription || null,
+        metaKeywords: data.metaKeywords || null,
+        ogImage: data.ogImage || null,
+        packages:
+          data.type === "package" && packageIds.length
+            ? { connect: packageIds.map((id) => ({ id })) }
+            : undefined,
+        destinations:
+          data.type === "destination" && destinationIds.length
+            ? { connect: destinationIds.map((id) => ({ id })) }
+            : undefined,
+      },
+      include: {
+        packages: { select: { id: true } },
+        destinations: { select: { id: true } },
       },
     });
     return NextResponse.json(page);
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
