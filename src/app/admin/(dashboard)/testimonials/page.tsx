@@ -271,7 +271,7 @@ export default function TestimonialsPage() {
         saving={saving}
         saveLabel={form.id ? "Save changes" : "Add testimonial"}
         onSave={handleSave}
-        width="sm:max-w-3xl lg:max-w-4xl"
+        width="sm:!max-w-[50vw] sm:!w-[50vw]"
       />
 
       <ConfirmDelete

@@ -296,7 +296,7 @@ export default function ActivitiesPage() {
         saving={saving}
         saveLabel={form.id ? "Save changes" : "Create activity"}
         onSave={handleSave}
-        width="sm:max-w-3xl lg:max-w-4xl"
+        width="sm:!max-w-[50vw] sm:!w-[50vw]"
       />
 
       <ConfirmDelete
