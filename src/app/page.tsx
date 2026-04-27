@@ -365,11 +365,23 @@ export default async function HomePage() {
       </section>
 
       {/* Activities Section */}
-      <section className="py-28 bg-slate-50 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 md:px-8">
+      <section className="relative py-28 bg-white overflow-hidden">
+        {/* Subtle radial highlight so the white doesn't feel flat */}
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(245,158,11,0.08),transparent_55%),radial-gradient(ellipse_at_bottom_left,rgba(10,60,93,0.06),transparent_55%)]" />
+        <div className="relative max-w-7xl mx-auto px-4 md:px-8">
           <div className="mb-12 max-w-2xl">
-            <h2 className="text-3xl md:text-5xl font-outfit font-bold text-brand-blue mb-6 leading-tight">Adventures Await</h2>
-            <p className="text-slate-500 text-lg font-inter">Curated experiences to make your Himalayan trip unforgettable.</p>
+            <div className="inline-flex items-center gap-2 rounded-full bg-brand-orange/10 px-3 py-1 mb-4">
+              <span className="h-1.5 w-1.5 rounded-full bg-brand-orange" />
+              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-brand-orange">
+                Things to do
+              </span>
+            </div>
+            <h2 className="text-3xl md:text-5xl font-outfit font-bold text-brand-blue mb-4 leading-tight">
+              Adventures Await
+            </h2>
+            <p className="text-slate-500 text-lg font-inter">
+              Curated experiences to make your Himalayan trip unforgettable.
+            </p>
           </div>
           <ActivitiesSlider activities={activities} />
         </div>
