@@ -121,15 +121,16 @@ export default function BlogSection({ blogs = [] }: { blogs: BlogData[] }) {
             </div>
           </Link>
 
-          {/* Right column — stacked cards */}
-          <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-6">
+          {/* Right column — three compact cards */}
+          <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-4">
             {others.map((blog) => (
               <Link
                 key={blog.slug}
                 href={`/blog/${blog.slug}`}
-                className="group relative overflow-hidden rounded-2xl bg-white ring-1 ring-slate-200/70 shadow-sm hover:shadow-xl hover:ring-slate-300 transition-all duration-300 flex flex-col sm:flex-row lg:flex-row"
+                className="group relative flex flex-col sm:flex-col lg:flex-row overflow-hidden rounded-2xl bg-white ring-1 ring-slate-200/70 shadow-sm hover:shadow-xl hover:ring-slate-300 transition-all duration-300"
               >
-                <div className="relative h-44 sm:h-auto sm:w-2/5 shrink-0 overflow-hidden bg-slate-200">
+                {/* Image */}
+                <div className="relative h-36 sm:h-32 lg:h-auto lg:w-[42%] shrink-0 overflow-hidden bg-slate-200">
                   {blog.coverImage && (
                     <Image
                       src={blog.coverImage}
@@ -137,14 +138,15 @@ export default function BlogSection({ blogs = [] }: { blogs: BlogData[] }) {
                       fill
                       unoptimized
                       className="object-cover transition-transform duration-700 group-hover:scale-110"
-                      sizes="(max-width: 640px) 100vw, 33vw"
+                      sizes="(max-width: 1024px) 33vw, 240px"
                     />
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/30 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent" />
                 </div>
 
-                <div className="flex flex-1 flex-col p-4 sm:p-5">
-                  <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-2">
+                {/* Body */}
+                <div className="flex flex-1 flex-col p-4">
+                  <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-1.5">
                     <span className="inline-flex items-center gap-1">
                       <RiCalendarLine className="h-3 w-3" />
                       {formatDate(blog.publishedAt)}
@@ -152,18 +154,15 @@ export default function BlogSection({ blogs = [] }: { blogs: BlogData[] }) {
                     <span className="h-0.5 w-0.5 rounded-full bg-slate-300" />
                     <span>{readingMinutes(blog.excerpt)} min</span>
                   </div>
-                  <h3 className="font-outfit text-base font-bold leading-snug text-slate-900 line-clamp-2 transition-colors group-hover:text-brand-orange">
+                  <h3 className="font-outfit text-sm md:text-[15px] font-bold leading-snug text-slate-900 line-clamp-2 transition-colors group-hover:text-brand-orange">
                     {blog.title}
                   </h3>
-                  <p className="mt-2 text-xs text-slate-500 line-clamp-2 hidden sm:block">
-                    {blog.excerpt}
-                  </p>
-                  <div className="mt-auto pt-3 flex items-center gap-2 text-xs font-bold text-brand-orange">
-                    <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-brand-orange/10">
+                  <div className="mt-auto pt-2 flex items-center gap-2 text-[11px] font-semibold text-slate-500">
+                    <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-brand-orange/10 text-brand-orange">
                       <RiUser3Line className="h-3 w-3" />
                     </span>
-                    <span className="truncate">{blog.author}</span>
-                    <RiArrowRightUpLine className="ml-auto h-3.5 w-3.5 transition-transform group-hover:rotate-45 group-hover:translate-x-0.5" />
+                    <span className="truncate flex-1">{blog.author}</span>
+                    <RiArrowRightUpLine className="h-3.5 w-3.5 text-brand-orange transition-transform group-hover:rotate-45 group-hover:translate-x-0.5" />
                   </div>
                 </div>
               </Link>

@@ -44,7 +44,7 @@ export default async function HomePage() {
   const [packages, destinations, blogs, testimonials, activities, settings] = await Promise.all([
     getFeaturedPackages(),
     getAllDestinations(),
-    getLatestBlogs(3),
+    getLatestBlogs(4),
     getAllTestimonials(),
     getAllActivities(),
     getSettings(),
