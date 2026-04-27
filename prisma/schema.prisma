@@ -27,6 +27,7 @@ model Package {
   metaTitle       String?
   metaDescription String?
   metaKeywords    String?
+  internalPages   InternalPage[] @relation("InternalPagePackages")
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -71,6 +72,7 @@ model Destination {
   metaTitle       String?
   metaDescription String?
   metaKeywords    String?
+  internalPages   InternalPage[] @relation("InternalPageDestinations")
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -176,17 +178,27 @@ model AdminUser {
 }
 
 model InternalPage {
-  id              String   @id @default(cuid())
+  id              String        @id @default(cuid())
   title           String
-  slug            String   @unique
+  slug            String        @unique
   description     String?
-  type            String   // "package" or "destination"
-  isActive        Boolean  @default(true)
-  sortOrder       Int      @default(0)
+  tagline         String?
+  content         String?
+  coverImage      String?
+  type            String        // "package" or "destination"
+  isActive        Boolean       @default(true)
+  isFeatured      Boolean       @default(false)
+  sortOrder       Int           @default(0)
+  // SEO
   metaTitle       String?
   metaDescription String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  metaKeywords    String?
+  ogImage         String?
+  // Manual selection of which packages/destinations belong to this group
+  packages        Package[]     @relation("InternalPagePackages")
+  destinations    Destination[] @relation("InternalPageDestinations")
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 
   @@map("internal_pages")
 }

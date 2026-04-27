@@ -4,7 +4,11 @@ export async function getInternalPages() {
   try {
     const pages = await prisma.internalPage.findMany({
       where: { isActive: true },
-      orderBy: { sortOrder: 'asc' }
+      orderBy: { sortOrder: "asc" },
+      include: {
+        packages: { select: { id: true } },
+        destinations: { select: { id: true } },
+      },
     });
     return pages;
   } catch (error) {
@@ -16,7 +20,11 @@ export async function getInternalPages() {
 export async function getInternalPageBySlug(slug: string) {
   try {
     const page = await prisma.internalPage.findUnique({
-      where: { slug }
+      where: { slug },
+      include: {
+        packages: true,
+        destinations: true,
+      },
     });
     return page;
   } catch (error) {

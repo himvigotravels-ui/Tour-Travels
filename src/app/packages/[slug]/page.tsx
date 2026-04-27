@@ -36,15 +36,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const internalPage = await getInternalPageBySlug(slug);
   if (internalPage && internalPage.type === "package") {
     const title = internalPage.metaTitle || internalPage.title;
-    const description = internalPage.metaDescription || internalPage.description || `Explore our best ${internalPage.title} and plan your dream trip with Himvigo.`;
+    const description =
+      internalPage.metaDescription ||
+      internalPage.description ||
+      `Explore our best ${internalPage.title} and plan your dream trip with Himvigo.`;
+    const ogImage = internalPage.ogImage || internalPage.coverImage || undefined;
     return {
       title,
       description,
-      alternates: {
-        canonical: `/packages/${slug}`,
+      keywords: internalPage.metaKeywords || undefined,
+      alternates: { canonical: `/packages/${slug}` },
+      openGraph: {
+        title,
+        description,
+        images: ogImage ? [{ url: ogImage }] : undefined,
       },
-      openGraph: { title, description },
-      twitter: { title, description }
+      twitter: {
+        title,
+        description,
+        images: ogImage ? [ogImage] : undefined,
+      },
     };
   }
 
@@ -98,14 +109,38 @@ export default async function PackageDetails({ params }: Props) {
   // Check for dynamic internal pages first
   const internalPage = await getInternalPageBySlug(slug);
   if (internalPage && internalPage.type === "package") {
-    const allPackages = await getAllPackages();
-    // Filter packages that have this category slug or title in their categories array
-    const categoryPackages = allPackages.filter(p => 
-      (p.categories || []).map(c => c.toLowerCase()).includes(lowerSlug) ||
-      (p.categories || []).some(c => c.toLowerCase() === internalPage.title.toLowerCase())
+    // Prefer manually-selected packages; fall back to category-array matching
+    const manualIds = (internalPage.packages ?? []).map((p) => p.id);
+    let groupPackages;
+    if (manualIds.length > 0) {
+      const idOrder = new Map<string, number>(
+        manualIds.map((id, idx) => [id, idx])
+      );
+      const allPackages = await getAllPackages();
+      groupPackages = allPackages
+        .filter((p) => p.id && manualIds.includes(p.id))
+        .sort(
+          (a, b) =>
+            (idOrder.get(a.id ?? "") ?? 0) -
+            (idOrder.get(b.id ?? "") ?? 0)
+        );
+    } else {
+      const allPackages = await getAllPackages();
+      groupPackages = allPackages.filter(
+        (p) =>
+          (p.categories || []).map((c) => c.toLowerCase()).includes(lowerSlug) ||
+          (p.categories || []).some(
+            (c) => c.toLowerCase() === internalPage.title.toLowerCase()
+          )
+      );
+    }
+
+    content = (
+      <CategoryLandingPage
+        category={internalPage.title}
+        packages={groupPackages}
+      />
     );
-    
-    content = <CategoryLandingPage category={internalPage.title} packages={categoryPackages} />;
   } else if (CATEGORIES.includes(lowerSlug)) {
     // Detect if this is a hardcoded category page request
     const allPackages = await getAllPackages();
