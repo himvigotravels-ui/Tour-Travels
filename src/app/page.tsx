@@ -126,7 +126,7 @@ export default async function HomePage() {
           <HeroSlider />
 
           <div className="relative z-10 h-full w-full max-w-6xl mx-auto px-4 md:px-8 flex flex-col justify-center">
-            <div className="max-w-2xl">
+            <div className="w-full">
               <div className="inline-flex items-center gap-2 rounded-full bg-white/10 ring-1 ring-white/25 px-3 py-1.5 backdrop-blur-md mb-5">
                 <span className="relative flex h-2 w-2">
                   <span className="absolute inset-0 animate-ping rounded-full bg-brand-orange opacity-75" />
@@ -173,7 +173,7 @@ export default async function HomePage() {
                   : "Your Himachal Adventure Starts Here"}
               </h1>
 
-              <p className="text-base md:text-lg text-white/85 mb-7 font-inter max-w-xl drop-shadow-lg leading-relaxed">
+              <p className="text-base md:text-lg text-white/85 mb-7 font-inter drop-shadow-lg leading-relaxed">
                 {settings.hero_subheadline ||
                   "Safe rides. Local expertise. Unforgettable journeys through the heart of the Himalayas."}
               </p>
