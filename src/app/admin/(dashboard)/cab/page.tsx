@@ -525,7 +525,7 @@ export default function CabPage() {
         saving={saving}
         saveLabel={vForm.id ? "Save changes" : "Add vehicle"}
         onSave={saveVehicle}
-        width="sm:max-w-2xl"
+        width="sm:max-w-3xl lg:max-w-4xl"
       />
 
       <EntitySheet
@@ -536,7 +536,7 @@ export default function CabPage() {
         saving={saving}
         saveLabel={rForm.id ? "Save changes" : "Add route"}
         onSave={saveRoute}
-        width="sm:max-w-2xl"
+        width="sm:max-w-3xl lg:max-w-4xl"
       />
 
       <ConfirmDelete

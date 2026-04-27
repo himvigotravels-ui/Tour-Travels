@@ -88,7 +88,7 @@ export default function InquiriesPage() {
       </TableBody></Table></CardContent></Card>
 
       <Sheet open={!!selected} onOpenChange={() => setSelected(null)}>
-        <SheetContent className="w-full sm:max-w-xl overflow-y-auto p-0 flex flex-col">
+        <SheetContent className="w-full sm:max-w-2xl lg:max-w-3xl overflow-y-auto p-0 flex flex-col">
           <SheetHeader className="p-6 pb-0"><SheetTitle>Inquiry Details</SheetTitle></SheetHeader>
           <div className="flex-1 overflow-y-auto px-6 py-4">
           {selected && (

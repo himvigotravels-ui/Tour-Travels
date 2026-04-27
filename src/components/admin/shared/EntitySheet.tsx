@@ -46,7 +46,7 @@ export function EntitySheet({
   saveLabel = "Save",
   onSave,
   onCancel,
-  width = "sm:max-w-4xl",
+  width = "sm:max-w-[64rem] lg:max-w-[72rem]",
   defaultSection,
 }: Props) {
   const [active, setActive] = useState(defaultSection ?? sections[0]?.id);
