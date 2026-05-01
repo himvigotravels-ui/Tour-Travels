@@ -1,10 +1,14 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { RiWhatsappLine } from "react-icons/ri";
 
 export const WhatsAppWidget = ({ phoneNumber }: { phoneNumber?: string }) => {
+  const pathname = usePathname();
+  if (pathname?.startsWith("/admin")) return null;
+
   const whatsappNumber = (phoneNumber || "919805514018").replace(/[^0-9]/g, '');
-  
+
   return (
     <a
       href={`https://wa.me/${whatsappNumber}`}
