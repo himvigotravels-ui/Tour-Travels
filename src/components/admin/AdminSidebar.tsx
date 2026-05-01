@@ -30,6 +30,7 @@ import {
   RiLandscapeLine,
   RiCompass3Line,
   RiSparkling2Line,
+  RiNotification3Line,
 } from "react-icons/ri";
 
 interface NavItem {
@@ -73,6 +74,7 @@ const navGroups: NavGroup[] = [
   {
     label: "System",
     items: [
+      { title: "Booking Popup", href: "/admin/booking-popup", icon: RiNotification3Line },
       { title: "SEO", href: "/admin/seo", icon: RiSearchLine },
       { title: "Settings", href: "/admin/settings", icon: RiSettings4Line },
     ],

@@ -7,7 +7,9 @@ import Script from "next/script";
 import { cn } from "@/lib/utils";
 import { getSettings } from "@/lib/db/settings";
 import { getInternalPages } from "@/lib/db/pages";
+import { getAllDestinations } from "@/lib/db/destinations";
 import { WhatsAppWidget } from "@/components/ui/WhatsAppWidget";
+import { BookingPopup, BookingPopupConfig } from "@/components/ui/BookingPopup";
 
 export const dynamic = "force-dynamic";
 
@@ -51,7 +53,7 @@ export async function generateMetadata(): Promise<Metadata> {
     authors: [{ name: siteName }],
     creator: siteName,
     publisher: siteName,
-    metadataBase: new URL("https://himvigo.com"),
+    metadataBase: new URL("https://www.himvigo.com"),
     alternates: {
       canonical: "/",
     },
@@ -68,7 +70,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       type: "website",
       locale: "en_IN",
-      url: "https://himvigo.com",
+      url: "https://www.himvigo.com",
       title: homeTitle,
       description: homeDesc,
       siteName: siteName,
@@ -85,7 +87,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title: homeTitle,
       description: homeDesc,
-      images: ["https://himvigo.com/opengraph-image.png"],
+      images: ["https://www.himvigo.com/opengraph-image.png"],
       creator: "@himvigotours",
     },
     robots: {
@@ -110,10 +112,33 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [settings, internalPages] = await Promise.all([
+  const [settings, internalPages, destinations] = await Promise.all([
     getSettings(),
     getInternalPages(),
+    getAllDestinations(),
   ]);
+
+  const navDestinations = destinations
+    .filter((d) => d.slug && d.name)
+    .map((d) => ({ name: d.name, slug: d.slug }));
+
+  const popupConfig: BookingPopupConfig = {
+    enabled: settings.booking_popup_enabled === "true",
+    title:
+      settings.booking_popup_title ||
+      "Plan your Himalayan getaway in 24 hours.",
+    subtitle:
+      settings.booking_popup_subtitle ||
+      "Tell us where you want to go and our local experts will craft a no-obligation quote for you.",
+    ctaText: settings.booking_popup_cta_text || "Get a free quote",
+    ctaHref: settings.booking_popup_cta_link || "/contact",
+    image: settings.booking_popup_image || undefined,
+    pages: settings.booking_popup_pages || "all",
+    delaySeconds: Number(settings.booking_popup_delay_seconds || 6),
+    showOnce: (settings.booking_popup_show_once ?? "true") === "true",
+    exitIntent: settings.booking_popup_exit_intent === "true",
+    badge: settings.booking_popup_badge || "Limited slots",
+  };
 
   return (
     <html
@@ -129,10 +154,14 @@ export default async function RootLayout({
       )}
     >
       <body className="min-h-full flex flex-col font-inter">
-        <Navbar internalPages={internalPages} />
+        <Navbar
+          internalPages={internalPages}
+          destinations={navDestinations}
+        />
         {children}
         <Footer settings={settings} />
         <WhatsAppWidget phoneNumber={settings.site_whatsapp} />
+        <BookingPopup config={popupConfig} />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-R18M7Q4X5Q"
           strategy="afterInteractive"

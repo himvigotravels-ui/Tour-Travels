@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Menu, X, MountainSnow } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface InternalPage {
@@ -12,30 +12,62 @@ interface InternalPage {
   type: string;
 }
 
-export const Navbar = ({ internalPages = [] }: { internalPages?: InternalPage[] }) => {
+interface NavDestination {
+  name: string;
+  slug: string;
+}
+
+export const Navbar = ({
+  internalPages = [],
+  destinations = [],
+}: {
+  internalPages?: InternalPage[];
+  destinations?: NavDestination[];
+}) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
-
-  if (pathname?.startsWith("/admin")) {
-    return null;
-  }
+  const isAdminRoute = pathname?.startsWith("/admin") ?? false;
 
   useEffect(() => {
+    if (isAdminRoute) return;
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [isAdminRoute]);
+
+  if (isAdminRoute) return null;
 
   const packageDropdown = internalPages
-    .filter(p => p.type === "package")
-    .map(p => ({ name: p.title, href: `/packages/${p.slug}` }));
+    .filter((p) => p.type === "package")
+    .map((p) => ({ name: p.title, href: `/packages/${p.slug}` }));
 
-  const destinationDropdown = internalPages
-    .filter(p => p.type === "destination")
-    .map(p => ({ name: p.title, href: `/destinations/${p.slug}` }));
+  // Destinations dropdown = curated nav-groups first, then real
+  // destinations from the destinations table (so admins see all actual
+  // destinations they create — not just hand-picked groups).
+  const navGroupDestinations = internalPages
+    .filter((p) => p.type === "destination")
+    .map((p) => ({ name: p.title, href: `/destinations/${p.slug}` }));
+
+  const realDestinations = destinations.map((d) => ({
+    name: d.name,
+    href: `/destinations/${d.slug}`,
+  }));
+
+  // Merge, dedupe by href, cap to a sensible nav size
+  const seen = new Set<string>();
+  const destinationDropdown = [
+    ...navGroupDestinations,
+    ...realDestinations,
+  ]
+    .filter((item) => {
+      if (seen.has(item.href)) return false;
+      seen.add(item.href);
+      return true;
+    })
+    .slice(0, 12);
 
   const navLinks = [
     { name: "Home", href: "/" },
@@ -49,16 +81,15 @@ export const Navbar = ({ internalPages = [] }: { internalPages?: InternalPage[] 
         { name: "Offbeat Himachal", href: "/packages/offbeat" },
       ]
     },
-    { 
-      name: "Destinations", 
+    {
+      name: "Destinations",
       href: "/destinations",
-      dropdown: destinationDropdown.length > 0 ? destinationDropdown : [
-        { name: "Shimla", href: "/destinations/shimla" },
-        { name: "Manali", href: "/destinations/manali" },
-        { name: "Dharamshala", href: "/destinations/dharamshala" },
-        { name: "Spiti Valley", href: "/destinations/spiti-valley" },
-        { name: "Kinnaur", href: "/destinations/kinnaur" },
-      ]
+      dropdown:
+        destinationDropdown.length > 0
+          ? destinationDropdown
+          : [
+              { name: "All Destinations", href: "/destinations" },
+            ],
     },
     { name: "Cab Services", href: "/cab" },
     { name: "About", href: "/about" },

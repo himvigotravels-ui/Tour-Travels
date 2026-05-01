@@ -4,7 +4,10 @@ import { prisma } from '@/lib/prisma'
 export const dynamic = 'force-dynamic';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://himvigo.com'
+  // SEO best practice: pick one canonical host (www vs apex) and stick to
+  // it everywhere — sitemap, canonicals, OG, schema. We use the www
+  // subdomain. Override via NEXT_PUBLIC_SITE_URL if needed.
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.himvigo.com'
 
   try {
     // Fetch active packages
