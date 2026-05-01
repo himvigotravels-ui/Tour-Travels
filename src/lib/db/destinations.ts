@@ -21,7 +21,8 @@ export interface DestinationData {
 export async function getAllDestinations(): Promise<DestinationData[]> {
   try {
     const destinations = await prisma.destination.findMany({
-      orderBy: { sortOrder: 'asc' }
+      where: { isActive: true },
+      orderBy: { sortOrder: 'asc' },
     });
     return destinations as unknown as DestinationData[];
   } catch (error) {
@@ -32,8 +33,8 @@ export async function getAllDestinations(): Promise<DestinationData[]> {
 
 export async function getDestinationBySlug(slug: string): Promise<DestinationData | null> {
   try {
-    const destination = await prisma.destination.findUnique({
-      where: { slug }
+    const destination = await prisma.destination.findFirst({
+      where: { slug, isActive: true },
     });
     return destination as unknown as DestinationData | null;
   } catch (error) {
