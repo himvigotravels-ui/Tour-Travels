@@ -197,14 +197,6 @@ export default async function HomePage() {
             </div>
           </div>
 
-          {/* Soft bottom fade so the photo blends into the next band */}
-          <div
-            className="pointer-events-none absolute inset-x-0 bottom-0 h-56"
-            style={{
-              background:
-                "linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 30%, rgba(255,255,255,0.35) 65%, rgba(255,255,255,0.85) 90%, #fff 100%)",
-            }}
-          />
         </div>
 
         {/* Search band — clean and dedicated, no nested cards */}
