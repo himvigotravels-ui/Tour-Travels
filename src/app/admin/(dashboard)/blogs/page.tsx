@@ -32,6 +32,7 @@ import { Field, FieldGrid } from "@/components/admin/shared/Field";
 import { ToggleRow } from "@/components/admin/shared/ToggleRow";
 import { TagInput } from "@/components/admin/shared/TagInput";
 import { MetaFields } from "@/components/admin/shared/MetaFields";
+import { RichTextEditor } from "@/components/admin/shared/RichTextEditor";
 
 interface BlogData {
   id?: string;
@@ -286,20 +287,18 @@ export default function BlogsPage() {
           <Field
             label="Content"
             required
-            hint="Markdown supported."
+            hint="Format with the toolbar — bold, headings, lists, quotes, links and inline images. Output is HTML rendered with Tailwind typography on the public site."
             rightSlot={
               <span className="text-[10px] text-muted-foreground tabular-nums">
-                {form.content.length.toLocaleString()} chars
+                {(form.content || "").replace(/<[^>]*>/g, "").length.toLocaleString()} chars
               </span>
             }
           >
-            <Textarea
+            <RichTextEditor
               value={form.content}
-              onChange={(e) =>
-                setForm((f) => ({ ...f, content: e.target.value }))
-              }
-              rows={14}
-              className="font-mono text-sm"
+              onChange={(html) => setForm((f) => ({ ...f, content: html }))}
+              imageFolder="blogs"
+              placeholder="Write your story... use the toolbar to format."
             />
           </Field>
 

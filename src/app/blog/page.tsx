@@ -1,103 +1,205 @@
 import Link from "next/link";
-import { ArrowRight, Calendar, User } from "lucide-react";
+import Image from "next/image";
+import {
+  RiArrowRightUpLine,
+  RiBookOpenLine,
+  RiCalendarLine,
+  RiUser3Line,
+  RiTimeLine,
+} from "react-icons/ri";
 import { BottomCTA } from "@/components/ui/BottomCTA";
 import { getAllBlogs } from "@/lib/db/blogs";
-
 import { getSettings } from "@/lib/db/settings";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
+
+function fmt(d: Date | string | null | undefined) {
+  if (!d) return "";
+  const date = typeof d === "string" ? new Date(d) : d;
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+function readMinutes(text: string | undefined) {
+  if (!text) return 3;
+  const words = text
+    .replace(/<[^>]*>/g, "")
+    .trim()
+    .split(/\s+/).length;
+  return Math.max(2, Math.round(words / 200));
+}
 
 export async function generateMetadata() {
   const settings = await getSettings();
   return {
     title: settings.seo_blog_title || "Travel Blog | Himvigo Tours",
-    description: settings.seo_blog_description || "Read the latest stories and guides from the Himalayas.",
+    description:
+      settings.seo_blog_description ||
+      "Read the latest stories and guides from the Himalayas.",
     keywords: settings.seo_blog_keywords || "travel blog, himachal",
-    alternates: {
-      canonical: "/blog",
-    },
+    alternates: { canonical: "/blog" },
   };
 }
 
 export default async function BlogListPage() {
   const blogs = await getAllBlogs();
+  const [featured, ...rest] = blogs;
 
   return (
-    <main className="flex flex-col min-h-screen bg-slate-50">
-      <section className="relative h-[40vh] flex items-center justify-center bg-brand-blue border-b border-white/10 overflow-hidden">
-        <div className="absolute inset-0">
-          <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80" className="w-full h-full object-cover" alt="Blog Hero" />
-          <div className="absolute inset-0 bg-black/30"></div>
-        </div>
-        <div className="relative z-10 text-center">
-          <h1 className="text-5xl md:text-7xl font-outfit font-extrabold text-white mb-4">Travel <span className="text-brand-orange">Blog</span></h1>
-          <p className="text-slate-200 text-lg font-medium">Stories and guides from the Himalayas</p>
-        </div>
-      </section>
+    <main className="flex flex-col min-h-screen bg-white">
+      {/* Hero band */}
+      <section className="relative pt-32 pb-12 md:pt-40 md:pb-16 bg-brand-blue overflow-hidden">
+        <div className="pointer-events-none absolute -left-32 top-20 -z-10 h-[28rem] w-[28rem] rounded-full bg-brand-orange/15 blur-[120px]" />
+        <div className="pointer-events-none absolute -right-32 -top-20 -z-10 h-[24rem] w-[24rem] rounded-full bg-blue-500/15 blur-[120px]" />
 
-      <section className="py-24 max-w-7xl mx-auto px-4 md:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-          {blogs.map((blog, i) => (
-            <Link key={i} href={`/blog/${blog.slug}`} className="group bg-white rounded-[2.5rem] overflow-hidden border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-500">
-               <div className="h-64 overflow-hidden relative">
-                  <img src={blog.coverImage} alt={blog.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                  <div className="absolute top-4 left-4 bg-white/95 px-4 py-1.5 rounded-full text-[10px] font-bold text-slate-900 uppercase tracking-widest border border-white/20">
-                    {blog.category || "Travel Guide"}
-                  </div>
-               </div>
-               <div className="p-8">
-                  <div className="flex items-center gap-4 text-[11px] font-bold text-slate-400 mb-4 uppercase tracking-[0.2em]">
-                    <span className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5" /> {new Date(blog.publishedAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</span>
-                    <span className="flex items-center gap-1.5"><User className="w-3.5 h-3.5" /> {blog.author}</span>
-                  </div>
-                  <h3 className="text-2xl font-bold text-slate-900 mb-4 group-hover:text-brand-orange transition-colors font-outfit">
-                    {blog.title}
-                  </h3>
-                  <p className="text-slate-500 font-medium leading-relaxed font-inter mb-6 line-clamp-3">
-                    {blog.excerpt}
-                  </p>
-                  <div className="flex items-center font-bold text-brand-orange group-hover:text-brand-orange/80 transition-colors">
-                    Read More <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
-                  </div>
-               </div>
-            </Link>
-          ))}
-        </div>
-
-        {/* Newsletter Subscription Box */}
-        <div className="mt-24 p-10 md:p-16 bg-brand-blue/5 border border-brand-blue/10 rounded-[3rem] relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-10">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-brand-blue/10 rounded-full blur-3xl -mr-20 -mt-20"></div>
-          <div className="absolute bottom-0 left-0 w-40 h-40 bg-brand-orange/10 rounded-full blur-3xl -ml-10 -mb-10"></div>
-          
-          <div className="relative z-10 max-w-xl">
-            <div className="inline-flex items-center gap-2 py-1 px-3 rounded-full bg-brand-blue/10 text-brand-blue text-[10px] font-bold uppercase tracking-widest mb-6">
-              Travel Newsletter
+        <div className="relative max-w-7xl mx-auto px-4 md:px-8">
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/10 ring-1 ring-white/20 px-3 py-1.5 backdrop-blur-md mb-5">
+              <RiBookOpenLine className="h-3.5 w-3.5 text-brand-orange" />
+              <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-white/95">
+                Travel Stories
+              </span>
             </div>
-            <h2 className="text-3xl md:text-5xl font-outfit font-extrabold text-slate-900 mb-6">Never miss a hidden gem.</h2>
-            <p className="text-slate-600 font-inter text-lg">Join 15,000+ travelers getting our monthly insights, untouched destination guides, and exclusive early-bird package discounts.</p>
-          </div>
-
-          <div className="relative z-10 w-full md:w-auto flex-shrink-0">
-            <form className="flex flex-col sm:flex-row gap-3 bg-white p-2 rounded-2xl md:rounded-full border border-slate-200 shadow-xl shadow-slate-200/40">
-              <input 
-                type="email" 
-                placeholder="Enter your email address" 
-                className="w-full md:w-72 px-6 py-4 rounded-xl md:rounded-full bg-transparent outline-none text-slate-700 font-inter text-sm" 
-                required 
-              />
-              <button 
-                type="submit" 
-                className="w-full sm:w-auto px-8 py-4 bg-brand-orange text-white font-bold rounded-xl md:rounded-full hover:bg-brand-orange/90 transition-colors shadow-md"
-              >
-                Subscribe
-              </button>
-            </form>
-            <p className="text-xs text-slate-400 mt-4 text-center md:text-left font-medium flex items-center justify-center md:justify-start gap-1">
-              No spam. Unsubscribe anytime.
+            <h1 className="font-outfit text-4xl md:text-6xl lg:text-7xl font-extrabold text-white drop-shadow-2xl tracking-tight leading-[1.05] mb-5">
+              The Himalayas,
+              <br />
+              <span className="text-brand-orange">in their own words.</span>
+            </h1>
+            <p className="text-base md:text-lg text-white/80 font-inter max-w-xl">
+              Stories, guides, and travel notes from our local crew —
+              everything you wish you knew before your first trip.
             </p>
           </div>
         </div>
       </section>
+
+      {/* Body */}
+      <section className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-20 w-full">
+        {!blogs.length && (
+          <div className="rounded-3xl border border-dashed border-slate-200 bg-slate-50 py-20 text-center">
+            <p className="text-sm text-slate-500">
+              No stories published yet. Check back soon.
+            </p>
+          </div>
+        )}
+
+        {/* Featured post */}
+        {featured && (
+          <Link
+            href={`/blog/${featured.slug}`}
+            className="group mb-16 block overflow-hidden rounded-3xl bg-slate-900 shadow-[0_8px_32px_-12px_rgba(15,23,42,0.25)] hover:shadow-[0_30px_60px_-20px_rgba(15,23,42,0.45)] transition-shadow duration-500"
+          >
+            <div className="grid grid-cols-1 lg:grid-cols-2">
+              <div className="relative aspect-[16/11] overflow-hidden bg-slate-200">
+                {featured.coverImage && (
+                  <Image
+                    src={featured.coverImage}
+                    alt={featured.title}
+                    fill
+                    unoptimized
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105"
+                  />
+                )}
+                <span className="absolute left-5 top-5 inline-flex items-center gap-2 rounded-full bg-white/95 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-900 shadow-md backdrop-blur">
+                  <span className="h-1.5 w-1.5 rounded-full bg-brand-orange" />
+                  Featured
+                </span>
+              </div>
+              <div className="flex flex-col justify-center p-7 md:p-10 text-white">
+                <div className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-widest text-white/60 mb-4">
+                  <span className="inline-flex items-center gap-1.5">
+                    <RiCalendarLine className="h-3 w-3" />
+                    {fmt(featured.publishedAt)}
+                  </span>
+                  <span className="h-1 w-1 rounded-full bg-white/40" />
+                  <span className="inline-flex items-center gap-1.5">
+                    <RiUser3Line className="h-3 w-3" />
+                    {featured.author}
+                  </span>
+                  <span className="h-1 w-1 rounded-full bg-white/40" />
+                  <span className="inline-flex items-center gap-1.5">
+                    <RiTimeLine className="h-3 w-3" />
+                    {readMinutes(featured.excerpt || featured.content)} min
+                  </span>
+                </div>
+                <h2 className="font-outfit text-2xl md:text-4xl font-extrabold leading-tight mb-4 transition-colors group-hover:text-brand-orange">
+                  {featured.title}
+                </h2>
+                {featured.excerpt && (
+                  <p className="text-white/80 leading-relaxed mb-6 line-clamp-3">
+                    {featured.excerpt}
+                  </p>
+                )}
+                <span className="inline-flex w-fit items-center gap-2 rounded-full bg-white/15 ring-1 ring-white/20 px-4 py-2 text-sm font-bold backdrop-blur transition-colors group-hover:bg-brand-orange group-hover:ring-brand-orange">
+                  Read story
+                  <RiArrowRightUpLine className="h-4 w-4 transition-transform group-hover:rotate-45" />
+                </span>
+              </div>
+            </div>
+          </Link>
+        )}
+
+        {/* Grid of remaining posts */}
+        {rest.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {rest.map((blog) => (
+              <Link
+                key={blog.slug}
+                href={`/blog/${blog.slug}`}
+                className="group block overflow-hidden rounded-3xl bg-white ring-1 ring-slate-200 shadow-sm hover:shadow-xl hover:ring-slate-300 transition-all duration-300"
+              >
+                <div className="relative aspect-[16/10] overflow-hidden bg-slate-200">
+                  {blog.coverImage && (
+                    <Image
+                      src={blog.coverImage}
+                      alt={blog.title}
+                      fill
+                      unoptimized
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                  )}
+                  {blog.category && (
+                    <span className="absolute left-3 top-3 inline-flex items-center rounded-full bg-white/95 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-900 shadow-sm backdrop-blur">
+                      {blog.category}
+                    </span>
+                  )}
+                </div>
+                <div className="p-5">
+                  <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-2">
+                    <span className="inline-flex items-center gap-1">
+                      <RiCalendarLine className="h-3 w-3" />
+                      {fmt(blog.publishedAt)}
+                    </span>
+                    <span className="h-0.5 w-0.5 rounded-full bg-slate-300" />
+                    <span>{readMinutes(blog.excerpt || blog.content)} min</span>
+                  </div>
+                  <h3 className="font-outfit text-lg font-bold text-slate-900 leading-snug line-clamp-2 transition-colors group-hover:text-brand-orange">
+                    {blog.title}
+                  </h3>
+                  {blog.excerpt && (
+                    <p className="mt-2 text-sm text-slate-500 line-clamp-2">
+                      {blog.excerpt}
+                    </p>
+                  )}
+                  <div className="mt-4 flex items-center gap-2 text-xs font-bold text-brand-orange">
+                    <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-brand-orange/10">
+                      <RiUser3Line className="h-3 w-3" />
+                    </span>
+                    <span className="truncate">{blog.author}</span>
+                    <RiArrowRightUpLine className="ml-auto h-3.5 w-3.5 transition-transform group-hover:rotate-45 group-hover:translate-x-0.5" />
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+      </section>
+
       <BottomCTA />
     </main>
   );
