@@ -21,8 +21,12 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
 
-  // Check for dynamic internal pages first
-  const internalPage = await getInternalPageBySlug(slug);
+  // Real Destination wins over a same-slug nav-group; only fall through
+  // to the nav-group when no destination exists with this slug.
+  const destinationFirst = await getDestinationBySlug(slug);
+  const internalPage = !destinationFirst
+    ? await getInternalPageBySlug(slug)
+    : null;
   if (internalPage && internalPage.type === "destination") {
     const title = internalPage.metaTitle || internalPage.title;
     const description =
@@ -48,7 +52,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     };
   }
 
-  const destination = await getDestinationBySlug(slug);
+  const destination = destinationFirst;
 
   if (!destination) return {};
 
@@ -78,8 +82,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function DestinationDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
 
-  // Check for dynamic internal pages first
-  const internalPage = await getInternalPageBySlug(slug);
+  // A real Destination row wins over a same-slug nav-group. The nav-group
+  // landing only renders when there's no destination with this slug —
+  // i.e. when the slug names a curated *group* like "honeymoon-spots"
+  // rather than an actual place.
+  const destinationFirst = await getDestinationBySlug(slug);
+
+  const internalPage = !destinationFirst
+    ? await getInternalPageBySlug(slug)
+    : null;
   if (internalPage && internalPage.type === "destination") {
     // Prefer manually-selected destinations; fall back to category-array matching
     const manualIds = (internalPage.destinations ?? []).map((d) => d.id);
@@ -118,7 +129,7 @@ export default async function DestinationDetailPage({ params }: { params: Promis
     );
   }
 
-  const destination = await getDestinationBySlug(slug);
+  const destination = destinationFirst;
 
   if (!destination) {
     notFound();
