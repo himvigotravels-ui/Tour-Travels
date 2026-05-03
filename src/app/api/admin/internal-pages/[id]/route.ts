@@ -2,6 +2,15 @@ import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
+
+function bustNavGroupCaches(slug: string, type: string) {
+  revalidatePath("/", "layout");
+  revalidatePath("/packages");
+  revalidatePath("/destinations");
+  if (type === "package") revalidatePath(`/packages/${slug}`);
+  if (type === "destination") revalidatePath(`/destinations/${slug}`);
+}
 
 const JWT_SECRET = process.env.JWT_SECRET || "fallback-secret-key-123";
 
@@ -82,6 +91,7 @@ export async function PUT(
         destinations: { select: { id: true } },
       },
     });
+    bustNavGroupCaches(page.slug, page.type);
     return NextResponse.json(page);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "Unknown error";
@@ -98,7 +108,12 @@ export async function DELETE(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   try {
+    const existing = await prisma.internalPage.findUnique({
+      where: { id: params.id },
+      select: { slug: true, type: true },
+    });
     await prisma.internalPage.delete({ where: { id: params.id } });
+    if (existing) bustNavGroupCaches(existing.slug, existing.type);
     return NextResponse.json({ success: true });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "Unknown error";

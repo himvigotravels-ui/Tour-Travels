@@ -2,6 +2,17 @@ import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
+
+function bustNavGroupCaches(slug: string, type: string) {
+  // Public listing surfaces that consume the group
+  revalidatePath("/", "layout");
+  revalidatePath("/packages");
+  revalidatePath("/destinations");
+  // The slug-driven inner page
+  if (type === "package") revalidatePath(`/packages/${slug}`);
+  if (type === "destination") revalidatePath(`/destinations/${slug}`);
+}
 
 const JWT_SECRET = process.env.JWT_SECRET || "fallback-secret-key-123";
 
@@ -70,6 +81,7 @@ export async function POST(req: Request) {
         destinations: { select: { id: true } },
       },
     });
+    bustNavGroupCaches(page.slug, page.type);
     return NextResponse.json(page);
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "Unknown error";
