@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { RichTextEditor } from "@/components/admin/shared/RichTextEditor";
 import { Badge } from "@/components/ui/badge";
 import {
   Select,
@@ -421,26 +422,36 @@ export default function NavGroupsPage() {
           <Field
             label="Short Description"
             hint="Intro paragraph above the listing."
+            rightSlot={
+              <span className="text-[10px] text-muted-foreground tabular-nums">
+                {(form.description || "").replace(/<[^>]*>/g, "").length.toLocaleString()} chars
+              </span>
+            }
           >
-            <Textarea
+            <RichTextEditor
               value={form.description}
-              onChange={(e) =>
-                setForm((f) => ({ ...f, description: e.target.value }))
+              onChange={(html) =>
+                setForm((f) => ({ ...f, description: html }))
               }
-              rows={3}
+              imageFolder="nav-groups"
             />
           </Field>
 
           <Field
             label="Long-form Content"
             hint="Optional rich content rendered below the listing."
+            rightSlot={
+              <span className="text-[10px] text-muted-foreground tabular-nums">
+                {(form.content || "").replace(/<[^>]*>/g, "").length.toLocaleString()} chars
+              </span>
+            }
           >
-            <Textarea
+            <RichTextEditor
               value={form.content}
-              onChange={(e) =>
-                setForm((f) => ({ ...f, content: e.target.value }))
+              onChange={(html) =>
+                setForm((f) => ({ ...f, content: html }))
               }
-              rows={6}
+              imageFolder="nav-groups"
             />
           </Field>
         </div>

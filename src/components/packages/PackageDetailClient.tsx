@@ -149,9 +149,10 @@ export default function PackageDetailClient({ pkg }: PackageDetailClientProps) {
               <div className="w-1.5 h-6 bg-brand-blue rounded-full mr-3"></div>
               Tour Overview
             </h2>
-            <p className="text-slate-600 font-inter leading-relaxed text-lg">
-              {pkg.description || "Get ready for an incredible adventure in Himachal Pradesh..."}
-            </p>
+            <div 
+              className="text-slate-600 font-inter leading-relaxed text-lg prose prose-slate max-w-none"
+              dangerouslySetInnerHTML={{ __html: pkg.description || "Get ready for an incredible adventure in Himachal Pradesh..." }} 
+            />
           </motion.div>
 
           {/* Itinerary */}

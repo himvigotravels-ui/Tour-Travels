@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 interface CategoryLandingPageProps {
   category: string;
   packages: TourPackage[];
+  description?: string;
 }
 
 const categoryInfo: Record<string, { title: string; subtitle: string; description: string; image: string }> = {
@@ -37,7 +38,7 @@ const categoryInfo: Record<string, { title: string; subtitle: string; descriptio
   }
 };
 
-export default function CategoryLandingPage({ category, packages }: CategoryLandingPageProps) {
+export default function CategoryLandingPage({ category, packages, description }: CategoryLandingPageProps) {
   const info = categoryInfo[category.toLowerCase()] || {
     title: `${category.charAt(0).toUpperCase() + category.slice(1)} Packages`,
     subtitle: "Experience Himachal with Himvigo",
@@ -89,9 +90,10 @@ export default function CategoryLandingPage({ category, packages }: CategoryLand
               <h1 className="text-4xl md:text-6xl lg:text-7xl font-outfit font-extrabold text-white mb-6 drop-shadow-xl leading-[1.1]">
                 {info.title}
               </h1>
-              <p className="text-lg md:text-2xl text-slate-200 max-w-3xl font-medium drop-shadow-lg leading-relaxed">
-                {info.description}
-              </p>
+              <div 
+                className="text-lg md:text-2xl text-slate-200 max-w-3xl font-medium drop-shadow-lg leading-relaxed prose prose-invert prose-slate"
+                dangerouslySetInnerHTML={{ __html: description || info.description }}
+              />
             </motion.div>
           </div>
         </div>

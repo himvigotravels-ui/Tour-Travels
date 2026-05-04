@@ -60,9 +60,10 @@ export default function ActivitiesSlider({ activities = [] }: { activities: Acti
                 <h3 className="text-3xl font-outfit font-extrabold text-white mb-3 group-hover:text-amber-400 transition-colors">
                   {act.title}
                 </h3>
-                <p className="text-slate-200 text-sm font-medium leading-relaxed opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500">
-                  {act.description}
-                </p>
+                <div 
+                  className="text-slate-200 text-sm font-medium leading-relaxed opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 line-clamp-3 prose prose-invert prose-sm"
+                  dangerouslySetInnerHTML={{ __html: act.description }}
+                />
               </div>
             </div>
           </SwiperSlide>

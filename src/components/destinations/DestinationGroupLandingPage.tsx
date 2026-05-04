@@ -50,14 +50,13 @@ export default function DestinationGroupLandingPage({ groupName, destinations, d
             {groupName}
           </motion.h1>
           {description && (
-            <motion.p 
+            <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
-              className="text-lg md:text-xl text-slate-200 max-w-2xl mx-auto font-medium"
-            >
-              {description}
-            </motion.p>
+              className="text-lg md:text-xl text-slate-200 max-w-2xl mx-auto font-medium prose prose-invert prose-slate"
+              dangerouslySetInnerHTML={{ __html: description }}
+            />
           )}
         </div>
       </section>

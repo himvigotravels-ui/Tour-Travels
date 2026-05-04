@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { RichTextEditor } from "@/components/admin/shared/RichTextEditor";
 import { Badge } from "@/components/ui/badge";
 import { ImageUpload } from "@/components/admin/ImageUpload";
 import { toast } from "sonner";
@@ -341,13 +342,20 @@ export default function DestinationsPage() {
             </Field>
           </FieldGrid>
 
-          <Field label="Description" required>
-            <Textarea
+          <Field 
+            label="Description" 
+            required
+            rightSlot={
+              <span className="text-[10px] text-muted-foreground tabular-nums">
+                {(form.description || "").replace(/<[^>]*>/g, "").length.toLocaleString()} chars
+              </span>
+            }
+          >
+            <RichTextEditor
               value={form.description}
-              onChange={(e) =>
-                setForm((f) => ({ ...f, description: e.target.value }))
-              }
-              rows={5}
+              onChange={(html) => setForm((f) => ({ ...f, description: html }))}
+              imageFolder="destinations"
+              placeholder="Detailed description... use the toolbar to format."
             />
           </Field>
 

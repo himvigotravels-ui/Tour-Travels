@@ -170,9 +170,10 @@ export default async function DestinationDetailPage({ params }: { params: Promis
           {/* Left: Content */}
           <div className="lg:col-span-2">
             <h2 className="text-3xl font-outfit font-bold text-slate-900 mb-8 pb-4 border-b border-slate-200">About {destination.name}</h2>
-            <p className="text-slate-600 text-lg leading-relaxed mb-12 font-inter font-medium">
-              {destination.description}
-            </p>
+            <div 
+              className="text-slate-600 text-lg leading-relaxed mb-12 font-inter font-medium prose prose-slate max-w-none"
+              dangerouslySetInnerHTML={{ __html: destination.description }}
+            />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
               <div className="p-8 rounded-3xl bg-white border border-slate-100 shadow-sm hover:shadow-md transition-shadow">

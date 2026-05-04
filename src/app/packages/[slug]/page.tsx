@@ -143,6 +143,7 @@ export default async function PackageDetails({ params }: Props) {
       <CategoryLandingPage
         category={internalPage.title}
         packages={groupPackages}
+        description={internalPage.description || undefined}
       />
     );
   } else if (pkg) {

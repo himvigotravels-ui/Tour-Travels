@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { RichTextEditor } from "@/components/admin/shared/RichTextEditor";
 import { Badge } from "@/components/ui/badge";
 import { ImageUpload } from "@/components/admin/ImageUpload";
 import { toast } from "sonner";
@@ -226,13 +227,20 @@ export default function ActivitiesPage() {
               />
             </Field>
           </FieldGrid>
-          <Field label="Description" required>
-            <Textarea
+          <Field 
+            label="Description" 
+            required
+            rightSlot={
+              <span className="text-[10px] text-muted-foreground tabular-nums">
+                {(form.description || "").replace(/<[^>]*>/g, "").length.toLocaleString()} chars
+              </span>
+            }
+          >
+            <RichTextEditor
               value={form.description}
-              onChange={(e) =>
-                setForm((f) => ({ ...f, description: e.target.value }))
-              }
-              rows={4}
+              onChange={(html) => setForm((f) => ({ ...f, description: html }))}
+              imageFolder="activities"
+              placeholder="Detailed description... use the toolbar to format."
             />
           </Field>
         </div>
