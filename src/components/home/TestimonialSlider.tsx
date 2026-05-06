@@ -58,12 +58,10 @@ export default function TestimonialSlider({
             </span>
           </div>
           <h2 className="text-3xl md:text-5xl font-outfit font-bold text-brand-blue mb-4 leading-tight">
-            Loved by travellers across<br />
-            <span className="text-brand-orange">the Himalayas.</span>
+            What Our Travellers Say
           </h2>
           <p className="text-slate-500 text-lg font-inter max-w-xl">
-            Real words from real travellers — every story below is from a
-            verified booking with Himvigo.
+            Over 5,000 families, couples, and adventurers have trusted Himvigo with their Himachal memories.
           </p>
         </div>
 

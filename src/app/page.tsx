@@ -3,6 +3,7 @@ import { SearchFilter } from "@/components/SearchFilter";
 import RegionSlider from "@/components/home/RegionSlider";
 import TestimonialSlider from "@/components/home/TestimonialSlider";
 import ActivitiesSlider from "@/components/home/ActivitiesSlider";
+import { FAQ } from "@/components/home/FAQ";
 import BlogSection from "@/components/home/BlogSection";
 import HeroSlider from "@/components/home/HeroSlider";
 import { WhyChooseUs, Feature } from "@/components/home/WhyChooseUs";
@@ -298,8 +299,8 @@ export default async function HomePage() {
       <section className="py-24 bg-slate-50 border-y border-slate-100 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <div className="mb-12 max-w-2xl">
-            <h2 className="text-3xl md:text-5xl font-outfit font-bold text-brand-blue mb-6 leading-tight">Why Choose Himvigo</h2>
-            <p className="text-slate-500 text-lg font-inter">Experience the difference of traveling with true Himalayan experts.</p>
+            <h2 className="text-3xl md:text-5xl font-outfit font-bold text-brand-blue mb-6 leading-tight">Why 5,000+ Travellers Trust Us</h2>
+            <p className="text-slate-500 text-lg font-inter">We&apos;re not a booking portal. We&apos;re your personal Himachal travel partners — invested in every step of your journey.</p>
           </div>
 
           <WhyChooseUs features={features} />
@@ -311,7 +312,7 @@ export default async function HomePage() {
         {/* Subtle radial highlight so the white doesn't feel flat */}
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(245,158,11,0.08),transparent_55%),radial-gradient(ellipse_at_bottom_left,rgba(10,60,93,0.06),transparent_55%)]" />
         <div className="relative max-w-7xl mx-auto px-4 md:px-8">
-          <div className="mb-12 max-w-2xl">
+          <div className="mb-12 max-w-3xl">
             <div className="inline-flex items-center gap-2 rounded-full bg-brand-orange/10 px-3 py-1 mb-4">
               <span className="h-1.5 w-1.5 rounded-full bg-brand-orange" />
               <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-brand-orange">
@@ -319,10 +320,10 @@ export default async function HomePage() {
               </span>
             </div>
             <h2 className="text-3xl md:text-5xl font-outfit font-bold text-brand-blue mb-4 leading-tight">
-              Adventures Await
+              Explore Thrilling Himalayan Adventures & Outdoor Experiences
             </h2>
             <p className="text-slate-500 text-lg font-inter">
-              Curated experiences to make your Himalayan trip unforgettable.
+              From high-altitude treks to world-famous paragliding spots, Himvigo curates immersive Himalayan adventures with expert planning, scenic stays, and memorable local experiences across Himachal Pradesh.
             </p>
           </div>
           <ActivitiesSlider activities={activities} />
@@ -338,6 +339,9 @@ export default async function HomePage() {
 
       {/* Blogs Section */}
       <BlogSection blogs={blogs} />
+
+      {/* FAQ Section */}
+      <FAQ />
 
       <BottomCTA />
     </main>
