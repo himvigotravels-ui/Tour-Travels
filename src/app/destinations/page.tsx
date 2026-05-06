@@ -102,7 +102,7 @@ export default async function DestinationsPage() {
                   <h2 className="text-4xl md:text-6xl font-outfit font-extrabold text-slate-900 mb-6 drop-shadow-sm">{dest.name}</h2>
                   
                   <div 
-                    className="text-slate-600 font-inter text-lg leading-relaxed mb-8 prose prose-slate max-w-none"
+                    className="text-slate-600 font-inter text-lg leading-relaxed mb-8 prose prose-slate max-w-none line-clamp-6 overflow-hidden"
                     dangerouslySetInnerHTML={{ __html: dest.description }}
                   />
                   <div className="grid grid-cols-2 gap-6 mb-10">
@@ -123,7 +123,7 @@ export default async function DestinationsPage() {
                   <div className="mb-10">
                     <h5 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Highlights</h5>
                     <div className="flex flex-wrap gap-2">
-                      {dest.highlights.map((highlight, idx) => (
+                      {dest.highlights.slice(0, 4).map((highlight, idx) => (
                         <span key={idx} className="bg-brand-blue/5 text-brand-blue font-medium px-4 py-2 rounded-xl text-sm border border-brand-blue/10">
                           {highlight}
                         </span>
