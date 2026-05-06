@@ -9,7 +9,7 @@ export async function POST(req: Request) {
     // Booking form has adults, children, pickupDate, dropDate
     // Contact form has departure, destination, travelDate, passengers, duration
     
-    const data: Record<string, unknown> = {
+    const data: any = {
       name: body.name,
       phone: body.phone,
       email: body.email || null,
