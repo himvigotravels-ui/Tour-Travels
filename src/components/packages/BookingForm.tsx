@@ -45,8 +45,12 @@ export function BookingForm({ price }: BookingFormProps) {
       if (!response.ok) throw new Error("Failed to submit inquiry");
 
       setSuccess(true);
-    } catch (err: any) {
-      setError(err.message || "Something went wrong. Please try again.");
+    } catch (err: unknown) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Something went wrong. Please try again."
+      );
     } finally {
       setLoading(false);
     }

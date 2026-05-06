@@ -9,7 +9,7 @@ export async function POST(req: Request) {
     // Booking form has adults, children, pickupDate, dropDate
     // Contact form has departure, destination, travelDate, passengers, duration
     
-    const data: any = {
+    const data: Record<string, unknown> = {
       name: body.name,
       phone: body.phone,
       email: body.email || null,
@@ -39,8 +39,9 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({ success: true, inquiry }, { status: 201 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error creating inquiry:", error);
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ success: false, error: message }, { status: 500 });
   }
 }
