@@ -101,9 +101,10 @@ export default async function DestinationsPage() {
                   <h4 className="text-brand-orange font-bold uppercase tracking-widest text-sm mb-3 font-inter">{dest.tagline}</h4>
                   <h2 className="text-4xl md:text-6xl font-outfit font-extrabold text-slate-900 mb-6 drop-shadow-sm">{dest.name}</h2>
                   
-                  <p className="text-slate-600 font-inter text-lg leading-relaxed mb-8">
-                    {dest.description}
-                  </p>
+                  <div 
+                    className="text-slate-600 font-inter text-lg leading-relaxed mb-8 prose prose-slate max-w-none"
+                    dangerouslySetInnerHTML={{ __html: dest.description }}
+                  />
                   <div className="grid grid-cols-2 gap-6 mb-10">
                     <div>
                       <h5 className="flex items-center gap-2 text-sm font-bold text-slate-400 uppercase tracking-wider mb-2">
