@@ -15,7 +15,15 @@ export interface Destination {
   tagline: string;
 }
 
-export default function RegionSlider({ destinations = [] }: { destinations: Destination[] }) {
+export default function RegionSlider({ 
+  destinations = [], 
+  title = "Explore by Destination", 
+  description 
+}: { 
+  destinations: Destination[];
+  title?: string;
+  description?: string;
+}) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -32,10 +40,15 @@ export default function RegionSlider({ destinations = [] }: { destinations: Dest
 
   return (
     <div className="relative w-full">
-      <div className="flex justify-between items-end mb-10">
-        <div>
-          <h2 className="text-3xl md:text-5xl font-outfit font-bold text-white tracking-tight">Explore by Destination</h2>
-          <div className="h-1.5 w-24 bg-amber-500 mt-5 rounded-full" />
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-8">
+        <div className="max-w-3xl">
+          <h2 className="text-3xl md:text-5xl font-outfit font-bold text-white tracking-tight">{title}</h2>
+          <div className="h-1.5 w-24 bg-amber-500 mt-5 rounded-full mb-6" />
+          {description && (
+            <p className="text-slate-300 text-lg font-inter leading-relaxed max-w-2xl">
+              {description}
+            </p>
+          )}
         </div>
         
         {/* Custom Nav Buttons */}

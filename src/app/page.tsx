@@ -228,12 +228,11 @@ export default async function HomePage() {
                 </span>
               </div>
               <h2 className="text-3xl md:text-5xl font-outfit font-bold text-brand-blue mb-4 leading-tight">
-                Crafted experiences,<br />
-                <span className="text-brand-orange">end&#8209;to&#8209;end.</span>
+                Complete Himachal<br />
+                <span className="text-brand-orange">Travel Services</span>
               </h2>
               <p className="text-slate-500 text-lg font-inter max-w-xl">
-                From single-day cab transfers to multi-week curated journeys
-                across Himachal — we own every step of the trip.
+                Everything you need for a seamless Himachal trip — under one roof, handled by people who genuinely care.
               </p>
             </div>
             <div className="md:col-span-4 md:text-right">
@@ -265,11 +264,11 @@ export default async function HomePage() {
       </section>
 
       {/* Featured Packages Section */}
-      <section className="py-24 bg-slate-50">
+      <section className="py-24 bg-slate-50 border-y border-slate-100">
         <div className="max-w-7xl mx-auto px-4 md:px-8 mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="max-w-2xl">
-            <h2 className="text-3xl md:text-5xl font-outfit font-bold text-brand-blue mb-6 leading-tight">Featured Expeditions</h2>
-            <p className="text-slate-500 text-lg font-inter">Handpicked itineraries designed for the ultimate Himalayan experience.</p>
+            <h2 className="text-3xl md:text-5xl font-outfit font-bold text-brand-blue mb-6 leading-tight">Find Your Perfect Himachal Trip</h2>
+            <p className="text-slate-500 text-lg font-inter">Every package is fully customizable. Whether you have 3 days or 15, a tight budget or luxury preferences — we make it work.</p>
           </div>
           <Link href="/packages" className="inline-flex items-center gap-2 font-bold text-brand-orange hover:text-brand-orange/80 transition-colors group">
             View All Packages
@@ -287,7 +286,11 @@ export default async function HomePage() {
       {/* Popular Destinations Slider */}
       <section className="py-24 bg-brand-blue overflow-hidden w-full flex justify-center">
         <div className="w-full max-w-7xl px-4 md:px-8">
-          <RegionSlider destinations={destinations} />
+          <RegionSlider 
+            destinations={destinations} 
+            title="Top Destinations We Cover"
+            description="From snow-capped peaks to ancient monasteries — every corner of Himachal has a story. Here are our most-loved destinations."
+          />
         </div>
       </section>
 
