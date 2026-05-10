@@ -10,23 +10,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.himvigo.com'
 
   try {
-    // Fetch active packages
-    const packages = await prisma.package.findMany({
-      where: { isActive: true },
-      select: { slug: true, updatedAt: true },
-    })
-
-    // Fetch published blogs
-    const blogs = await prisma.blog.findMany({
-      where: { isPublished: true },
-      select: { slug: true, updatedAt: true },
-    })
-
-    // Fetch active destinations
-    const destinations = await prisma.destination.findMany({
-      where: { isActive: true },
-      select: { slug: true, updatedAt: true },
-    })
+    const [packages, blogs, destinations, internalPages, treks] = await Promise.all([
+      prisma.package.findMany({
+        where: { isActive: true, isTrek: false },
+        select: { slug: true, updatedAt: true },
+      }),
+      prisma.blog.findMany({
+        where: { isPublished: true },
+        select: { slug: true, updatedAt: true },
+      }),
+      prisma.destination.findMany({
+        where: { isActive: true },
+        select: { slug: true, updatedAt: true },
+      }),
+      prisma.internalPage.findMany({
+        where: { isActive: true },
+        select: { slug: true, type: true, updatedAt: true },
+      }),
+      prisma.package.findMany({
+        where: { isActive: true, isTrek: true },
+        select: { slug: true, updatedAt: true },
+      }),
+    ])
 
     const packagesUrls = packages.map((pkg) => ({
       url: `${baseUrl}/packages/${pkg.slug}`,
@@ -49,11 +54,36 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     }))
 
+    const treksUrls = treks.map((trek) => ({
+      url: `${baseUrl}/treks/${trek.slug}`,
+      lastModified: trek.updatedAt,
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    }))
+
+    const navGroupUrls = internalPages
+      .filter((p) => ["package", "destination", "trek"].includes(p.type))
+      .map((p) => {
+        const base =
+          p.type === "package"
+            ? "packages"
+            : p.type === "trek"
+            ? "treks"
+            : "destinations";
+        return {
+          url: `${baseUrl}/${base}/${p.slug}`,
+          lastModified: p.updatedAt,
+          changeFrequency: "weekly" as const,
+          priority: 0.7,
+        };
+      })
+
     const staticRoutes = [
       '',
       '/about',
       '/packages',
       '/destinations',
+      '/treks',
       '/cab',
       '/blog',
       '/contact',
@@ -67,7 +97,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: route === '' ? 1 : 0.8,
     }))
 
-    return [...staticRoutes, ...packagesUrls, ...destinationUrls, ...blogsUrls]
+    return [
+      ...staticRoutes,
+      ...packagesUrls,
+      ...destinationUrls,
+      ...treksUrls,
+      ...navGroupUrls,
+      ...blogsUrls,
+    ]
   } catch (error) {
     console.error('Sitemap generation error:', error)
     return [

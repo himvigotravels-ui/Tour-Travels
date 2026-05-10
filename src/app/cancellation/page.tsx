@@ -3,6 +3,8 @@ import Link from "next/link";
 export const metadata = {
   title: "Cancellation Policy | Himvigo Tours",
   description: "Learn about our tour and booking cancellation procedures.",
+  alternates: { canonical: "/cancellation" },
+  robots: { index: true, follow: true },
 };
 
 export default function CancellationPolicy() {

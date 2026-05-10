@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin/
 Disallow: /api/
 
-Sitemap: https://himvigo.com/sitemap.xml
+Sitemap: https://www.himvigo.com/sitemap.xml

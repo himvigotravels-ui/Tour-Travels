@@ -7,7 +7,16 @@ export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: "About Us | Himvigo - Authentic Himalayan Experiences",
-  description: "Learn about Himvigo's journey, our mission to provide authentic travel experiences, and the team behind your favorite Himalayan adventures.",
+  description:
+    "Learn about Himvigo's journey, our mission to provide authentic travel experiences, and the team behind your favorite Himalayan adventures.",
+  alternates: { canonical: "/about" },
+  openGraph: {
+    title: "About Himvigo Tours",
+    description:
+      "Local Himalayan experts crafting authentic, safe and unforgettable journeys across Himachal Pradesh.",
+    url: "/about",
+    type: "website",
+  },
 };
 
 export default async function AboutPage() {

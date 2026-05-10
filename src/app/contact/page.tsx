@@ -8,8 +8,15 @@ export async function generateMetadata() {
   const settings = await getSettings();
   return {
     title: settings.seo_contact_title || "Contact Us | Himvigo Tours",
-    description: settings.seo_contact_description || "Get in touch with our local Himalayan travel experts.",
-    keywords: settings.seo_contact_keywords || "contact, support, himvigo",
+    description: settings.seo_contact_description || "Get in touch with our local Himalayan travel experts — quotes within 24 hours.",
+    keywords: settings.seo_contact_keywords || "contact, support, himvigo, himachal travel quote",
+    alternates: { canonical: "/contact" },
+    openGraph: {
+      title: settings.seo_contact_title || "Contact Himvigo Tours",
+      description: settings.seo_contact_description || "Get in touch with our local Himalayan travel experts — quotes within 24 hours.",
+      url: "/contact",
+      type: "website",
+    },
   };
 }
 

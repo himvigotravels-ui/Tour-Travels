@@ -22,7 +22,14 @@ export async function generateMetadata() {
   return {
     title: settings.seo_cab_title || "Premium Cab Services Himachal | Himvigo Tours",
     description: settings.seo_cab_description || "Book reliable, safe, and premium cab services across Himachal Pradesh.",
-    keywords: settings.seo_cab_keywords || "cab, taxi, himachal",
+    keywords: settings.seo_cab_keywords || "cab, taxi, himachal, chandigarh to manali, shimla cab, spiti cab service",
+    alternates: { canonical: "/cab" },
+    openGraph: {
+      title: settings.seo_cab_title || "Premium Cab Services in Himachal | Himvigo Tours",
+      description: settings.seo_cab_description || "Verified mountain drivers, premium fleet and transparent pricing across Himachal Pradesh.",
+      url: "/cab",
+      type: "website",
+    },
   };
 }
 
