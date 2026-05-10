@@ -9,7 +9,7 @@ import {
 } from "react-icons/ri";
 import { BottomCTA } from "@/components/ui/BottomCTA";
 import { getAllBlogs } from "@/lib/db/blogs";
-import { getSettings } from "@/lib/db/settings";
+import { buildPageMetadata } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
@@ -33,15 +33,12 @@ function readMinutes(text: string | undefined) {
 }
 
 export async function generateMetadata() {
-  const settings = await getSettings();
-  return {
-    title: settings.seo_blog_title || "Travel Blog | Himvigo Tours",
-    description:
-      settings.seo_blog_description ||
-      "Read the latest stories and guides from the Himalayas.",
-    keywords: settings.seo_blog_keywords || "travel blog, himachal",
-    alternates: { canonical: "/blog" },
-  };
+  return buildPageMetadata("blog", {
+    title: "Travel Blog | Himvigo Tours",
+    description: "Read the latest stories and guides from the Himalayas.",
+    keywords: "travel blog, himachal",
+    path: "/blog",
+  });
 }
 
 export default async function BlogListPage() {

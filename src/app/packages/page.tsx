@@ -7,19 +7,17 @@ import { RiArrowRightSLine } from "react-icons/ri";
 import Link from "next/link";
 
 import { getSettings } from "@/lib/db/settings";
+import { buildPageMetadata } from "@/lib/seo";
 
 export const dynamic = 'force-dynamic';
 
 export async function generateMetadata() {
-  const settings = await getSettings();
-  return {
-    title: settings.seo_packages_title || "Tour Packages | Himvigo Tours",
-    description: settings.seo_packages_description || "Browse our premium selection of Himachal Pradesh itineraries.",
-    keywords: settings.seo_packages_keywords || "tour packages, himachal",
-    alternates: {
-      canonical: "/packages",
-    },
-  };
+  return buildPageMetadata("packages", {
+    title: "Tour Packages | Himvigo Tours",
+    description: "Browse our premium selection of Himachal Pradesh itineraries.",
+    keywords: "tour packages, himachal",
+    path: "/packages",
+  });
 }
 
 export default async function PackagesPage(props: { searchParams: Promise<{ dest?: string; dur?: string; cat?: string; q?: string; sort?: string }> }) {

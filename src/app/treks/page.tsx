@@ -5,23 +5,19 @@ import { RiArrowRightSLine, RiCompass3Line } from "react-icons/ri";
 import Link from "next/link";
 
 import { getSettings } from "@/lib/db/settings";
+import { buildPageMetadata } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata() {
-  const settings = await getSettings();
-  return {
-    title: settings.seo_treks_title || "Himalayan Treks | Himvigo Tours",
+  return buildPageMetadata("treks", {
+    title: "Himalayan Treks | Himvigo Tours",
     description:
-      settings.seo_treks_description ||
       "Discover hand-picked Himalayan trek expeditions across Himachal Pradesh — small groups, local guides, verified routes.",
     keywords:
-      settings.seo_treks_keywords ||
       "himachal treks, shimla trek, manali trek, himalayan trekking, trek packages",
-    alternates: {
-      canonical: "/treks",
-    },
-  };
+    path: "/treks",
+  });
 }
 
 export default async function TreksPage(props: {

@@ -19,18 +19,17 @@ import { RiArrowRightLine, RiPhoneLine } from "react-icons/ri";
 import Link from "next/link";
 import { getSettings } from "@/lib/db/settings";
 
+import { buildPageMetadata } from "@/lib/seo";
+
 export const dynamic = 'force-dynamic';
 
 export async function generateMetadata() {
-  const settings = await getSettings();
-  return {
-    title: settings.seo_home_title || "Best Himachal Tour Packages & Spiti Valley Tours",
-    description: settings.seo_home_description || "Experience the magic of Himachal Pradesh with Himvigo.",
-    keywords: settings.seo_home_keywords || "himachal tours, spiti valley",
-    alternates: {
-      canonical: "/",
-    },
-  };
+  return buildPageMetadata("home", {
+    title: "Best Himachal Tour Packages & Spiti Valley Tours",
+    description: "Experience the magic of Himachal Pradesh with Himvigo.",
+    keywords: "himachal tours, spiti valley",
+    path: "/",
+  });
 }
 
 

@@ -3,21 +3,16 @@ import { RiArrowRightSLine, RiMapPinLine, RiPhoneLine, RiMailLine, RiTimeLine, R
 import { ContactForm } from "@/components/contact/ContactForm";
 
 import { getSettings } from "@/lib/db/settings";
+import { buildPageMetadata } from "@/lib/seo";
 
 export async function generateMetadata() {
-  const settings = await getSettings();
-  return {
-    title: settings.seo_contact_title || "Contact Us | Himvigo Tours",
-    description: settings.seo_contact_description || "Get in touch with our local Himalayan travel experts — quotes within 24 hours.",
-    keywords: settings.seo_contact_keywords || "contact, support, himvigo, himachal travel quote",
-    alternates: { canonical: "/contact" },
-    openGraph: {
-      title: settings.seo_contact_title || "Contact Himvigo Tours",
-      description: settings.seo_contact_description || "Get in touch with our local Himalayan travel experts — quotes within 24 hours.",
-      url: "/contact",
-      type: "website",
-    },
-  };
+  return buildPageMetadata("contact", {
+    title: "Contact Us | Himvigo Tours",
+    description:
+      "Get in touch with our local Himalayan travel experts — quotes within 24 hours.",
+    keywords: "contact, support, himvigo, himachal travel quote",
+    path: "/contact",
+  });
 }
 
 export default async function ContactPage() {
