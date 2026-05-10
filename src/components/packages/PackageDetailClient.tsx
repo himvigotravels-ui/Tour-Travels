@@ -52,8 +52,8 @@ export default function PackageDetailClient({ pkg }: PackageDetailClientProps) {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <Link href="/packages" className="inline-flex items-center text-brand-orange hover:text-brand-orange/80 font-inter text-sm md:text-base font-semibold mb-6 transition-colors group drop-shadow-md">
-              Packages <ChevronRight className="w-4 h-4 mx-1 group-hover:translate-x-1 transition-transform" /> <span className="text-slate-200 font-normal">{pkg.title}</span>
+            <Link href={pkg.isTrek ? "/treks" : "/packages"} className="inline-flex items-center text-brand-orange hover:text-brand-orange/80 font-inter text-sm md:text-base font-semibold mb-6 transition-colors group drop-shadow-md">
+              {pkg.isTrek ? "Treks" : "Packages"} <ChevronRight className="w-4 h-4 mx-1 group-hover:translate-x-1 transition-transform" /> <span className="text-slate-200 font-normal">{pkg.title}</span>
             </Link>
           </motion.div>
           

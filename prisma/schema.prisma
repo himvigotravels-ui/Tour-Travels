@@ -24,6 +24,7 @@ model Package {
   categories      String[]
   isFeatured      Boolean  @default(false)
   isActive        Boolean  @default(true)
+  isTrek          Boolean  @default(false)
   metaTitle       String?
   metaDescription String?
   metaKeywords    String?

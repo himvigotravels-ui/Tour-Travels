@@ -9,9 +9,11 @@ function bustNavGroupCaches(slug: string, type: string) {
   revalidatePath("/", "layout");
   revalidatePath("/packages");
   revalidatePath("/destinations");
+  revalidatePath("/treks");
   // The slug-driven inner page
   if (type === "package") revalidatePath(`/packages/${slug}`);
   if (type === "destination") revalidatePath(`/destinations/${slug}`);
+  if (type === "trek") revalidatePath(`/treks/${slug}`);
 }
 
 const JWT_SECRET = process.env.JWT_SECRET || "fallback-secret-key-123";
@@ -68,11 +70,11 @@ export async function POST(req: Request) {
         metaKeywords: data.metaKeywords || null,
         ogImage: data.ogImage || null,
         packages:
-          data.type === "package" && packageIds.length
+          (data.type === "package" || data.type === "trek") && packageIds.length
             ? { connect: packageIds.map((id) => ({ id })) }
             : undefined,
         destinations:
-          data.type === "destination" && destinationIds.length
+          (data.type === "destination" || data.type === "trek") && destinationIds.length
             ? { connect: destinationIds.map((id) => ({ id })) }
             : undefined,
       },

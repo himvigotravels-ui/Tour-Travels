@@ -44,6 +44,10 @@ export const Navbar = ({
     .filter((p) => p.type === "package")
     .map((p) => ({ name: p.title, href: `/packages/${p.slug}` }));
 
+  const trekDropdown = internalPages
+    .filter((p) => p.type === "trek")
+    .map((p) => ({ name: p.title, href: `/treks/${p.slug}` }));
+
   // Destinations dropdown = curated nav-groups first, then real
   // destinations from the destinations table (so admins see all actual
   // destinations they create — not just hand-picked groups).
@@ -90,6 +94,14 @@ export const Navbar = ({
           : [
               { name: "All Destinations", href: "/destinations" },
             ],
+    },
+    {
+      name: "Treks",
+      href: "/treks",
+      dropdown:
+        trekDropdown.length > 0
+          ? trekDropdown
+          : [{ name: "All Treks", href: "/treks" }],
     },
     { name: "Cab Services", href: "/cab" },
     { name: "About", href: "/about" },

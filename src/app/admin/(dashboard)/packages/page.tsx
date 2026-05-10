@@ -20,6 +20,7 @@ import {
   RiSearchLine,
   RiSettings4Line,
   RiPriceTag3Line,
+  RiCompass3Line,
 } from "react-icons/ri";
 
 import { PageHeader } from "@/components/admin/shared/PageHeader";
@@ -62,6 +63,7 @@ interface PackageData {
   categories: string[];
   isFeatured: boolean;
   isActive: boolean;
+  isTrek: boolean;
   metaTitle: string;
   metaDescription: string;
   metaKeywords: string;
@@ -84,6 +86,7 @@ const emptyPackage: PackageData = {
   categories: [],
   isFeatured: false,
   isActive: true,
+  isTrek: false,
   metaTitle: "",
   metaDescription: "",
   metaKeywords: "",
@@ -143,6 +146,7 @@ export default function PackagesPage() {
       inclusions: pkg.inclusions || [],
       exclusions: pkg.exclusions || [],
       categories: pkg.categories || [],
+      isTrek: pkg.isTrek ?? false,
       metaTitle: pkg.metaTitle || "",
       metaDescription: pkg.metaDescription || "",
       metaKeywords: pkg.metaKeywords || "",
@@ -273,6 +277,11 @@ export default function PackagesPage() {
           <Badge variant={p.isActive ? "default" : "secondary"}>
             {p.isActive ? "Active" : "Draft"}
           </Badge>
+          {p.isTrek && (
+            <Badge variant="outline" className="gap-1 text-emerald-700 border-emerald-300 bg-emerald-50">
+              <RiCompass3Line className="h-3 w-3" /> Trek
+            </Badge>
+          )}
           {p.isFeatured && (
             <RiStarFill className="h-3.5 w-3.5 text-amber-500" />
           )}
@@ -540,6 +549,14 @@ export default function PackagesPage() {
             checked={form.isFeatured}
             onCheckedChange={(v) =>
               setForm((f) => ({ ...f, isFeatured: v }))
+            }
+          />
+          <ToggleRow
+            label="Is a Trek"
+            description="Show this package on the Treks page and inside trek nav groups (e.g. Treks in Shimla)."
+            checked={form.isTrek}
+            onCheckedChange={(v) =>
+              setForm((f) => ({ ...f, isTrek: v }))
             }
           />
         </div>

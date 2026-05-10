@@ -25,6 +25,7 @@ import {
   RiImageLine,
   RiSuitcaseLine,
   RiMapPinLine,
+  RiCompass3Line,
 } from "react-icons/ri";
 import {
   MultiSelect,
@@ -65,7 +66,7 @@ interface NavGroupForm {
   tagline: string;
   content: string;
   coverImage: string;
-  type: "package" | "destination";
+  type: "package" | "destination" | "trek";
   isActive: boolean;
   isFeatured: boolean;
   sortOrder: number;
@@ -153,7 +154,7 @@ export default function NavGroupsPage() {
       tagline: page.tagline || "",
       content: page.content || "",
       coverImage: page.coverImage || "",
-      type: page.type as "package" | "destination",
+      type: page.type as "package" | "destination" | "trek",
       isActive: page.isActive,
       isFeatured: page.isFeatured ?? false,
       sortOrder: page.sortOrder,
@@ -247,7 +248,9 @@ export default function NavGroupsPage() {
   );
 
   const selectedCount =
-    form.type === "package"
+    form.type === "trek"
+      ? form.packageIds.length + form.destinationIds.length
+      : form.type === "package"
       ? form.packageIds.length
       : form.destinationIds.length;
 
@@ -267,22 +270,28 @@ export default function NavGroupsPage() {
     {
       key: "slug",
       header: "Slug",
-      cell: (p) => (
-        <span className="font-mono text-xs text-muted-foreground">
-          /{p.type === "package" ? "packages" : "destinations"}/{p.slug}
-        </span>
-      ),
+      cell: (p) => {
+        const base =
+          p.type === "package"
+            ? "packages"
+            : p.type === "trek"
+            ? "treks"
+            : "destinations";
+        return (
+          <span className="font-mono text-xs text-muted-foreground">
+            /{base}/{p.slug}
+          </span>
+        );
+      },
     },
     {
       key: "type",
       header: "Type",
       cell: (p) => (
         <Badge variant="outline" className="gap-1 capitalize">
-          {p.type === "package" ? (
-            <RiSuitcaseLine className="h-3 w-3" />
-          ) : (
-            <RiMapPinLine className="h-3 w-3" />
-          )}
+          {p.type === "package" && <RiSuitcaseLine className="h-3 w-3" />}
+          {p.type === "destination" && <RiMapPinLine className="h-3 w-3" />}
+          {p.type === "trek" && <RiCompass3Line className="h-3 w-3" />}
           {p.type}
         </Badge>
       ),
@@ -291,6 +300,15 @@ export default function NavGroupsPage() {
       key: "items",
       header: "Items",
       cell: (p) => {
+        if (p.type === "trek") {
+          const pkgCount = p.packages?.length ?? 0;
+          const destCount = p.destinations?.length ?? 0;
+          return (
+            <span className="text-sm text-muted-foreground">
+              {destCount} dest, {pkgCount} pkg
+            </span>
+          );
+        }
         const itemCount =
           p.type === "package"
             ? p.packages?.length ?? 0
@@ -357,7 +375,7 @@ export default function NavGroupsPage() {
                 onValueChange={(v) =>
                   setForm((f) => ({
                     ...f,
-                    type: v as "package" | "destination",
+                    type: v as "package" | "destination" | "trek",
                   }))
                 }
               >
@@ -367,6 +385,7 @@ export default function NavGroupsPage() {
                 <SelectContent>
                   <SelectItem value="package">Packages</SelectItem>
                   <SelectItem value="destination">Destinations</SelectItem>
+                  <SelectItem value="trek">Treks</SelectItem>
                 </SelectContent>
               </Select>
             </Field>
@@ -459,11 +478,23 @@ export default function NavGroupsPage() {
     },
     {
       id: "items",
-      label: form.type === "package" ? "Packages" : "Destinations",
-      icon: form.type === "package" ? RiSuitcaseLine : RiMapPinLine,
+      label:
+        form.type === "package"
+          ? "Packages"
+          : form.type === "trek"
+          ? "Filter & Picks"
+          : "Destinations",
+      icon:
+        form.type === "package"
+          ? RiSuitcaseLine
+          : form.type === "trek"
+          ? RiCompass3Line
+          : RiMapPinLine,
       description:
         form.type === "package"
           ? "Curate which packages this group features and in what order."
+          : form.type === "trek"
+          ? "Pick destinations to filter trek packages by (e.g. Shimla → shows trek-tagged packages whose location matches Shimla). Optionally curate a manual package list to override the destination filter."
           : "Curate which destinations this group features and in what order.",
       badge: selectedCount > 0 ? (
         <Badge variant="secondary" className="h-4 px-1 text-[10px]">
@@ -471,8 +502,8 @@ export default function NavGroupsPage() {
         </Badge>
       ) : undefined,
       content: (
-        <div className="space-y-3">
-          {form.type === "package" ? (
+        <div className="space-y-5">
+          {form.type === "package" && (
             <MultiSelect
               options={packageOptions}
               value={form.packageIds}
@@ -482,7 +513,8 @@ export default function NavGroupsPage() {
               emptyText="No packages match. Try a different search."
               noun="package"
             />
-          ) : (
+          )}
+          {form.type === "destination" && (
             <MultiSelect
               options={destinationOptions}
               value={form.destinationIds}
@@ -495,10 +527,46 @@ export default function NavGroupsPage() {
               noun="destination"
             />
           )}
-          <p className="text-[11px] text-muted-foreground">
-            Tip: leave empty to fall back to category-based matching (legacy
-            behaviour using the items&rsquo; <code>categories</code> array).
-          </p>
+          {form.type === "trek" && (
+            <>
+              <Field
+                label="Destination Filter"
+                hint="Trek-tagged packages whose location matches any of these destinations will appear in this group."
+              >
+                <MultiSelect
+                  options={destinationOptions}
+                  value={form.destinationIds}
+                  onChange={(v) =>
+                    setForm((f) => ({ ...f, destinationIds: v }))
+                  }
+                  placeholder="Click to add destinations"
+                  searchPlaceholder="Search destinations by name..."
+                  emptyText="No destinations match. Try a different search."
+                  noun="destination"
+                />
+              </Field>
+              <Field
+                label="Manual Package Override (optional)"
+                hint="If set, these treks are shown instead of the destination-filtered list."
+              >
+                <MultiSelect
+                  options={packageOptions}
+                  value={form.packageIds}
+                  onChange={(v) => setForm((f) => ({ ...f, packageIds: v }))}
+                  placeholder="Click to add specific treks"
+                  searchPlaceholder="Search packages by title or location..."
+                  emptyText="No packages match. Try a different search."
+                  noun="package"
+                />
+              </Field>
+            </>
+          )}
+          {form.type !== "trek" && (
+            <p className="text-[11px] text-muted-foreground">
+              Tip: leave empty to fall back to category-based matching (legacy
+              behaviour using the items&rsquo; <code>categories</code> array).
+            </p>
+          )}
         </div>
       ),
     },
@@ -604,9 +672,11 @@ export default function NavGroupsPage() {
         onSave={handleSave}
         footerLeft={
           <span>
-            {selectedCount}{" "}
-            {form.type === "package" ? "package" : "destination"}
-            {selectedCount === 1 ? "" : "s"} selected
+            {form.type === "trek"
+              ? `${form.destinationIds.length} dest, ${form.packageIds.length} pkg selected`
+              : `${selectedCount} ${form.type === "package" ? "package" : "destination"}${
+                  selectedCount === 1 ? "" : "s"
+                } selected`}
           </span>
         }
       />
