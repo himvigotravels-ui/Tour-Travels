@@ -129,7 +129,7 @@ export default async function TrekDetails({ params }: Props) {
 
     // Manual override list takes precedence; otherwise filter by destination match.
     const manualPackages = (internalPage.packages ?? []) as unknown as TourPackage[];
-    const destinations = (internalPage.destinations ?? []).map((d) => ({
+    const destinations = (internalPage.destinations ?? []).map((d: any) => ({
       name: d.name,
       slug: d.slug,
     }));
@@ -155,7 +155,7 @@ export default async function TrekDetails({ params }: Props) {
         description={internalPage.description || undefined}
         tagline={internalPage.tagline || undefined}
         coverImage={internalPage.coverImage || undefined}
-        destinationNames={destinations.map((d) => d.name)}
+        destinationNames={destinations.map((d: any) => d.name)}
       />
     );
   }
