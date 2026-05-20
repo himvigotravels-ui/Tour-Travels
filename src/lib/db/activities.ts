@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { apiFetch } from "../api";
 
 export interface ActivityData {
   id?: string;
@@ -12,10 +12,7 @@ export interface ActivityData {
 
 export async function getAllActivities(): Promise<ActivityData[]> {
   try {
-    const activities = await prisma.activity.findMany({
-      orderBy: { sortOrder: 'asc' }
-    });
-    return activities as unknown as ActivityData[];
+    return await apiFetch<ActivityData[]>("/api/activities");
   } catch (error) {
     console.error('Error fetching activities:', error);
     return [];

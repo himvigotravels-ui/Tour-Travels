@@ -114,11 +114,11 @@ export default async function PackageDetails({ params }: Props) {
   const internalPage = !pkg ? await getInternalPageBySlug(slug) : null;
   if (internalPage && internalPage.type === "package") {
     // Prefer manually-selected packages; fall back to category-array matching
-    const manualIds = (internalPage.packages ?? []).map((p) => p.id);
+    const manualIds = (internalPage.packages ?? []).map((p: any) => p.id);
     let groupPackages;
     if (manualIds.length > 0) {
       const idOrder = new Map<string, number>(
-        manualIds.map((id, idx) => [id, idx])
+        manualIds.map((id: any, idx: number) => [id, idx])
       );
       const allPackages = await getAllPackages();
       groupPackages = allPackages

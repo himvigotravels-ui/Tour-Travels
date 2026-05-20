@@ -1,11 +1,8 @@
-import { prisma } from "@/lib/prisma";
+import { apiFetch } from "../api";
 
 export async function getCabVehicles() {
   try {
-    return await prisma.cabVehicle.findMany({
-      where: { isActive: true },
-      orderBy: { updatedAt: 'desc' }
-    });
+    return await apiFetch<any[]>("/api/cab/vehicles");
   } catch (error) {
     console.error("Error fetching cab vehicles:", error);
     return [];
@@ -14,10 +11,7 @@ export async function getCabVehicles() {
 
 export async function getCabRoutes() {
   try {
-    return await prisma.cabRoute.findMany({
-      where: { isActive: true },
-      orderBy: { fromCity: 'asc' }
-    });
+    return await apiFetch<any[]>("/api/cab/routes");
   } catch (error) {
     console.error("Error fetching cab routes:", error);
     return [];

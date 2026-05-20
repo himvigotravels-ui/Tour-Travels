@@ -4,17 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && prisma migrate deploy && next build",
+    "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "db:seed": "npx prisma db seed"
+    "lint": "eslint"
   },
-  "prisma": {
-    "seed": "npx tsx prisma/seed.mts"
-  },
+
   "dependencies": {
-    "@prisma/adapter-pg": "^7.7.0",
-    "@prisma/client": "^7.7.0",
     "@tiptap/extension-image": "^3.22.5",
     "@tiptap/extension-link": "^3.22.5",
     "@tiptap/extension-placeholder": "^3.22.5",
@@ -36,8 +31,6 @@
     "next": "16.2.1",
     "next-cloudinary": "^6.17.5",
     "next-themes": "^0.4.6",
-    "pg": "^8.20.0",
-    "prisma": "^7.7.0",
     "radix-ui": "^1.4.3",
     "react": "19.2.4",
     "react-day-picker": "^9.14.0",

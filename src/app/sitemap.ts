@@ -1,37 +1,26 @@
 import { MetadataRoute } from 'next'
-import { prisma } from '@/lib/prisma'
+import { apiFetch } from '@/lib/api'
 
 export const dynamic = 'force-dynamic';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // SEO best practice: pick one canonical host (www vs apex) and stick to
-  // it everywhere — sitemap, canonicals, OG, schema. We use the www
-  // subdomain. Override via NEXT_PUBLIC_SITE_URL if needed.
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.himvigo.com'
 
   try {
-    const [packages, blogs, destinations, internalPages, treks] = await Promise.all([
-      prisma.package.findMany({
-        where: { isActive: true, isTrek: false },
-        select: { slug: true, updatedAt: true },
-      }),
-      prisma.blog.findMany({
-        where: { isPublished: true },
-        select: { slug: true, updatedAt: true },
-      }),
-      prisma.destination.findMany({
-        where: { isActive: true },
-        select: { slug: true, updatedAt: true },
-      }),
-      prisma.internalPage.findMany({
-        where: { isActive: true },
-        select: { slug: true, type: true, updatedAt: true },
-      }),
-      prisma.package.findMany({
-        where: { isActive: true, isTrek: true },
-        select: { slug: true, updatedAt: true },
-      }),
-    ])
+    // Fetch all active packages and filter into standard packages and treks
+    const allActivePackages = await apiFetch<any[]>("/api/packages?active=true")
+    const packages = allActivePackages.filter((p: any) => !p.isTrek)
+    const treks = allActivePackages.filter((p: any) => p.isTrek)
+
+    // Fetch published blogs
+    const blogs = await apiFetch<any[]>("/api/blogs?published=true")
+
+    // Fetch active destinations
+    const destinations = await apiFetch<any[]>("/api/destinations?active=true")
+
+    // Fetch active internal pages
+    const allInternalPages = await apiFetch<any[]>("/api/internal-pages")
+    const internalPages = allInternalPages.filter((p: any) => p.isActive)
 
     const packagesUrls = packages.map((pkg) => ({
       url: `${baseUrl}/packages/${pkg.slug}`,

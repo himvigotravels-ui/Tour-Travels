@@ -1,16 +1,8 @@
-import { prisma } from "@/lib/prisma";
+import { apiFetch } from "../api";
 
 export async function getInternalPages() {
   try {
-    const pages = await prisma.internalPage.findMany({
-      where: { isActive: true },
-      orderBy: { sortOrder: "asc" },
-      include: {
-        packages: { select: { id: true } },
-        destinations: { select: { id: true } },
-      },
-    });
-    return pages;
+    return await apiFetch<any[]>("/api/internal-pages");
   } catch (error) {
     console.error("Error fetching internal pages:", error);
     return [];
@@ -19,14 +11,7 @@ export async function getInternalPages() {
 
 export async function getInternalPageBySlug(slug: string) {
   try {
-    const page = await prisma.internalPage.findUnique({
-      where: { slug },
-      include: {
-        packages: true,
-        destinations: true,
-      },
-    });
-    return page;
+    return await apiFetch<any>(`/api/internal-pages/${slug}`);
   } catch (error) {
     console.error(`Error fetching internal page ${slug}:`, error);
     return null;

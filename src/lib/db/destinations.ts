@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { apiFetch } from "../api";
 
 export interface DestinationData {
   id?: string;
@@ -20,11 +20,7 @@ export interface DestinationData {
 
 export async function getAllDestinations(): Promise<DestinationData[]> {
   try {
-    const destinations = await prisma.destination.findMany({
-      where: { isActive: true },
-      orderBy: { sortOrder: 'asc' },
-    });
-    return destinations as unknown as DestinationData[];
+    return await apiFetch<DestinationData[]>("/api/destinations?active=true");
   } catch (error) {
     console.error('Error fetching destinations:', error);
     return [];
@@ -33,10 +29,7 @@ export async function getAllDestinations(): Promise<DestinationData[]> {
 
 export async function getDestinationBySlug(slug: string): Promise<DestinationData | null> {
   try {
-    const destination = await prisma.destination.findFirst({
-      where: { slug, isActive: true },
-    });
-    return destination as unknown as DestinationData | null;
+    return await apiFetch<DestinationData>(`/api/destinations/${slug}`);
   } catch (error) {
     console.error(`Error fetching destination ${slug}:`, error);
     return null;

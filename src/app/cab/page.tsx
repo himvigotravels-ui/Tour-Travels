@@ -140,7 +140,7 @@ export default async function CabPage() {
                   <span className="text-[10px] font-bold text-brand-orange uppercase tracking-[0.2em] mb-2">{v.model}</span>
                   <h3 className="text-2xl font-bold text-slate-900 mb-4">{v.name}</h3>
                   <ul className="space-y-2.5 mb-8 flex-1">
-                    {v.features.map((feature, idx) => (
+                    {v.features.map((feature: any, idx: number) => (
                       <li key={idx} className="flex items-center text-sm text-slate-500 font-medium">
                         <RiCheckboxCircleLine className="w-4 h-4 text-brand-orange mr-3 shrink-0" /> {feature}
                       </li>

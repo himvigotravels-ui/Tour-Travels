@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { apiFetch } from "../api";
 
 export interface BlogData {
   id?: string;
@@ -19,11 +19,7 @@ export interface BlogData {
 
 export async function getAllBlogs(): Promise<BlogData[]> {
   try {
-    const blogs = await prisma.blog.findMany({
-      where: { isPublished: true },
-      orderBy: { publishedAt: 'desc' }
-    });
-    return blogs as unknown as BlogData[];
+    return await apiFetch<BlogData[]>("/api/blogs?published=true");
   } catch (error) {
     console.error('Error fetching blogs:', error);
     return [];
@@ -32,12 +28,7 @@ export async function getAllBlogs(): Promise<BlogData[]> {
 
 export async function getLatestBlogs(limit = 3): Promise<BlogData[]> {
   try {
-    const blogs = await prisma.blog.findMany({
-      where: { isPublished: true },
-      orderBy: { publishedAt: 'desc' },
-      take: limit
-    });
-    return blogs as unknown as BlogData[];
+    return await apiFetch<BlogData[]>(`/api/blogs?published=true&limit=${limit}`);
   } catch (error) {
     console.error('Error fetching latest blogs:', error);
     return [];
@@ -46,10 +37,7 @@ export async function getLatestBlogs(limit = 3): Promise<BlogData[]> {
 
 export async function getBlogBySlug(slug: string): Promise<BlogData | null> {
   try {
-    const blog = await prisma.blog.findUnique({
-      where: { slug }
-    });
-    return blog as unknown as BlogData | null;
+    return await apiFetch<BlogData>(`/api/blogs/${slug}`);
   } catch (error) {
     console.error(`Error fetching blog ${slug}:`, error);
     return null;

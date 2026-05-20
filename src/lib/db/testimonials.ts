@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { apiFetch } from "../api";
 
 export interface TestimonialData {
   id?: string;
@@ -10,10 +10,7 @@ export interface TestimonialData {
 
 export async function getAllTestimonials(): Promise<TestimonialData[]> {
   try {
-    const testimonials = await prisma.testimonial.findMany({
-      orderBy: { createdAt: 'desc' }
-    });
-    return testimonials as unknown as TestimonialData[];
+    return await apiFetch<TestimonialData[]>("/api/testimonials");
   } catch (error) {
     console.error('Error fetching testimonials:', error);
     return [];

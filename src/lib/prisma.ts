@@ -1,23 +1,129 @@
-import { PrismaClient } from "@prisma/client";
-import { PrismaPg } from "@prisma/adapter-pg";
+// This Proxy client acts as an RPC gateway, sending database requests
+// to the external SQLite Express server instead of direct local Postgres queries.
+// It has 0MB Prisma footprint on Vercel serverless builds because it contains
+// ZERO imports of @prisma/client, making your Vercel serverless functions load instantly!
 
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
-};
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3001";
+const API_KEY = process.env.BACKEND_API_KEY || "himvigo-super-secret-key-2026";
 
-function createPrismaClient() {
-  // Free-tier hosted Postgres (Prisma Postgres / Supabase / Neon) caps
-  // simultaneous connections per role. Cap our pool well below that so
-  // dev hot-reloads and serverless cold starts don't hit P2037.
-  const adapter = new PrismaPg({
-    connectionString: process.env.DATABASE_URL!,
-    max: Number(process.env.DATABASE_POOL_MAX ?? 3),
-    idleTimeoutMillis: 10_000,
-    connectionTimeoutMillis: 10_000,
-  });
-  return new PrismaClient({ adapter });
+class PrismaQueryPromise {
+  model: string;
+  action: string;
+  args: any[];
+
+  constructor(model: string, action: string, args: any[]) {
+    this.model = model;
+    this.action = action;
+    this.args = args;
+  }
+
+  async execute() {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/prisma`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": API_KEY,
+        },
+        body: JSON.stringify({
+          model: this.model,
+          action: this.action,
+          args: this.args,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Database API error: ${response.statusText}`);
+      }
+
+      const { data } = await response.json();
+      return data;
+    } catch (error: any) {
+      console.error(`❌ RPC Query Failed: prisma.${this.model}.${this.action}`, error);
+      throw error;
+    }
+  }
+
+  then(onfulfilled?: any, onrejected?: any) {
+    return this.execute().then(onfulfilled, onrejected);
+  }
+
+  catch(onrejected?: any) {
+    return this.execute().catch(onrejected);
+  }
+
+  finally(onfinally?: any) {
+    return this.execute().finally(onfinally);
+  }
 }
 
-export const prisma = globalForPrisma.prisma ?? createPrismaClient();
+// Transaction execution handler
+async function executeTransaction(operations: PrismaQueryPromise[]) {
+  try {
+    const serializedOps = operations.map(op => ({
+      model: op.model,
+      action: op.action,
+      args: op.args,
+    }));
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+    const response = await fetch(`${BACKEND_URL}/api/prisma/transaction`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": API_KEY,
+      },
+      body: JSON.stringify({ operations: serializedOps }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || `Database Transaction error: ${response.statusText}`);
+    }
+
+    const { data } = await response.json();
+    return data;
+  } catch (error) {
+    console.error("❌ RPC Transaction Failed:", error);
+    throw error;
+  }
+}
+
+const makeModelProxy = (model: string) => {
+  return new Proxy({}, {
+    get(target, prop) {
+      if (typeof prop === "string") {
+        return (...args: any[]) => {
+          return new PrismaQueryPromise(model, prop, args);
+        };
+      }
+    },
+  });
+};
+
+const createPrismaProxy = () => {
+  return new Proxy({}, {
+    get(target, prop) {
+      if (typeof prop === "string") {
+        if (prop === "$transaction") {
+          return async (ops: any[]) => {
+            return await executeTransaction(ops);
+          };
+        }
+        if (prop === "$disconnect" || prop === "$connect") {
+          return async () => {};
+        }
+        if (prop.startsWith("$")) {
+          return (...args: any[]) => {
+            console.warn(`Calling unsupported direct helper: prisma.${prop}`);
+            return Promise.resolve(null);
+          };
+        }
+        return makeModelProxy(prop);
+      }
+    },
+  });
+};
+
+export const prisma = createPrismaProxy() as any;
+export default prisma;

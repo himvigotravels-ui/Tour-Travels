@@ -93,11 +93,11 @@ export default async function DestinationDetailPage({ params }: { params: Promis
     : null;
   if (internalPage && internalPage.type === "destination") {
     // Prefer manually-selected destinations; fall back to category-array matching
-    const manualIds = (internalPage.destinations ?? []).map((d) => d.id);
+    const manualIds = (internalPage.destinations ?? []).map((d: any) => d.id);
     let groupDestinations;
     if (manualIds.length > 0) {
       const idOrder = new Map<string, number>(
-        manualIds.map((id, idx) => [id, idx])
+        manualIds.map((id: any, idx: number) => [id, idx])
       );
       const allDestinations = await getAllDestinations();
       groupDestinations = allDestinations

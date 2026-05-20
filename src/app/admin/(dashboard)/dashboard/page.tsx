@@ -86,7 +86,7 @@ export default async function DashboardPage() {
             <p className="text-sm text-muted-foreground text-center py-8">No inquiries yet. They will appear here when submitted.</p>
           ) : (
             <div className="space-y-3">
-              {recentInquiries.map((inquiry) => (
+              {recentInquiries.map((inquiry: any) => (
                 <div key={inquiry.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
                   <div className="flex items-center gap-3 min-w-0">
                     <div className="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white text-sm font-bold shrink-0">

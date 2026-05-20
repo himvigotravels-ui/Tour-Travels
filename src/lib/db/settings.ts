@@ -1,11 +1,8 @@
-import { prisma } from "@/lib/prisma";
+import { apiFetch } from "../api";
 
 export async function getSettings() {
   try {
-    const settings = await prisma.siteSetting.findMany();
-    const obj: Record<string, string> = {};
-    settings.forEach((s) => (obj[s.key] = s.value));
-    return obj;
+    return await apiFetch<Record<string, string>>("/api/settings");
   } catch (error) {
     console.error("Error fetching settings:", error);
     return {};
@@ -14,10 +11,8 @@ export async function getSettings() {
 
 export async function getSetting(key: string, defaultValue = "") {
   try {
-    const setting = await prisma.siteSetting.findUnique({
-      where: { key },
-    });
-    return setting?.value || defaultValue;
+    const data = await apiFetch<{ value: string }>(`/api/settings/${key}`);
+    return data.value || defaultValue;
   } catch (error) {
     return defaultValue;
   }
