@@ -18,7 +18,8 @@
       "PowerShell(node -e \"const sharp = require\\('sharp'\\); ['hero-spiti.png','hero-main.png','hero-1.png','about-hero.png'].forEach\\(f => sharp\\('public/'+f\\).metadata\\(\\).then\\(m => console.log\\(f, m.width+'x'+m.height\\)\\)\\)\")",
       "PowerShell(node scripts/gen-og.mjs 2>&1)",
       "Bash(npx tsc *)",
-      "Bash(echo \"---exit code: $?---\")"
+      "Bash(echo \"---exit code: $?---\")",
+      "PowerShell($items = Get-ChildItem -Force | Where-Object { $_.Name -ne 'frontend' -and $_.Name -ne 'backend' }; Write-Output \\(\"Moving \" + $items.Count + \" items into frontend/...\"\\); $errors = @\\(\\); foreach \\($item in $items\\) { try { Move-Item -LiteralPath $item.FullName -Destination 'frontend\\\\' -Force -ErrorAction Stop } catch { $errors += \"FAILED: $\\($item.Name\\) — $\\($_.Exception.Message\\)\" } }; if \\($errors.Count -gt 0\\) { Write-Output \"Errors:\"; $errors | ForEach-Object { Write-Output $_ } } else { Write-Output 'all moved cleanly' })"
     ]
   }
 }
