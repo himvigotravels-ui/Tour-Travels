@@ -24,8 +24,10 @@ export async function apiFetch<T>(path: string, options: RequestInit = {}): Prom
     const res = await fetch(url, {
       ...options,
       headers,
-      // Ensure Next.js caches these API calls if desired (revalidate settings can be added)
-      next: { revalidate: 60 } // Cache for 60 seconds
+      // Short revalidation window — admin edits should reflect on the
+      // public site within ~10s without rebuilding. Override per-call
+      // with `next: { revalidate: N }` when a longer cache is fine.
+      next: { revalidate: 10 },
     });
 
     if (!res.ok) {

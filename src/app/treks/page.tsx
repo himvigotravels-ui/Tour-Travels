@@ -82,10 +82,10 @@ export default async function TreksPage(props: {
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-transparent"></div>
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 w-full pt-24 text-center">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 w-full pt-24 flex flex-col items-center text-center">
           <Link
             href="/"
-            className="inline-flex items-center justify-center text-amber-400 hover:text-amber-300 font-inter text-sm md:text-base font-medium mb-8 transition-colors bg-white/5 px-4 py-1.5 rounded-full backdrop-blur-sm border border-white/10"
+            className="inline-flex items-center text-amber-400 hover:text-amber-300 font-inter text-sm md:text-base font-medium mb-6 transition-colors bg-white/5 px-4 py-1.5 rounded-full backdrop-blur-sm border border-white/10"
           >
             Home <RiArrowRightSLine className="w-4 h-4 mx-1" />{" "}
             <span className="text-slate-300 font-normal">Treks</span>
