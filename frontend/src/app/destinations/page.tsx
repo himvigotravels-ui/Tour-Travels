@@ -11,19 +11,17 @@ import Image from "next/image";
 import { BottomCTA } from "@/components/ui/BottomCTA";
 import { getSettings } from "@/lib/db/settings";
 import { getAllDestinations } from "@/lib/db/destinations";
+import { buildPageMetadata } from "@/lib/seo";
 
 export const dynamic = 'force-dynamic';
 
 export async function generateMetadata() {
-  const settings = await getSettings();
-  return {
-    title: settings.seo_destinations_title || "Explore Destinations | Himvigo Tours",
-    description: settings.seo_destinations_description || "Explore the magical regions of Himachal Pradesh.",
-    keywords: settings.seo_destinations_keywords || "destinations, spiti, manali",
-    alternates: {
-      canonical: "/destinations",
-    },
-  };
+  return buildPageMetadata("destinations", {
+    title: "Explore Destinations | Himvigo Tours",
+    description: "Explore the magical regions of Himachal Pradesh.",
+    keywords: "destinations, spiti, manali",
+    path: "/destinations",
+  });
 }
 
 

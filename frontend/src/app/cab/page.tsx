@@ -13,17 +13,20 @@ import Link from "next/link";
 
 import { getSettings } from "@/lib/db/settings";
 import { getCabVehicles, getCabRoutes } from "@/lib/db/cab";
+import { buildPageMetadata } from "@/lib/seo";
 import * as motion from "framer-motion/client";
 
 export const dynamic = 'force-dynamic';
 
 export async function generateMetadata() {
-  const settings = await getSettings();
-  return {
-    title: settings.seo_cab_title || "Premium Cab Services Himachal | Himvigo Tours",
-    description: settings.seo_cab_description || "Book reliable, safe, and premium cab services across Himachal Pradesh.",
-    keywords: settings.seo_cab_keywords || "cab, taxi, himachal",
-  };
+  return buildPageMetadata("cab", {
+    title: "Premium Cab Services Himachal | Himvigo Tours",
+    description:
+      "Verified mountain drivers, premium fleet and transparent pricing across Himachal Pradesh.",
+    keywords:
+      "cab, taxi, himachal, chandigarh to manali, shimla cab, spiti cab service",
+    path: "/cab",
+  });
 }
 
 

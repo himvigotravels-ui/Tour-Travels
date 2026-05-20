@@ -30,7 +30,7 @@ export default function PackageDetailClient({ pkg }: PackageDetailClientProps) {
   return (
     <main className="flex flex-col min-h-screen bg-slate-50">
       {/* Dynamic Hero Banner */}
-      <section className="relative w-full h-[70vh] min-h-[550px] flex items-end pb-20 bg-forest-900 overflow-hidden">
+      <section className="relative w-full h-screen min-h-[640px] flex items-end pb-16 md:pb-24 pt-32 bg-forest-900 overflow-hidden">
         <motion.div 
           initial={{ scale: 1.1, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -44,16 +44,16 @@ export default function PackageDetailClient({ pkg }: PackageDetailClientProps) {
           />
         </motion.div>
         
-        {/* Subtle Overlay */}
-        <div className="absolute inset-0 bg-black/30 z-[1]"></div>
+        {/* Cinematic gradient overlay (top dark for navbar legibility, bottom dark for copy) */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/40 to-slate-950/40 z-[1]"></div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8 w-full pb-8">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <Link href="/packages" className="inline-flex items-center text-brand-orange hover:text-brand-orange/80 font-inter text-sm md:text-base font-semibold mb-6 transition-colors group drop-shadow-md">
-              Packages <ChevronRight className="w-4 h-4 mx-1 group-hover:translate-x-1 transition-transform" /> <span className="text-slate-200 font-normal">{pkg.title}</span>
+            <Link href={pkg.isTrek ? "/treks" : "/packages"} className="inline-flex items-center text-brand-orange hover:text-brand-orange/80 font-inter text-sm md:text-base font-semibold mb-6 transition-colors group drop-shadow-md">
+              {pkg.isTrek ? "Treks" : "Packages"} <ChevronRight className="w-4 h-4 mx-1 group-hover:translate-x-1 transition-transform" /> <span className="text-slate-200 font-normal">{pkg.title}</span>
             </Link>
           </motion.div>
           

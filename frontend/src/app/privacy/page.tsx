@@ -3,6 +3,8 @@ import Link from "next/link";
 export const metadata = {
   title: "Privacy Policy | Himvigo Tours",
   description: "Learn how Himvigo protects your personal data and privacy.",
+  alternates: { canonical: "/privacy" },
+  robots: { index: true, follow: true },
 };
 
 export default function PrivacyPolicy() {

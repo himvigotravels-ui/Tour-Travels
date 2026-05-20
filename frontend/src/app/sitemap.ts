@@ -7,8 +7,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.himvigo.com'
 
   try {
-    // Fetch active packages
-    const packages = await apiFetch<any[]>("/api/packages?active=true")
+    // Fetch all active packages and filter into standard packages and treks
+    const allActivePackages = await apiFetch<any[]>("/api/packages?active=true")
+    const packages = allActivePackages.filter((p: any) => !p.isTrek)
+    const treks = allActivePackages.filter((p: any) => p.isTrek)
 
     // Fetch published blogs
     const blogs = await apiFetch<any[]>("/api/blogs?published=true")
@@ -16,6 +18,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Fetch active destinations
     const destinations = await apiFetch<any[]>("/api/destinations?active=true")
 
+    // Fetch active internal pages
+    const allInternalPages = await apiFetch<any[]>("/api/internal-pages")
+    const internalPages = allInternalPages.filter((p: any) => p.isActive)
 
     const packagesUrls = packages.map((pkg) => ({
       url: `${baseUrl}/packages/${pkg.slug}`,
@@ -38,11 +43,36 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     }))
 
+    const treksUrls = treks.map((trek) => ({
+      url: `${baseUrl}/treks/${trek.slug}`,
+      lastModified: trek.updatedAt,
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    }))
+
+    const navGroupUrls = internalPages
+      .filter((p) => ["package", "destination", "trek"].includes(p.type))
+      .map((p) => {
+        const base =
+          p.type === "package"
+            ? "packages"
+            : p.type === "trek"
+            ? "treks"
+            : "destinations";
+        return {
+          url: `${baseUrl}/${base}/${p.slug}`,
+          lastModified: p.updatedAt,
+          changeFrequency: "weekly" as const,
+          priority: 0.7,
+        };
+      })
+
     const staticRoutes = [
       '',
       '/about',
       '/packages',
       '/destinations',
+      '/treks',
       '/cab',
       '/blog',
       '/contact',
@@ -56,7 +86,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: route === '' ? 1 : 0.8,
     }))
 
-    return [...staticRoutes, ...packagesUrls, ...destinationUrls, ...blogsUrls]
+    return [
+      ...staticRoutes,
+      ...packagesUrls,
+      ...destinationUrls,
+      ...treksUrls,
+      ...navGroupUrls,
+      ...blogsUrls,
+    ]
   } catch (error) {
     console.error('Sitemap generation error:', error)
     return [

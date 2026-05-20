@@ -3,6 +3,8 @@ import Link from "next/link";
 export const metadata = {
   title: "Terms & Conditions | Himvigo Tours",
   description: "Terms and conditions for booking tours and cabs with Himvigo.",
+  alternates: { canonical: "/terms" },
+  robots: { index: true, follow: true },
 };
 
 export default function TermsConditions() {

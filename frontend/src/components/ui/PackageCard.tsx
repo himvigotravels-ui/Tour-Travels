@@ -31,6 +31,9 @@ export type TourPackage = {
   inclusions?: string[];
   exclusions?: string[];
   categories?: string[];
+  isTrek?: boolean;
+  isFeatured?: boolean;
+  isActive?: boolean;
   metaTitle?: string;
   metaDescription?: string;
   metaKeywords?: string;

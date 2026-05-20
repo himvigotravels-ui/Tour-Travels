@@ -8,8 +8,10 @@ function bustNavGroupCaches(slug: string, type: string) {
   revalidatePath("/", "layout");
   revalidatePath("/packages");
   revalidatePath("/destinations");
+  revalidatePath("/treks");
   if (type === "package") revalidatePath(`/packages/${slug}`);
   if (type === "destination") revalidatePath(`/destinations/${slug}`);
+  if (type === "trek") revalidatePath(`/treks/${slug}`);
 }
 
 const JWT_SECRET = process.env.JWT_SECRET || "fallback-secret-key-123";
@@ -78,11 +80,11 @@ export async function PUT(
         metaKeywords: data.metaKeywords || null,
         ogImage: data.ogImage || null,
         packages:
-          data.type === "package"
+          data.type === "package" || data.type === "trek"
             ? { set: packageIds.map((id) => ({ id })) }
             : { set: [] },
         destinations:
-          data.type === "destination"
+          data.type === "destination" || data.type === "trek"
             ? { set: destinationIds.map((id) => ({ id })) }
             : { set: [] },
       },

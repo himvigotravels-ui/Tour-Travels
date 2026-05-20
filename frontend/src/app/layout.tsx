@@ -33,15 +33,50 @@ export async function generateMetadata(): Promise<Metadata> {
     `${siteName} | Premium Travel & Spiti Valley Packages`;
   const homeDesc =
     settings.seo_home_description ||
+    settings.seo_default_description ||
     "Experience the magic of Himachal Pradesh with Himvigo. Premium, offbeat Spiti Valley tours, trekking expeditions, and reliable Chandigarh to Manali cab services.";
   const homeKeywords =
     settings.seo_home_keywords ||
+    settings.seo_default_keywords ||
     "Himachal Pradesh Tours, Spiti Valley Packages, Manali Tour, Kasol Trek, Chandigarh to Manali Cabs, Premium Travel Himachal";
 
   const keywordsList =
     typeof homeKeywords === "string"
       ? homeKeywords.split(",").map((k) => k.trim())
       : ["Himvigo", "Himachal", "Tours"];
+
+  // Resolve OG image: per-home override → site default → bundled fallback.
+  const ogImage =
+    settings.seo_home_og_image ||
+    settings.seo_default_og_image ||
+    "/opengraph-image.png";
+
+  // Build dynamic icons. If admin uploaded custom URLs we expose those
+  // explicitly via metadata.icons; otherwise we fall back silently to the
+  // file-convention icons baked into the build (src/app/icon.svg, etc.).
+  const iconList: { url: string; type?: string; sizes?: string }[] = [];
+  if (settings.seo_favicon_svg) {
+    iconList.push({ url: settings.seo_favicon_svg, type: "image/svg+xml" });
+  }
+  if (settings.seo_favicon_png) {
+    iconList.push({
+      url: settings.seo_favicon_png,
+      type: "image/png",
+      sizes: "any",
+    });
+  }
+  const iconsBlock =
+    iconList.length > 0 || settings.seo_apple_icon
+      ? {
+          icon: iconList.length > 0 ? iconList : undefined,
+          apple: settings.seo_apple_icon || undefined,
+        }
+      : undefined;
+
+  const twitterHandle = settings.seo_twitter_handle || "@himvigotours";
+  const googleVerification =
+    settings.seo_google_verification ||
+    "8WFTUbPg8wJt_6TLKRHNAKGwRw2gHCgU0HSiqp--pAs";
 
   return {
     title: {
@@ -57,13 +92,9 @@ export async function generateMetadata(): Promise<Metadata> {
     alternates: {
       canonical: "/",
     },
-    // Favicon resolution is delegated to Next's file conventions:
-    //   src/app/favicon.ico     → standard browser tab icon
-    //   src/app/icon.svg        → high-res SVG (Google/light + dark mode)
-    //   src/app/apple-icon.ico  → iOS home-screen icon
-    // The previous manual block referenced /favicon.png (484×269,
-    // non-square) which made search engines fall back to a default
-    // logo. Removing it lets Next generate the right <link> tags.
+    // Icons: admin-uploaded URLs override; otherwise Next.js auto-resolves
+    // src/app/favicon.ico, src/app/icon.svg, src/app/apple-icon.png.
+    icons: iconsBlock,
     openGraph: {
       type: "website",
       locale: "en_IN",
@@ -73,7 +104,7 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: siteName,
       images: [
         {
-          url: "/opengraph-image.png",
+          url: ogImage,
           width: 1200,
           height: 630,
           alt: `${siteName} - Premium Himalayan Experiences`,
@@ -84,8 +115,8 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title: homeTitle,
       description: homeDesc,
-      images: ["https://www.himvigo.com/opengraph-image.png"],
-      creator: "@himvigotours",
+      images: [ogImage.startsWith("http") ? ogImage : `https://www.himvigo.com${ogImage}`],
+      creator: twitterHandle,
     },
     robots: {
       index: true,
@@ -99,7 +130,7 @@ export async function generateMetadata(): Promise<Metadata> {
       },
     },
     verification: {
-      google: "8WFTUbPg8wJt_6TLKRHNAKGwRw2gHCgU0HSiqp--pAs",
+      google: googleVerification,
     },
   };
 }

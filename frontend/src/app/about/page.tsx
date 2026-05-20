@@ -2,13 +2,19 @@ import { RiShieldCheckLine, RiGroupLine, RiHeartLine, RiAwardLine } from "react-
 import { ReactNode } from "react";
 import { BottomCTA } from "@/components/ui/BottomCTA";
 import { getSettings } from "@/lib/db/settings";
+import { buildPageMetadata } from "@/lib/seo";
 
 export const dynamic = 'force-dynamic';
 
-export const metadata = {
-  title: "About Us | Himvigo - Authentic Himalayan Experiences",
-  description: "Learn about Himvigo's journey, our mission to provide authentic travel experiences, and the team behind your favorite Himalayan adventures.",
-};
+export async function generateMetadata() {
+  return buildPageMetadata("about", {
+    title: "About Us | Himvigo - Authentic Himalayan Experiences",
+    description:
+      "Local Himalayan experts crafting authentic, safe and unforgettable journeys across Himachal Pradesh.",
+    keywords: "about himvigo, himalayan tour operator, himachal experts",
+    path: "/about",
+  });
+}
 
 export default async function AboutPage() {
   const settings = await getSettings();
