@@ -3,8 +3,14 @@
 // It has 0MB Prisma footprint on Vercel serverless builds because it contains
 // ZERO imports of @prisma/client, making your Vercel serverless functions load instantly!
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3001";
-const API_KEY = process.env.BACKEND_API_KEY || "himvigo-super-secret-key-2026";
+// Fall back to the production Render backend so the live site still
+// works even if NEXT_PUBLIC_BACKEND_URL isn't set on Vercel. Override
+// locally by setting NEXT_PUBLIC_BACKEND_URL=http://localhost:3001.
+const BACKEND_URL =
+  process.env.NEXT_PUBLIC_BACKEND_URL ||
+  "https://tour-travels-backend-l6e4.onrender.com";
+const API_KEY =
+  process.env.BACKEND_API_KEY || "himvigo-super-secret-key-2026";
 
 class PrismaQueryPromise {
   model: string;
