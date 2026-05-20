@@ -17,6 +17,7 @@ async function buildAppleIcon() {
   // source's existing background (no extra padding).
   const out = await sharp(srcBuf)
     .resize(180, 180, { fit: "cover" })
+    .ensureAlpha()
     .png()
     .toBuffer();
   writeFileSync(resolve(ROOT, "src/app/apple-icon.png"), out);
@@ -37,6 +38,7 @@ async function buildFaviconIco() {
     sizes.map((size) =>
       sharp(srcBuf)
         .resize(size, size, { fit: "cover" })
+        .ensureAlpha() // Turbopack's ICO decoder requires RGBA PNG frames
         .png()
         .toBuffer()
     )
