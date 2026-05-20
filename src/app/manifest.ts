@@ -14,14 +14,14 @@ export default async function manifest(): Promise<MetadataRoute.Manifest> {
 
   const icons: MetadataRoute.Manifest["icons"] = [];
 
+  // SVG: only emit if admin has uploaded one — the bundled icon is now
+  // a raster PNG, so there's no /icon.svg to fall back to.
   if (settings.seo_favicon_svg) {
     icons.push({
       src: settings.seo_favicon_svg,
       sizes: "any",
       type: "image/svg+xml",
     });
-  } else {
-    icons.push({ src: "/icon.svg", sizes: "any", type: "image/svg+xml" });
   }
 
   if (settings.seo_favicon_png) {
@@ -31,7 +31,7 @@ export default async function manifest(): Promise<MetadataRoute.Manifest> {
       type: "image/png",
     });
   } else {
-    icons.push({ src: "/icon.png", sizes: "512x512", type: "image/png" });
+    icons.push({ src: "/icon.png", sizes: "any", type: "image/png" });
   }
 
   if (settings.seo_apple_icon) {
