@@ -185,6 +185,12 @@ export default async function RootLayout({
         <Navbar
           internalPages={internalPages}
           destinations={navDestinations}
+          contact={{
+            phone: settings.site_phone,
+            whatsapp: settings.site_whatsapp,
+            email: settings.site_email,
+            address: settings.site_address,
+          }}
         />
         {children}
         <Footer settings={settings} />

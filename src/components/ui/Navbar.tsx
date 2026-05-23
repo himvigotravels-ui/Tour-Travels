@@ -3,7 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Menu, X, ChevronDown, Home, Briefcase, MapPin, Mountain, Car, Info } from "lucide-react";
+import {
+  Menu, X, ChevronDown,
+  Home, Briefcase, MapPin, Mountain, Car, Info,
+  Phone, MessageCircle, Mail, MapPinned,
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface InternalPage {
@@ -17,12 +21,21 @@ interface NavDestination {
   slug: string;
 }
 
+interface NavContact {
+  phone?: string;
+  whatsapp?: string;
+  email?: string;
+  address?: string;
+}
+
 export const Navbar = ({
   internalPages = [],
   destinations = [],
+  contact = {},
 }: {
   internalPages?: InternalPage[];
   destinations?: NavDestination[];
+  contact?: NavContact;
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -39,6 +52,16 @@ export const Navbar = ({
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isAdminRoute]);
+
+  // Lock body scroll while the slide-in drawer is open.
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = isMobileMenuOpen ? "hidden" : prev || "";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [isMobileMenuOpen]);
 
   if (isAdminRoute) return null;
 
@@ -192,52 +215,69 @@ export const Navbar = ({
         </button>
       </div>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile slide-in sidebar (fixed full-height drawer + backdrop) */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <motion.div
-            key="mobile-drawer"
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.2 }}
-            className="absolute top-full left-0 w-full bg-white shadow-2xl border-t border-slate-100 md:hidden z-50 max-h-[85vh] flex flex-col overflow-hidden"
-          >
-            <div className="flex-1 overflow-y-auto px-5 pt-4 pb-32 scrollbar-hide">
-              {navLinks.map((link) => {
-                const Icon = link.icon;
-                const isOpen = openSection === link.name;
-                const isActive =
-                  pathname === link.href ||
-                  (link.href !== "/" && pathname?.startsWith(link.href));
+          <>
+            {/* Backdrop — tap to close */}
+            <motion.div
+              key="mobile-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="fixed inset-0 bg-slate-950/55 backdrop-blur-[2px] z-[60] md:hidden"
+              aria-hidden="true"
+            />
 
-                if (!link.dropdown) {
-                  return (
-                    <Link
-                      key={link.name}
-                      href={link.href}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className={`flex items-center gap-3 py-3.5 px-2 rounded-xl active:bg-slate-100 transition-colors ${
-                        isActive ? "text-brand-orange" : "text-slate-900"
-                      }`}
-                    >
-                      <Icon className="w-5 h-5 opacity-70" />
-                      <span className="font-bold font-outfit text-base tracking-tight">
-                        {link.name}
-                      </span>
-                    </Link>
-                  );
-                }
+            {/* Drawer — slides in from the right */}
+            <motion.aside
+              key="mobile-drawer"
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "tween", ease: [0.22, 1, 0.36, 1], duration: 0.35 }}
+              className="fixed top-0 right-0 h-screen w-full sm:max-w-sm bg-white shadow-2xl z-[70] md:hidden flex flex-col"
+              role="dialog"
+              aria-label="Site navigation"
+            >
+              {/* Header */}
+              <div className="flex-shrink-0 flex items-center justify-between px-5 py-4 border-b border-slate-100">
+                <Link
+                  href="/"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center"
+                >
+                  <img src="/logo.svg" alt="Himvigo" className="h-8 w-auto" />
+                </Link>
+                <button
+                  type="button"
+                  aria-label="Close menu"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="h-10 w-10 rounded-full bg-slate-100 hover:bg-slate-200 active:bg-slate-300 flex items-center justify-center transition-colors"
+                >
+                  <X className="w-5 h-5 text-slate-700" />
+                </button>
+              </div>
 
-                return (
-                  <div key={link.name} className="border-b border-slate-100 last:border-b-0">
-                    <div className="flex items-stretch">
-                      {/* Tapping the title navigates to the section parent page */}
+              {/* Scrollable nav links — scrolls ONLY when content overflows */}
+              <nav className="flex-1 min-h-0 overflow-y-auto px-3 py-3 scrollbar-hide">
+                {navLinks.map((link) => {
+                  const Icon = link.icon;
+                  const isOpen = openSection === link.name;
+                  const isActive =
+                    pathname === link.href ||
+                    (link.href !== "/" && pathname?.startsWith(link.href));
+
+                  if (!link.dropdown) {
+                    return (
                       <Link
+                        key={link.name}
                         href={link.href}
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className={`flex-1 flex items-center gap-3 py-3.5 px-2 active:bg-slate-50 transition-colors rounded-l-xl ${
-                          isActive ? "text-brand-orange" : "text-slate-900"
+                        className={`flex items-center gap-3 py-3 px-3 rounded-xl active:bg-slate-100 transition-colors ${
+                          isActive ? "text-brand-orange bg-brand-orange/5" : "text-slate-900"
                         }`}
                       >
                         <Icon className="w-5 h-5 opacity-70" />
@@ -245,64 +285,123 @@ export const Navbar = ({
                           {link.name}
                         </span>
                       </Link>
-                      {/* Separate tap target for expand/collapse */}
-                      <button
-                        type="button"
-                        aria-label={`${isOpen ? "Collapse" : "Expand"} ${link.name}`}
-                        onClick={() =>
-                          setOpenSection(isOpen ? null : link.name)
-                        }
-                        className="px-4 flex items-center justify-center active:bg-slate-100 transition-colors rounded-r-xl"
-                      >
-                        <ChevronDown
-                          className={`w-5 h-5 text-slate-400 transition-transform duration-200 ${
-                            isOpen ? "rotate-180" : ""
+                    );
+                  }
+
+                  return (
+                    <div key={link.name} className="rounded-xl overflow-hidden">
+                      <div className="flex items-stretch">
+                        <Link
+                          href={link.href}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className={`flex-1 flex items-center gap-3 py-3 px-3 active:bg-slate-50 transition-colors ${
+                            isActive ? "text-brand-orange" : "text-slate-900"
                           }`}
-                        />
-                      </button>
-                    </div>
-
-                    <AnimatePresence initial={false}>
-                      {isOpen && (
-                        <motion.div
-                          key={`${link.name}-sub`}
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.2 }}
-                          className="overflow-hidden"
                         >
-                          <div className="pl-10 pr-2 pb-3 grid grid-cols-1 gap-0.5">
-                            {link.dropdown.map((sub) => (
-                              <Link
-                                key={sub.name}
-                                href={sub.href}
-                                onClick={() => setIsMobileMenuOpen(false)}
-                                className="text-slate-500 font-medium font-inter text-[15px] py-2.5 px-2 rounded-lg hover:text-brand-orange active:bg-slate-50 transition-colors"
-                              >
-                                {sub.name}
-                              </Link>
-                            ))}
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                );
-              })}
-            </div>
+                          <Icon className="w-5 h-5 opacity-70" />
+                          <span className="font-bold font-outfit text-base tracking-tight">
+                            {link.name}
+                          </span>
+                        </Link>
+                        <button
+                          type="button"
+                          aria-label={`${isOpen ? "Collapse" : "Expand"} ${link.name}`}
+                          onClick={() => setOpenSection(isOpen ? null : link.name)}
+                          className="px-3 flex items-center justify-center active:bg-slate-100 transition-colors"
+                        >
+                          <ChevronDown
+                            className={`w-5 h-5 text-slate-400 transition-transform duration-200 ${
+                              isOpen ? "rotate-180" : ""
+                            }`}
+                          />
+                        </button>
+                      </div>
 
-            {/* Sticky CTA pinned above any floating widgets (e.g. WhatsApp) */}
-            <div className="absolute bottom-0 left-0 right-0 px-5 pt-3 pb-5 bg-gradient-to-t from-white via-white to-white/85 backdrop-blur-sm border-t border-slate-100">
-              <Link
-                href="/contact"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="block w-full bg-brand-orange text-white text-center py-3.5 rounded-2xl font-bold font-outfit shadow-lg shadow-brand-orange/20 active:scale-[0.98] transition-all"
-              >
-                Get a Quote
-              </Link>
-            </div>
-          </motion.div>
+                      <AnimatePresence initial={false}>
+                        {isOpen && (
+                          <motion.div
+                            key={`${link.name}-sub`}
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="overflow-hidden"
+                          >
+                            <div className="pl-11 pr-2 pb-2 grid grid-cols-1 gap-0.5">
+                              {link.dropdown.map((sub) => (
+                                <Link
+                                  key={sub.name}
+                                  href={sub.href}
+                                  onClick={() => setIsMobileMenuOpen(false)}
+                                  className="text-slate-500 font-medium font-inter text-[15px] py-2 px-2 rounded-lg hover:text-brand-orange active:bg-slate-50 transition-colors"
+                                >
+                                  {sub.name}
+                                </Link>
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  );
+                })}
+              </nav>
+
+              {/* Footer — contact + Get in Touch (always visible) */}
+              <div className="flex-shrink-0 border-t border-slate-100 bg-slate-50/60 px-5 pt-4 pb-5 space-y-3">
+                {(contact.phone || contact.whatsapp || contact.email || contact.address) && (
+                  <div className="space-y-1.5">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400 mb-2">
+                      Reach us
+                    </p>
+                    {contact.phone && (
+                      <a
+                        href={`tel:${contact.phone.replace(/\s+/g, "")}`}
+                        className="flex items-center gap-2.5 text-sm text-slate-700 hover:text-brand-orange transition-colors"
+                      >
+                        <Phone className="w-4 h-4 text-brand-blue" />
+                        <span className="font-medium">{contact.phone}</span>
+                      </a>
+                    )}
+                    {contact.whatsapp && (
+                      <a
+                        href={`https://wa.me/${contact.whatsapp.replace(/\D/g, "")}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2.5 text-sm text-slate-700 hover:text-brand-orange transition-colors"
+                      >
+                        <MessageCircle className="w-4 h-4 text-emerald-600" />
+                        <span className="font-medium">WhatsApp chat</span>
+                      </a>
+                    )}
+                    {contact.email && (
+                      <a
+                        href={`mailto:${contact.email}`}
+                        className="flex items-center gap-2.5 text-sm text-slate-700 hover:text-brand-orange transition-colors break-all"
+                      >
+                        <Mail className="w-4 h-4 text-brand-blue" />
+                        <span className="font-medium">{contact.email}</span>
+                      </a>
+                    )}
+                    {contact.address && (
+                      <div className="flex items-start gap-2.5 text-[12px] text-slate-500 leading-snug pt-0.5">
+                        <MapPinned className="w-4 h-4 text-brand-blue flex-shrink-0 mt-0.5" />
+                        <span>{contact.address}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                <Link
+                  href="/contact"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block w-full bg-brand-orange text-white text-center py-3.5 rounded-2xl font-bold font-outfit shadow-lg shadow-brand-orange/25 active:scale-[0.98] transition-all"
+                >
+                  Get in Touch
+                </Link>
+              </div>
+            </motion.aside>
+          </>
         )}
       </AnimatePresence>
     </nav>
