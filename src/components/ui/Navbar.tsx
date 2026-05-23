@@ -227,7 +227,7 @@ export const Navbar = ({
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="fixed inset-0 bg-slate-950/55 backdrop-blur-[2px] z-[60] md:hidden"
+              className="fixed inset-0 bg-slate-950/55 backdrop-blur-[2px] z-[105] md:hidden"
               aria-hidden="true"
             />
 
@@ -238,7 +238,7 @@ export const Navbar = ({
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "tween", ease: [0.22, 1, 0.36, 1], duration: 0.35 }}
-              className="fixed top-0 right-0 h-screen w-full sm:max-w-sm bg-white shadow-2xl z-[70] md:hidden flex flex-col"
+              className="fixed top-0 right-0 h-screen w-full sm:max-w-sm bg-white shadow-2xl z-[110] md:hidden flex flex-col"
               role="dialog"
               aria-label="Site navigation"
             >
