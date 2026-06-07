@@ -15,9 +15,18 @@ import {
 
 interface FooterProps {
   settings: Record<string, string>;
+  internalPages?: {
+    title: string;
+    slug: string;
+    type: string;
+  }[];
+  destinations?: {
+    name: string;
+    slug: string;
+  }[];
 }
 
-export const Footer = ({ settings }: FooterProps) => {
+export const Footer = ({ settings, internalPages = [], destinations = [] }: FooterProps) => {
   const pathname = usePathname();
 
   if (pathname?.startsWith("/admin")) {
@@ -36,9 +45,31 @@ export const Footer = ({ settings }: FooterProps) => {
     { icon: RiWhatsappLine, url: `https://wa.me/${(settings.site_whatsapp || "919805514018").replace(/\+/g, '')}`, label: "WhatsApp" },
   ];
 
+  const navGroupDestinations = internalPages
+    .filter((p) => p.type === "destination")
+    .map((p) => ({ name: p.title, slug: p.slug }));
+
+  const realDestinations = destinations.map((d) => ({
+    name: d.name,
+    slug: d.slug,
+  }));
+
+  const seen = new Set<string>();
+  const footerDestinations = [
+    ...navGroupDestinations,
+    ...realDestinations,
+  ]
+    .filter((item) => {
+      const href = `/destinations/${item.slug}`;
+      if (seen.has(href)) return false;
+      seen.add(href);
+      return true;
+    })
+    .slice(0, 6);
+
   return (
     <footer className="bg-brand-blue text-white pt-20 pb-10">
-      <div className="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 border-b border-white/10 pb-12 mb-8">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-12 border-b border-white/10 pb-12 mb-8">
         {/* Brand & Intro */}
         <div className="space-y-6">
           <Link href="/" className="flex items-center group">
@@ -61,6 +92,21 @@ export const Footer = ({ settings }: FooterProps) => {
               </a>
             ))}
           </div>
+        </div>
+
+        {/* Packages by Destination */}
+        <div>
+          <h3 className="font-outfit font-semibold text-lg mb-6 text-white">Packages by Destination</h3>
+          <ul className="space-y-3 text-sm font-inter text-slate-300">
+            {footerDestinations.map((dest) => (
+              <li key={dest.slug}>
+                <Link href={`/destinations/${dest.slug}`} className="hover:text-brand-orange transition-colors flex items-center gap-2 group">
+                  <RiArrowRightSLine className="w-4 h-4 text-white/20 group-hover:text-brand-orange" />
+                  {dest.name} Packages
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
 
         {/* Quick Links */}

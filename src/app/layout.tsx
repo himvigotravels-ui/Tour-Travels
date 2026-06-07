@@ -193,7 +193,11 @@ export default async function RootLayout({
           }}
         />
         {children}
-        <Footer settings={settings} />
+        <Footer
+          settings={settings}
+          internalPages={internalPages}
+          destinations={navDestinations}
+        />
         <WhatsAppWidget phoneNumber={settings.site_whatsapp} />
         <BookingPopup config={popupConfig} />
         <Script
