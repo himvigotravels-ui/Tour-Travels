@@ -10,6 +10,9 @@ import { getInternalPages } from "@/lib/db/pages";
 import { getAllDestinations } from "@/lib/db/destinations";
 import { WhatsAppWidget } from "@/components/ui/WhatsAppWidget";
 import { BookingPopup, BookingPopupConfig } from "@/components/ui/BookingPopup";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { organizationSchema, websiteSchema } from "@/lib/schema";
+import { SITE_URL, SITE_LOCALE } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -88,7 +91,7 @@ export async function generateMetadata(): Promise<Metadata> {
     authors: [{ name: siteName }],
     creator: siteName,
     publisher: siteName,
-    metadataBase: new URL("https://www.himvigo.com"),
+    metadataBase: new URL(SITE_URL),
     alternates: {
       canonical: "/",
     },
@@ -97,8 +100,8 @@ export async function generateMetadata(): Promise<Metadata> {
     icons: iconsBlock,
     openGraph: {
       type: "website",
-      locale: "en_IN",
-      url: "https://www.himvigo.com",
+      locale: SITE_LOCALE,
+      url: SITE_URL,
       title: homeTitle,
       description: homeDesc,
       siteName: siteName,
@@ -115,7 +118,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title: homeTitle,
       description: homeDesc,
-      images: [ogImage.startsWith("http") ? ogImage : `https://www.himvigo.com${ogImage}`],
+      images: [ogImage.startsWith("http") ? ogImage : `${SITE_URL}${ogImage}`],
       creator: twitterHandle,
     },
     robots: {
@@ -182,6 +185,7 @@ export default async function RootLayout({
       )}
     >
       <body className="min-h-full flex flex-col font-inter">
+        <JsonLd data={[organizationSchema(settings), websiteSchema(settings)]} />
         <Navbar
           internalPages={internalPages}
           destinations={navDestinations}

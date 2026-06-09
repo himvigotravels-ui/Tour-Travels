@@ -6,6 +6,8 @@ import CategoryLandingPage from "@/components/packages/CategoryLandingPage";
 import { Metadata } from "next";
 
 import { BottomCTA } from "@/components/ui/BottomCTA";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { packageSchema, breadcrumbSchema } from "@/lib/schema";
 
 export const dynamic = 'force-dynamic';
 
@@ -160,23 +162,25 @@ export default async function PackageDetails({ params }: Props) {
     notFound();
   }
 
-  const jsonLd = !CATEGORIES.includes(lowerSlug) && pkg ? {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "name": pkg.title,
-    "image": pkg.imageUrls,
-    "description": pkg.description,
-    "offers": {
-      "@type": "Offer",
-      "price": pkg.pricePerPerson,
-      "priceCurrency": "INR",
-      "availability": "https://schema.org/InStock"
-    }
-  } : null;
+  const crumbTitle =
+    pkg?.title ||
+    internalPage?.title ||
+    `${slug.charAt(0).toUpperCase()}${slug.slice(1)} Packages`;
+
+  const schemas: Record<string, unknown>[] = [
+    breadcrumbSchema([
+      { name: "Home", path: "/" },
+      { name: "Packages", path: "/packages" },
+      { name: crumbTitle, path: `/packages/${slug}` },
+    ]),
+  ];
+  if (pkg && !CATEGORIES.includes(lowerSlug)) {
+    schemas.unshift(packageSchema(pkg));
+  }
 
   return (
     <>
-      {jsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />}
+      <JsonLd data={schemas} />
       {content}
       <BottomCTA />
     </>

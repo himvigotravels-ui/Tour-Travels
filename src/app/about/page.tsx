@@ -3,6 +3,8 @@ import { ReactNode } from "react";
 import { BottomCTA } from "@/components/ui/BottomCTA";
 import { getSettings } from "@/lib/db/settings";
 import { buildPageMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { webPageSchema, breadcrumbSchema } from "@/lib/schema";
 
 export const dynamic = 'force-dynamic';
 
@@ -47,6 +49,20 @@ export default async function AboutPage() {
 
   return (
     <main className="flex flex-col min-h-screen bg-white">
+      <JsonLd
+        data={[
+          webPageSchema("AboutPage", {
+            name: "About Himvigo Tours",
+            description:
+              "Local Himalayan experts crafting authentic, safe and unforgettable journeys across Himachal Pradesh.",
+            path: "/about",
+          }),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "About", path: "/about" },
+          ]),
+        ]}
+      />
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden bg-brand-blue">
         <div className="absolute inset-0 z-0">

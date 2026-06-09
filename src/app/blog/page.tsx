@@ -10,6 +10,8 @@ import {
 import { BottomCTA } from "@/components/ui/BottomCTA";
 import { getAllBlogs } from "@/lib/db/blogs";
 import { buildPageMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { itemListSchema, breadcrumbSchema } from "@/lib/schema";
 
 export const dynamic = "force-dynamic";
 
@@ -47,6 +49,21 @@ export default async function BlogListPage() {
 
   return (
     <main className="flex flex-col min-h-screen bg-white">
+      <JsonLd
+        data={[
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Blog", path: "/blog" },
+          ]),
+          itemListSchema(
+            "Himvigo Travel Blog",
+            blogs.slice(0, 30).map((b) => ({
+              name: b.title,
+              path: `/blog/${b.slug}`,
+            }))
+          ),
+        ]}
+      />
       {/* Hero band */}
       <section className="relative pt-32 pb-12 md:pt-40 md:pb-16 bg-brand-blue overflow-hidden">
         <div className="pointer-events-none absolute -left-32 top-20 -z-10 h-[28rem] w-[28rem] rounded-full bg-brand-orange/15 blur-[120px]" />

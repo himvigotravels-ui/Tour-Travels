@@ -12,6 +12,8 @@ import { BottomCTA } from "@/components/ui/BottomCTA";
 import { getSettings } from "@/lib/db/settings";
 import { getAllDestinations } from "@/lib/db/destinations";
 import { buildPageMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { itemListSchema, breadcrumbSchema } from "@/lib/schema";
 
 export const dynamic = 'force-dynamic';
 
@@ -30,7 +32,22 @@ export default async function DestinationsPage() {
   const settings = await getSettings();
   return (
     <main className="flex flex-col min-h-screen bg-slate-50">
-      
+      <JsonLd
+        data={[
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Destinations", path: "/destinations" },
+          ]),
+          itemListSchema(
+            "Himachal Pradesh Destinations",
+            destinationsData.slice(0, 30).map((d) => ({
+              name: d.name,
+              path: `/destinations/${d.slug}`,
+            }))
+          ),
+        ]}
+      />
+
       {/* Cinematic Hero Section */}
       <section className="relative h-screen flex flex-col justify-center items-center overflow-hidden bg-brand-blue">
         {/* Background Layer with Parallax & Blend */}

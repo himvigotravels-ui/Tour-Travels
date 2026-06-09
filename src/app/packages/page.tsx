@@ -8,6 +8,8 @@ import Link from "next/link";
 
 import { getSettings } from "@/lib/db/settings";
 import { buildPageMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { itemListSchema, breadcrumbSchema } from "@/lib/schema";
 
 export const dynamic = 'force-dynamic';
 
@@ -80,6 +82,21 @@ export default async function PackagesPage(props: { searchParams: Promise<{ dest
 
   return (
     <main className="flex flex-col min-h-screen bg-slate-50">
+      <JsonLd
+        data={[
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Packages", path: "/packages" },
+          ]),
+          itemListSchema(
+            "Himachal Tour Packages",
+            packages.slice(0, 30).map((p) => ({
+              name: p.title,
+              path: `/packages/${p.slug}`,
+            }))
+          ),
+        ]}
+      />
       {/* Full Height Hero Banner */}
       <section className="relative w-full h-screen flex items-center justify-center bg-slate-900 overflow-hidden">
         <div className="absolute inset-0 z-0">

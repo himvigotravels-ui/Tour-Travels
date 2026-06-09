@@ -14,6 +14,8 @@ import { getBlogBySlug, getAllBlogs } from "@/lib/db/blogs";
 import { Metadata } from "next";
 import { ReadingProgress } from "@/components/blog/ReadingProgress";
 import { ShareButtons } from "@/components/blog/ShareButtons";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { articleSchema, breadcrumbSchema } from "@/lib/schema";
 
 export const dynamic = "force-dynamic";
 
@@ -47,20 +49,17 @@ export default async function BlogDetailPage({ params }: Props) {
     )
     .slice(0, 3);
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    headline: blog.title,
-    image: [blog.coverImage],
-    datePublished: blog.publishedAt,
-    author: [{ "@type": "Person", name: blog.author }],
-  };
-
   return (
     <main className="flex flex-col min-h-screen bg-white">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      <JsonLd
+        data={[
+          articleSchema(blog),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Blog", path: "/blog" },
+            { name: blog.title, path: `/blog/${blog.slug}` },
+          ]),
+        ]}
       />
 
       <ReadingProgress />

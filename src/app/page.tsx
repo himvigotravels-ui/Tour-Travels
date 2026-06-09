@@ -20,6 +20,9 @@ import Link from "next/link";
 import { getSettings } from "@/lib/db/settings";
 
 import { buildPageMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { faqSchema } from "@/lib/schema";
+import { HOME_FAQS } from "@/components/home/faq-data";
 
 export const dynamic = 'force-dynamic';
 
@@ -83,24 +86,11 @@ export default async function HomePage() {
     ];
   }
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "TravelAgency",
-    "name": "Himvigo Tours",
-    "image": "https://himvigo.com/logo.png",
-    "description": "Premium Tour Operator in Himachal Pradesh.",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Manali",
-      "addressRegion": "Himachal Pradesh",
-      "addressCountry": "IN"
-    },
-    "telephone": settings.site_phone || "+91-XXXXXXXXXX"
-  };
-
   return (
     <main className="flex flex-col min-h-screen bg-slate-50">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      {/* Organization + WebSite schema is emitted globally in layout.tsx.
+          Here we mark up the on-page FAQ for AI/answer-engine citation. */}
+      <JsonLd data={faqSchema(HOME_FAQS)} />
 
       {/* Hero Section */}
       <section className="relative bg-white">

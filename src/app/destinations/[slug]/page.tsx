@@ -8,6 +8,8 @@ import DestinationGroupLandingPage from "@/components/destinations/DestinationGr
 import { MapPin, Sun, Snowflake, Compass, Clock, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { Metadata } from "next";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { destinationSchema, breadcrumbSchema } from "@/lib/schema";
 
 export const dynamic = 'force-dynamic';
 
@@ -121,11 +123,20 @@ export default async function DestinationDetailPage({ params }: { params: Promis
     }
 
     return (
-      <DestinationGroupLandingPage
-        groupName={internalPage.title}
-        destinations={groupDestinations}
-        description={internalPage.description || undefined}
-      />
+      <>
+        <JsonLd
+          data={breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Destinations", path: "/destinations" },
+            { name: internalPage.title, path: `/destinations/${slug}` },
+          ])}
+        />
+        <DestinationGroupLandingPage
+          groupName={internalPage.title}
+          destinations={groupDestinations}
+          description={internalPage.description || undefined}
+        />
+      </>
     );
   }
 
@@ -143,12 +154,22 @@ export default async function DestinationDetailPage({ params }: { params: Promis
 
   return (
     <main className="flex flex-col min-h-screen bg-slate-50">
+      <JsonLd
+        data={[
+          destinationSchema(destination),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Destinations", path: "/destinations" },
+            { name: destination.name, path: `/destinations/${slug}` },
+          ]),
+        ]}
+      />
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden bg-brand-blue">
         <div className="absolute inset-0 z-0">
-          <img 
-            src={destination.image} 
-            alt={destination.name} 
+          <img
+            src={destination.image}
+            alt={destination.name}
             className="w-full h-full object-cover" 
           />
           <div className="absolute inset-0 bg-black/30"></div>

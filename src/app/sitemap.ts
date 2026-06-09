@@ -1,10 +1,11 @@
 import { MetadataRoute } from 'next'
 import { apiFetch } from '@/lib/api'
+import { SITE_URL } from '@/lib/site'
 
 export const dynamic = 'force-dynamic';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.himvigo.com'
+  const baseUrl = SITE_URL
 
   try {
     // Fetch all active packages and filter into standard packages and treks
@@ -86,7 +87,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: route === '' ? 1 : 0.8,
     }))
 
-    return [
+    // Real entity pages win over same-slug nav-group landings, so dedupe
+    // by URL keeping the first occurrence.
+    const all = [
       ...staticRoutes,
       ...packagesUrls,
       ...destinationUrls,
@@ -94,6 +97,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       ...navGroupUrls,
       ...blogsUrls,
     ]
+    const seen = new Set<string>()
+    return all.filter((entry) => {
+      if (seen.has(entry.url)) return false
+      seen.add(entry.url)
+      return true
+    })
   } catch (error) {
     console.error('Sitemap generation error:', error)
     return [

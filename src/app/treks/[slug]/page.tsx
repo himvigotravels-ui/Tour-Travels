@@ -6,6 +6,8 @@ import TrekGroupLandingPage from "@/components/treks/TrekGroupLandingPage";
 import { Metadata } from "next";
 import { BottomCTA } from "@/components/ui/BottomCTA";
 import type { TourPackage } from "@/components/ui/PackageCard";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { packageSchema, breadcrumbSchema } from "@/lib/schema";
 
 export const dynamic = "force-dynamic";
 
@@ -104,28 +106,19 @@ export default async function TrekDetails({ params }: Props) {
   const trek = await getTrekBySlug(slug);
 
   let content;
-  let jsonLd: Record<string, unknown> | null = null;
+  const schemas: Record<string, unknown>[] = [];
+  let crumbTitle = `${slug.charAt(0).toUpperCase()}${slug.slice(1)} Treks`;
 
   if (trek) {
     content = <PackageDetailClient pkg={trek} />;
-    jsonLd = {
-      "@context": "https://schema.org",
-      "@type": "Product",
-      name: trek.title,
-      image: trek.imageUrls,
-      description: trek.description,
-      offers: {
-        "@type": "Offer",
-        price: trek.pricePerPerson,
-        priceCurrency: "INR",
-        availability: "https://schema.org/InStock",
-      },
-    };
+    crumbTitle = trek.title;
+    schemas.push(packageSchema(trek, { isTrek: true }));
   } else {
     const internalPage = await getInternalPageBySlug(slug);
     if (!internalPage || internalPage.type !== "trek") {
       notFound();
     }
+    crumbTitle = internalPage.title || crumbTitle;
 
     // Manual override list takes precedence; otherwise filter by destination match.
     const manualPackages = (internalPage.packages ?? []) as unknown as TourPackage[];
@@ -160,14 +153,17 @@ export default async function TrekDetails({ params }: Props) {
     );
   }
 
+  schemas.push(
+    breadcrumbSchema([
+      { name: "Home", path: "/" },
+      { name: "Treks", path: "/treks" },
+      { name: crumbTitle, path: `/treks/${slug}` },
+    ])
+  );
+
   return (
     <>
-      {jsonLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-      )}
+      <JsonLd data={schemas} />
       {content}
       <BottomCTA />
     </>

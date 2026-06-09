@@ -4,6 +4,8 @@ import { ContactForm } from "@/components/contact/ContactForm";
 
 import { getSettings } from "@/lib/db/settings";
 import { buildPageMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { webPageSchema, breadcrumbSchema } from "@/lib/schema";
 
 export async function generateMetadata() {
   return buildPageMetadata("contact", {
@@ -23,7 +25,21 @@ export default async function ContactPage() {
 
   return (
     <main className="flex flex-col min-h-screen bg-slate-50">
-      
+      <JsonLd
+        data={[
+          webPageSchema("ContactPage", {
+            name: "Contact Himvigo Tours",
+            description:
+              "Get in touch with our local Himalayan travel experts for tour packages, treks and cab services across Himachal Pradesh.",
+            path: "/contact",
+          }),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Contact", path: "/contact" },
+          ]),
+        ]}
+      />
+
       {/* Cinematic Hero */}
       <section className="relative w-full h-[35vh] md:h-[45vh] min-h-[320px] md:min-h-[400px] flex items-center md:items-end pb-12 md:pb-16 bg-brand-blue overflow-hidden">
         <div className="absolute inset-0 z-0">

@@ -92,6 +92,8 @@ temp/
 !AGENTS.md
 !requirements.txt
 !progress.txt
+# Next.js route handler dir that serves /llms.txt — keep it out of the *.txt rule
+!src/app/llms.txt/
 
 # Ignore independent backend repository
 backend/

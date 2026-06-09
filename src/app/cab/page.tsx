@@ -14,6 +14,8 @@ import Link from "next/link";
 import { getSettings } from "@/lib/db/settings";
 import { getCabVehicles, getCabRoutes } from "@/lib/db/cab";
 import { buildPageMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { serviceSchema, breadcrumbSchema } from "@/lib/schema";
 import * as motion from "framer-motion/client";
 
 export const dynamic = 'force-dynamic';
@@ -37,6 +39,21 @@ export default async function CabPage() {
 
   return (
     <main className="flex flex-col min-h-screen bg-white">
+      <JsonLd
+        data={[
+          serviceSchema({
+            name: "Himachal Cab & Taxi Services",
+            serviceType: "Mountain cab and airport transfer service",
+            description:
+              "Verified mountain drivers, a premium fleet (Innova, Tempo Traveller, 4x4 SUV) and transparent pricing for transfers and tours across Himachal Pradesh — Chandigarh to Manali, Shimla, Spiti and more.",
+            path: "/cab",
+          }),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Cab Services", path: "/cab" },
+          ]),
+        ]}
+      />
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden bg-slate-900">
         {/* Background Image with subtle parallax effect via scale */}
