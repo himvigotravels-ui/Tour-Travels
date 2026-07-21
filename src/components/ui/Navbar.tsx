@@ -14,17 +14,14 @@ interface InternalPage {
   title: string;
   slug: string;
   type: string;
-  menuCategory?: string | null;
 }
 
 type DropdownItem = { name: string; href: string };
-type MegaGroup = { category: string; items: DropdownItem[] };
 type NavLink = {
   name: string;
   href: string;
   icon: React.ElementType;
   dropdown?: DropdownItem[];
-  mega?: MegaGroup[];
 };
 
 interface NavDestination {
@@ -84,25 +81,11 @@ export const Navbar = ({
     .filter((p) => p.type === "trek")
     .map((p) => ({ name: p.title, href: `/treks/${p.slug}` }));
 
-  // Yatras render as a two-level mega-menu: yatra nav-groups are bucketed
-  // by their `menuCategory` (e.g. "Major Pilgrimages"). Backend already
-  // returns them ordered by sortOrder, so category + item order is preserved.
-  const yatraCategoryOrder: string[] = [];
-  const yatraByCategory = new Map<string, DropdownItem[]>();
-  for (const p of internalPages.filter((p) => p.type === "yatra")) {
-    const category = (p.menuCategory && p.menuCategory.trim()) || "Yatras";
-    if (!yatraByCategory.has(category)) {
-      yatraByCategory.set(category, []);
-      yatraCategoryOrder.push(category);
-    }
-    yatraByCategory
-      .get(category)!
-      .push({ name: p.title, href: `/yatras/${p.slug}` });
-  }
-  const yatraMega: MegaGroup[] = yatraCategoryOrder.map((category) => ({
-    category,
-    items: yatraByCategory.get(category)!,
-  }));
+  // Yatras: a flat dropdown of yatra nav-groups (the category landing
+  // pages, e.g. "Major Pilgrimages"), mirroring the Treks dropdown.
+  const yatraDropdown = internalPages
+    .filter((p) => p.type === "yatra")
+    .map((p) => ({ name: p.title, href: `/yatras/${p.slug}` }));
 
   // Destinations dropdown = curated nav-groups first, then real
   // destinations from the destinations table (so admins see all actual
@@ -164,12 +147,9 @@ export const Navbar = ({
       name: "Yatras",
       href: "/yatras",
       icon: Landmark,
-      // A two-level mega-menu when yatra groups exist; otherwise a simple
-      // fallback link so the menu is never empty.
-      mega: yatraMega.length > 0 ? yatraMega : undefined,
       dropdown:
-        yatraMega.length > 0
-          ? undefined
+        yatraDropdown.length > 0
+          ? yatraDropdown
           : [{ name: "All Yatras", href: "/yatras" }],
     },
     { name: "Cab Services", href: "/cab", icon: Car },
@@ -207,7 +187,7 @@ export const Navbar = ({
                 }`}
               >
                 {link.name}
-                {(link.dropdown || link.mega) && (
+                {link.dropdown && (
                   <svg className="w-3.5 h-3.5 opacity-60 group-hover/item:rotate-180 transition-transform" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
                   </svg>
@@ -225,42 +205,6 @@ export const Navbar = ({
                       {sub.name}
                     </Link>
                   ))}
-                </div>
-              )}
-
-              {link.mega && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 w-[min(88vw,760px)] bg-white shadow-2xl rounded-2xl p-6 border border-slate-100 opacity-0 invisible group-hover/item:opacity-100 group-hover/item:visible transition-all duration-300 translate-y-2 group-hover/item:translate-y-0 z-[60]">
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-6">
-                    {link.mega.map((group) => (
-                      <div key={group.category}>
-                        <p className="text-[11px] font-bold uppercase tracking-wider text-brand-blue mb-2.5 flex items-center gap-1.5">
-                          <span className="h-1 w-1 rounded-full bg-brand-orange" />
-                          {group.category}
-                        </p>
-                        <ul className="space-y-0.5">
-                          {group.items.map((sub) => (
-                            <li key={sub.href}>
-                              <Link
-                                href={sub.href}
-                                className="block py-1.5 text-[13px] font-medium text-slate-600 hover:text-brand-orange transition-colors"
-                              >
-                                {sub.name}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-5 pt-4 border-t border-slate-100">
-                    <Link
-                      href={link.href}
-                      className="inline-flex items-center gap-1.5 text-[13px] font-bold text-brand-orange hover:gap-2.5 transition-all"
-                    >
-                      View all {link.name.toLowerCase()}
-                      <span aria-hidden>→</span>
-                    </Link>
-                  </div>
                 </div>
               )}
             </div>
@@ -349,7 +293,7 @@ export const Navbar = ({
                     pathname === link.href ||
                     (link.href !== "/" && pathname?.startsWith(link.href));
 
-                  if (!link.dropdown && !link.mega) {
+                  if (!link.dropdown) {
                     return (
                       <Link
                         key={link.name}
@@ -406,42 +350,18 @@ export const Navbar = ({
                             transition={{ duration: 0.2 }}
                             className="overflow-hidden"
                           >
-                            {link.mega ? (
-                              <div className="pl-11 pr-2 pb-2 space-y-3">
-                                {link.mega.map((group) => (
-                                  <div key={group.category}>
-                                    <p className="text-[11px] font-bold uppercase tracking-wider text-brand-blue/80 px-2 mb-1 mt-1">
-                                      {group.category}
-                                    </p>
-                                    <div className="grid grid-cols-1 gap-0.5">
-                                      {group.items.map((sub) => (
-                                        <Link
-                                          key={sub.href}
-                                          href={sub.href}
-                                          onClick={() => setIsMobileMenuOpen(false)}
-                                          className="text-slate-500 font-medium font-inter text-[15px] py-2 px-2 rounded-lg hover:text-brand-orange active:bg-slate-50 transition-colors"
-                                        >
-                                          {sub.name}
-                                        </Link>
-                                      ))}
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            ) : (
-                              <div className="pl-11 pr-2 pb-2 grid grid-cols-1 gap-0.5">
-                                {link.dropdown?.map((sub) => (
-                                  <Link
-                                    key={sub.name}
-                                    href={sub.href}
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                    className="text-slate-500 font-medium font-inter text-[15px] py-2 px-2 rounded-lg hover:text-brand-orange active:bg-slate-50 transition-colors"
-                                  >
-                                    {sub.name}
-                                  </Link>
-                                ))}
-                              </div>
-                            )}
+                            <div className="pl-11 pr-2 pb-2 grid grid-cols-1 gap-0.5">
+                              {link.dropdown?.map((sub) => (
+                                <Link
+                                  key={sub.name}
+                                  href={sub.href}
+                                  onClick={() => setIsMobileMenuOpen(false)}
+                                  className="text-slate-500 font-medium font-inter text-[15px] py-2 px-2 rounded-lg hover:text-brand-orange active:bg-slate-50 transition-colors"
+                                >
+                                  {sub.name}
+                                </Link>
+                              ))}
+                            </div>
                           </motion.div>
                         )}
                       </AnimatePresence>

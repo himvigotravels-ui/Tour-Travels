@@ -74,7 +74,6 @@ export async function PUT(
         content: data.content || null,
         coverImage: data.coverImage || null,
         type: data.type,
-        menuCategory: data.menuCategory || null,
         isActive: data.isActive,
         isFeatured: data.isFeatured ?? false,
         sortOrder: Number(data.sortOrder) || 0,

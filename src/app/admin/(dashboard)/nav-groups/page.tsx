@@ -68,7 +68,6 @@ interface NavGroupForm {
   content: string;
   coverImage: string;
   type: "package" | "destination" | "trek" | "yatra";
-  menuCategory: string;
   isActive: boolean;
   isFeatured: boolean;
   sortOrder: number;
@@ -94,7 +93,6 @@ const emptyForm: NavGroupForm = {
   content: "",
   coverImage: "",
   type: "package",
-  menuCategory: "",
   isActive: true,
   isFeatured: false,
   sortOrder: 0,
@@ -158,7 +156,6 @@ export default function NavGroupsPage() {
       content: page.content || "",
       coverImage: page.coverImage || "",
       type: page.type as "package" | "destination" | "trek" | "yatra",
-      menuCategory: page.menuCategory || "",
       isActive: page.isActive,
       isFeatured: page.isFeatured ?? false,
       sortOrder: page.sortOrder,
@@ -435,21 +432,6 @@ export default function NavGroupsPage() {
               />
             </Field>
           </FieldGrid>
-
-          {form.type === "yatra" && (
-            <Field
-              label="Menu Category"
-              hint="Groups this yatra under a heading in the Yatras mega-menu (e.g. Major Pilgrimages, Temple Circuits, Shakti Peeth Circuit). Yatras sharing a category appear together as one column."
-            >
-              <Input
-                value={form.menuCategory}
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, menuCategory: e.target.value }))
-                }
-                placeholder="e.g. Major Pilgrimages"
-              />
-            </Field>
-          )}
 
           <Field label="Tagline" hint="Short tagline for the navbar dropdown.">
             <Input
