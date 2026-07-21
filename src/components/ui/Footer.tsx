@@ -116,6 +116,7 @@ export const Footer = ({ settings, internalPages = [], destinations = [] }: Foot
             {[
               { label: "About Us", href: "/about" },
               { label: "Tour Packages", href: "/packages" },
+              { label: "Yatras & Pilgrimages", href: "/yatras" },
               { label: "Cab Services", href: "/cab" },
               { label: "Top Destinations", href: "/destinations" },
               { label: "Travel Blog", href: "/blog" },

@@ -21,6 +21,7 @@ import {
   RiSettings4Line,
   RiPriceTag3Line,
   RiCompass3Line,
+  RiAncientGateLine,
 } from "react-icons/ri";
 
 import { PageHeader } from "@/components/admin/shared/PageHeader";
@@ -64,6 +65,7 @@ interface PackageData {
   isFeatured: boolean;
   isActive: boolean;
   isTrek: boolean;
+  isYatra: boolean;
   metaTitle: string;
   metaDescription: string;
   metaKeywords: string;
@@ -87,6 +89,7 @@ const emptyPackage: PackageData = {
   isFeatured: false,
   isActive: true,
   isTrek: false,
+  isYatra: false,
   metaTitle: "",
   metaDescription: "",
   metaKeywords: "",
@@ -147,6 +150,7 @@ export default function PackagesPage() {
       exclusions: pkg.exclusions || [],
       categories: pkg.categories || [],
       isTrek: pkg.isTrek ?? false,
+      isYatra: pkg.isYatra ?? false,
       metaTitle: pkg.metaTitle || "",
       metaDescription: pkg.metaDescription || "",
       metaKeywords: pkg.metaKeywords || "",
@@ -280,6 +284,11 @@ export default function PackagesPage() {
           {p.isTrek && (
             <Badge variant="outline" className="gap-1 text-emerald-700 border-emerald-300 bg-emerald-50">
               <RiCompass3Line className="h-3 w-3" /> Trek
+            </Badge>
+          )}
+          {p.isYatra && (
+            <Badge variant="outline" className="gap-1 text-amber-700 border-amber-300 bg-amber-50">
+              <RiAncientGateLine className="h-3 w-3" /> Yatra
             </Badge>
           )}
           {p.isFeatured && (
@@ -557,6 +566,14 @@ export default function PackagesPage() {
             checked={form.isTrek}
             onCheckedChange={(v) =>
               setForm((f) => ({ ...f, isTrek: v }))
+            }
+          />
+          <ToggleRow
+            label="Is a Yatra"
+            description="Show this package on the Yatras page and inside yatra nav groups (e.g. Major Pilgrimages)."
+            checked={form.isYatra}
+            onCheckedChange={(v) =>
+              setForm((f) => ({ ...f, isYatra: v }))
             }
           />
         </div>

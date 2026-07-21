@@ -26,6 +26,7 @@ import {
   RiSuitcaseLine,
   RiMapPinLine,
   RiCompass3Line,
+  RiAncientGateLine,
 } from "react-icons/ri";
 import {
   MultiSelect,
@@ -66,7 +67,8 @@ interface NavGroupForm {
   tagline: string;
   content: string;
   coverImage: string;
-  type: "package" | "destination" | "trek";
+  type: "package" | "destination" | "trek" | "yatra";
+  menuCategory: string;
   isActive: boolean;
   isFeatured: boolean;
   sortOrder: number;
@@ -92,6 +94,7 @@ const emptyForm: NavGroupForm = {
   content: "",
   coverImage: "",
   type: "package",
+  menuCategory: "",
   isActive: true,
   isFeatured: false,
   sortOrder: 0,
@@ -154,7 +157,8 @@ export default function NavGroupsPage() {
       tagline: page.tagline || "",
       content: page.content || "",
       coverImage: page.coverImage || "",
-      type: page.type as "package" | "destination" | "trek",
+      type: page.type as "package" | "destination" | "trek" | "yatra",
+      menuCategory: page.menuCategory || "",
       isActive: page.isActive,
       isFeatured: page.isFeatured ?? false,
       sortOrder: page.sortOrder,
@@ -247,12 +251,12 @@ export default function NavGroupsPage() {
     [destinations]
   );
 
-  const selectedCount =
-    form.type === "trek"
-      ? form.packageIds.length + form.destinationIds.length
-      : form.type === "package"
-      ? form.packageIds.length
-      : form.destinationIds.length;
+  const isFilterType = form.type === "trek" || form.type === "yatra";
+  const selectedCount = isFilterType
+    ? form.packageIds.length + form.destinationIds.length
+    : form.type === "package"
+    ? form.packageIds.length
+    : form.destinationIds.length;
 
   const columns: EntityColumn<NavGroupRow>[] = [
     {
@@ -276,6 +280,8 @@ export default function NavGroupsPage() {
             ? "packages"
             : p.type === "trek"
             ? "treks"
+            : p.type === "yatra"
+            ? "yatras"
             : "destinations";
         return (
           <span className="font-mono text-xs text-muted-foreground">
@@ -292,6 +298,7 @@ export default function NavGroupsPage() {
           {p.type === "package" && <RiSuitcaseLine className="h-3 w-3" />}
           {p.type === "destination" && <RiMapPinLine className="h-3 w-3" />}
           {p.type === "trek" && <RiCompass3Line className="h-3 w-3" />}
+          {p.type === "yatra" && <RiAncientGateLine className="h-3 w-3" />}
           {p.type}
         </Badge>
       ),
@@ -300,7 +307,7 @@ export default function NavGroupsPage() {
       key: "items",
       header: "Items",
       cell: (p) => {
-        if (p.type === "trek") {
+        if (p.type === "trek" || p.type === "yatra") {
           const pkgCount = p.packages?.length ?? 0;
           const destCount = p.destinations?.length ?? 0;
           return (
@@ -375,7 +382,7 @@ export default function NavGroupsPage() {
                 onValueChange={(v) =>
                   setForm((f) => ({
                     ...f,
-                    type: v as "package" | "destination" | "trek",
+                    type: v as "package" | "destination" | "trek" | "yatra",
                   }))
                 }
               >
@@ -386,6 +393,7 @@ export default function NavGroupsPage() {
                   <SelectItem value="package">Packages</SelectItem>
                   <SelectItem value="destination">Destinations</SelectItem>
                   <SelectItem value="trek">Treks</SelectItem>
+                  <SelectItem value="yatra">Yatras</SelectItem>
                 </SelectContent>
               </Select>
             </Field>
@@ -427,6 +435,21 @@ export default function NavGroupsPage() {
               />
             </Field>
           </FieldGrid>
+
+          {form.type === "yatra" && (
+            <Field
+              label="Menu Category"
+              hint="Groups this yatra under a heading in the Yatras mega-menu (e.g. Major Pilgrimages, Temple Circuits, Shakti Peeth Circuit). Yatras sharing a category appear together as one column."
+            >
+              <Input
+                value={form.menuCategory}
+                onChange={(e) =>
+                  setForm((f) => ({ ...f, menuCategory: e.target.value }))
+                }
+                placeholder="e.g. Major Pilgrimages"
+              />
+            </Field>
+          )}
 
           <Field label="Tagline" hint="Short tagline for the navbar dropdown.">
             <Input
@@ -481,7 +504,7 @@ export default function NavGroupsPage() {
       label:
         form.type === "package"
           ? "Packages"
-          : form.type === "trek"
+          : isFilterType
           ? "Filter & Picks"
           : "Destinations",
       icon:
@@ -489,12 +512,16 @@ export default function NavGroupsPage() {
           ? RiSuitcaseLine
           : form.type === "trek"
           ? RiCompass3Line
+          : form.type === "yatra"
+          ? RiAncientGateLine
           : RiMapPinLine,
       description:
         form.type === "package"
           ? "Curate which packages this group features and in what order."
           : form.type === "trek"
           ? "Pick destinations to filter trek packages by (e.g. Shimla → shows trek-tagged packages whose location matches Shimla). Optionally curate a manual package list to override the destination filter."
+          : form.type === "yatra"
+          ? "Pick destinations to filter yatra packages by, or curate a manual list of yatra-tagged packages to override the destination filter."
           : "Curate which destinations this group features and in what order.",
       badge: selectedCount > 0 ? (
         <Badge variant="secondary" className="h-4 px-1 text-[10px]">
@@ -527,11 +554,15 @@ export default function NavGroupsPage() {
               noun="destination"
             />
           )}
-          {form.type === "trek" && (
+          {isFilterType && (
             <>
               <Field
                 label="Destination Filter"
-                hint="Trek-tagged packages whose location matches any of these destinations will appear in this group."
+                hint={
+                  form.type === "yatra"
+                    ? "Yatra-tagged packages whose location matches any of these destinations will appear in this group."
+                    : "Trek-tagged packages whose location matches any of these destinations will appear in this group."
+                }
               >
                 <MultiSelect
                   options={destinationOptions}
@@ -547,13 +578,21 @@ export default function NavGroupsPage() {
               </Field>
               <Field
                 label="Manual Package Override (optional)"
-                hint="If set, these treks are shown instead of the destination-filtered list."
+                hint={
+                  form.type === "yatra"
+                    ? "If set, these yatras are shown instead of the destination-filtered list."
+                    : "If set, these treks are shown instead of the destination-filtered list."
+                }
               >
                 <MultiSelect
                   options={packageOptions}
                   value={form.packageIds}
                   onChange={(v) => setForm((f) => ({ ...f, packageIds: v }))}
-                  placeholder="Click to add specific treks"
+                  placeholder={
+                    form.type === "yatra"
+                      ? "Click to add specific yatras"
+                      : "Click to add specific treks"
+                  }
                   searchPlaceholder="Search packages by title or location..."
                   emptyText="No packages match. Try a different search."
                   noun="package"
@@ -561,7 +600,7 @@ export default function NavGroupsPage() {
               </Field>
             </>
           )}
-          {form.type !== "trek" && (
+          {!isFilterType && (
             <p className="text-[11px] text-muted-foreground">
               Tip: leave empty to fall back to category-based matching (legacy
               behaviour using the items&rsquo; <code>categories</code> array).
@@ -672,7 +711,7 @@ export default function NavGroupsPage() {
         onSave={handleSave}
         footerLeft={
           <span>
-            {form.type === "trek"
+            {isFilterType
               ? `${form.destinationIds.length} dest, ${form.packageIds.length} pkg selected`
               : `${selectedCount} ${form.type === "package" ? "package" : "destination"}${
                   selectedCount === 1 ? "" : "s"

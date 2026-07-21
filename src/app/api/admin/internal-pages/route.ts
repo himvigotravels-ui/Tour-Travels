@@ -10,10 +10,12 @@ function bustNavGroupCaches(slug: string, type: string) {
   revalidatePath("/packages");
   revalidatePath("/destinations");
   revalidatePath("/treks");
+  revalidatePath("/yatras");
   // The slug-driven inner page
   if (type === "package") revalidatePath(`/packages/${slug}`);
   if (type === "destination") revalidatePath(`/destinations/${slug}`);
   if (type === "trek") revalidatePath(`/treks/${slug}`);
+  if (type === "yatra") revalidatePath(`/yatras/${slug}`);
 }
 
 const JWT_SECRET = process.env.JWT_SECRET || "fallback-secret-key-123";
@@ -62,6 +64,7 @@ export async function POST(req: Request) {
         content: data.content || null,
         coverImage: data.coverImage || null,
         type: data.type,
+        menuCategory: data.menuCategory || null,
         isActive: data.isActive ?? true,
         isFeatured: data.isFeatured ?? false,
         sortOrder: Number(data.sortOrder) || 0,
@@ -70,11 +73,15 @@ export async function POST(req: Request) {
         metaKeywords: data.metaKeywords || null,
         ogImage: data.ogImage || null,
         packages:
-          (data.type === "package" || data.type === "trek") && packageIds.length
+          (data.type === "package" ||
+            data.type === "trek" ||
+            data.type === "yatra") && packageIds.length
             ? { connect: packageIds.map((id) => ({ id })) }
             : undefined,
         destinations:
-          (data.type === "destination" || data.type === "trek") && destinationIds.length
+          (data.type === "destination" ||
+            data.type === "trek" ||
+            data.type === "yatra") && destinationIds.length
             ? { connect: destinationIds.map((id) => ({ id })) }
             : undefined,
       },

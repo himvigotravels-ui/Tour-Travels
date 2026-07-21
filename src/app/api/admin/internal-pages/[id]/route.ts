@@ -9,9 +9,11 @@ function bustNavGroupCaches(slug: string, type: string) {
   revalidatePath("/packages");
   revalidatePath("/destinations");
   revalidatePath("/treks");
+  revalidatePath("/yatras");
   if (type === "package") revalidatePath(`/packages/${slug}`);
   if (type === "destination") revalidatePath(`/destinations/${slug}`);
   if (type === "trek") revalidatePath(`/treks/${slug}`);
+  if (type === "yatra") revalidatePath(`/yatras/${slug}`);
 }
 
 const JWT_SECRET = process.env.JWT_SECRET || "fallback-secret-key-123";
@@ -72,6 +74,7 @@ export async function PUT(
         content: data.content || null,
         coverImage: data.coverImage || null,
         type: data.type,
+        menuCategory: data.menuCategory || null,
         isActive: data.isActive,
         isFeatured: data.isFeatured ?? false,
         sortOrder: Number(data.sortOrder) || 0,
@@ -80,11 +83,15 @@ export async function PUT(
         metaKeywords: data.metaKeywords || null,
         ogImage: data.ogImage || null,
         packages:
-          data.type === "package" || data.type === "trek"
+          data.type === "package" ||
+          data.type === "trek" ||
+          data.type === "yatra"
             ? { set: packageIds.map((id) => ({ id })) }
             : { set: [] },
         destinations:
-          data.type === "destination" || data.type === "trek"
+          data.type === "destination" ||
+          data.type === "trek" ||
+          data.type === "yatra"
             ? { set: destinationIds.map((id) => ({ id })) }
             : { set: [] },
       },
