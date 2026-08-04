@@ -32,7 +32,7 @@ export default function BlogSection({ blogs = [] }: { blogs: BlogData[] }) {
   const others = rest.slice(0, 3);
 
   return (
-    <section className="relative py-24 bg-slate-50 overflow-hidden">
+    <section className="relative py-24 bg-gradient-to-b from-white via-slate-50 to-slate-100 border-y border-slate-200/60 overflow-hidden">
       {/* Soft brand accent backgrounds */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(245,158,11,0.06),transparent_50%),radial-gradient(ellipse_at_bottom_right,rgba(10,60,93,0.05),transparent_50%)]" />
 

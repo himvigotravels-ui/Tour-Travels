@@ -32,6 +32,7 @@ import {
   RiSparkling2Line,
   RiNotification3Line,
   RiServiceLine,
+  RiCalendarScheduleLine,
 } from "react-icons/ri";
 
 interface NavItem {
@@ -58,6 +59,7 @@ const navGroups: NavGroup[] = [
     label: "Catalogue",
     items: [
       { title: "Packages", href: "/admin/packages", icon: RiSuitcaseLine },
+      { title: "Upcoming Trips", href: "/admin/upcoming-trips", icon: RiCalendarScheduleLine },
       { title: "Destinations", href: "/admin/destinations", icon: RiMapPinLine },
       { title: "Activities", href: "/admin/activities", icon: RiRunLine },
       { title: "Cab Services", href: "/admin/cab", icon: RiTaxiLine },

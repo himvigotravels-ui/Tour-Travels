@@ -6,6 +6,7 @@ import ActivitiesSlider from "@/components/home/ActivitiesSlider";
 import { FAQ } from "@/components/home/FAQ";
 import BlogSection from "@/components/home/BlogSection";
 import HeroSlider from "@/components/home/HeroSlider";
+import UpcomingTrips from "@/components/home/UpcomingTrips";
 import { WhyChooseUs, Feature } from "@/components/home/WhyChooseUs";
 import { ServiceCard } from "@/components/home/ServiceCard";
 import { ServiceItem } from "@/components/admin/shared/ServicesEditor";
@@ -14,6 +15,7 @@ import { getAllDestinations } from "@/lib/db/destinations";
 import { getLatestBlogs } from "@/lib/db/blogs";
 import { getAllTestimonials } from "@/lib/db/testimonials";
 import { getAllActivities } from "@/lib/db/activities";
+import { getUpcomingTrips } from "@/lib/db/upcomingTrips";
 import { BottomCTA } from "@/components/ui/BottomCTA";
 import { RiArrowRightLine, RiPhoneLine } from "react-icons/ri";
 import Link from "next/link";
@@ -38,12 +40,13 @@ export async function generateMetadata() {
 
 export default async function HomePage() {
   // Fetch all dynamic data from database
-  const [packages, destinations, blogs, testimonials, activities, settings] = await Promise.all([
+  const [packages, destinations, blogs, testimonials, activities, upcomingTrips, settings] = await Promise.all([
     getFeaturedPackages(),
     getAllDestinations(),
     getLatestBlogs(4),
     getAllTestimonials(),
     getAllActivities(),
+    getUpcomingTrips(6),
     getSettings(),
   ]);
 
@@ -206,8 +209,11 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Upcoming Trips — fixed-departure group trips, right below the hero */}
+      <UpcomingTrips trips={upcomingTrips} />
+
       {/* Our Services Section */}
-      <section className="py-24 bg-gradient-to-b from-white to-slate-50">
+      <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <div className="mb-12 grid grid-cols-1 md:grid-cols-12 gap-6 items-end">
             <div className="md:col-span-8">
@@ -254,7 +260,7 @@ export default async function HomePage() {
       </section>
 
       {/* Featured Packages Section */}
-      <section className="py-24 bg-slate-50 border-y border-slate-100">
+      <section className="py-24 bg-gradient-to-b from-white via-slate-50 to-slate-100 border-y border-slate-200/60">
         <div className="max-w-7xl mx-auto px-4 md:px-8 mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="max-w-2xl">
             <h2 className="text-3xl md:text-5xl font-outfit font-bold text-brand-blue mb-6 leading-tight">Find Your Perfect Himachal Trip</h2>
@@ -285,7 +291,7 @@ export default async function HomePage() {
       </section>
 
       {/* Why Choose Us - Enhanced Responsive Grid */}
-      <section className="py-24 bg-slate-50 border-y border-slate-100 overflow-hidden">
+      <section className="py-24 bg-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <div className="mb-12 max-w-2xl">
             <h2 className="text-3xl md:text-5xl font-outfit font-bold text-brand-blue mb-6 leading-tight">Why 5,000+ Travellers Trust Us</h2>
@@ -297,7 +303,7 @@ export default async function HomePage() {
       </section>
 
       {/* Activities Section */}
-      <section className="relative py-28 bg-white overflow-hidden">
+      <section className="relative py-28 bg-gradient-to-b from-white via-slate-50 to-slate-100 border-y border-slate-200/60 overflow-hidden">
         {/* Subtle radial highlight so the white doesn't feel flat */}
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(245,158,11,0.08),transparent_55%),radial-gradient(ellipse_at_bottom_left,rgba(10,60,93,0.06),transparent_55%)]" />
         <div className="relative max-w-7xl mx-auto px-4 md:px-8">
